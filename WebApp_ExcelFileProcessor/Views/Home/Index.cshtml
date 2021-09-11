@@ -6,17 +6,9 @@
 <!--stylesheets - only for login page-->
 <link href="~/packages/animated-svg-avatar-v2/login.css" rel="stylesheet" />
 
-<div class="form-row">
+<div class="form-row mt-5">
     <div class="col-12">
-        <div asp-validation-summary="All" class="text-danger"></div>
-       
-      
-    </div>
-</div>
-
-<div class="form-row">
-    <div class="col-12">
-        <form asp-controller="Home" asp-action="Index" method="post" role="form">
+        <form asp-controller="Home" asp-action="Index" method="post" role="form" autocomplete="off">
             <!--svg icon-->
             <div class="svgContainer">
                 <div>
@@ -125,7 +117,7 @@
                 @*<input type="email" id="loginEmail" maxlength="254" />*@
                 @*<p class="helper helper1">email@domain.com</p>*@
                 <label asp-for="Email" id="loginEmailLabel"></label>
-                <input asp-for="Email" id="loginEmail" class="form-control" maxlength="254" />
+                <input asp-for="Email" id="loginEmail" class="form-control" maxlength="30" autocomplete="off" />
                 <span asp-validation-for="Email" class="text-danger-custom"></span>
             </div>
             <!--password-->
@@ -133,7 +125,7 @@
                 @*<label for="loginPassword" id="loginPasswordLabel">Password</label>*@
                 @*<input type="password" id="loginPassword" />*@
                 <label asp-for="Password" id="loginPasswordLabel"></label>
-                <input asp-for="Password" id="loginPassword" class="form-contro fc-login-email" maxlength="12" />
+                <input asp-for="Password" id="loginPassword" class="form-contro fc-login-email" maxlength="15" autocomplete="new-password" />
                 <label id="showPasswordToggle" for="showPasswordCheck">
                     Show
                     <input id="showPasswordCheck" type="checkbox" />
@@ -144,6 +136,10 @@
             <!--login-->
             <div class="inputGroup inputGroup3">
                 <button id="login">Log in</button>
+            </div>
+            <!--validation summary-->
+            <div class="inputGroup">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             </div>
         </form>
     </div>

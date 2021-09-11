@@ -1,6 +1,4 @@
-using System;
-
-namespace WebApp_ExcelFileProcessor.Models
+namespace WebApp_ExcelFileProcessor.ViewModels
 {
     public class ErrorViewModel
     {

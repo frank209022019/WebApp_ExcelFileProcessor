@@ -1,7 +1,6 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-
 /*Global*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 a.navbar-brand {
@@ -82,8 +81,6 @@ body {
     .footer {
         visibility: hidden !important;
     }
-
-
 }
 
 /*HomeController/Index*/
@@ -92,10 +89,26 @@ body {
     font-weight: 600 !important;
     color: #dc3545 !important;
 }
+
 #loginPassword-error {
     font-weight: 600 !important;
     color: #dc3545 !important;
 }
+
+.validation-summary-errors {
+    font-weight: 600 !important;
+    color: #dc3545 !important;
+}
+
+input:-webkit-autofill {
+    -webkit-text-fill-color: #217093;
+    font-size: 1.25em !important;
+}
+
+    input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #217093;
+        font-size: 1.25em !important;
+    }
 
 /*DashboardController/Index*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/

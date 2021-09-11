@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using WebApp_ExcelFileProcessor.Models;
+using WebApp_ExcelFileProcessor.ViewModels;
 
 namespace WebApp_ExcelFileProcessor.Controllers
 {
@@ -18,7 +16,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(SignInManager<IdentityUser> signInManager,  ILogger<HomeController> logger,  UserManager<IdentityUser> userManager)
+        public HomeController(SignInManager<IdentityUser> signInManager, ILogger<HomeController> logger, UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -27,18 +25,32 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(new LoginViewModel() { Email = String.Empty, Password = String.Empty, RememberMe = true });
         }
+
         [HttpPost]
-        public IActionResult Index(LoginViewModel model)
+        public async Task<IActionResult> Index(LoginViewModel model)
         {
             try
-            {            
+            {
                 if (ModelState.IsValid)
                 {
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                    var result = Task.Run(() => _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false)).Result;
+
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if (user == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "User not found.");
+                        model.Email = String.Empty;
+                        model.Password = String.Empty;
+                        model.RememberMe = true;
+                        return View();
+                    }
+
+                    //var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
@@ -51,20 +63,30 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     //}
                     if (result.IsLockedOut)
                     {
-                        _logger.LogWarning("User account locked out.");
-                        return RedirectToPage("./Lockout");
+                        //_logger.LogWarning("User account locked out.");
+                        //return RedirectToPage("./Lockout");
+                        ModelState.AddModelError(string.Empty, "User account locked out.");
+                        model.Email = String.Empty;
+                        model.Password = String.Empty;
+                        model.RememberMe = true;
+                        return View();
                     }
                     else
                     {
                         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        model.Email = String.Empty;
+                        model.Password = String.Empty;
+                        model.RememberMe = true;
                         return View();
                     }
                 }
 
                 // If we got this far, something failed, redisplay form
+                model.Email = "";
+                model.Password = "";
                 return View();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View();
             }

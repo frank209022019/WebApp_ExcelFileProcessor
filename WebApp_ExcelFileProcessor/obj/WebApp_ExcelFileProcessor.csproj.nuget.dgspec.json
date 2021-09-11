@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Frank\\source\\repos\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj": {}
+    "C:\\Users\\Frank\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Frank\\source\\repos\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj": {
+    "C:\\Users\\Frank\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Frank\\source\\repos\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj",
+        "projectUniqueName": "C:\\Users\\Frank\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj",
         "projectName": "WebApp_ExcelFileProcessor",
-        "projectPath": "C:\\Users\\Frank\\source\\repos\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj",
+        "projectPath": "C:\\Users\\Frank\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj",
         "packagesPath": "C:\\Users\\Frank\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Frank\\source\\repos\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\obj\\",
+        "outputPath": "C:\\Users\\Frank\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -63,6 +63,14 @@
               "target": "Package",
               "version": "[5.0.9, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Proxies": {
+              "target": "Package",
+              "version": "[5.0.9, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[5.0.9, )"
@@ -70,6 +78,10 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.9, )"
+            },
+            "Microsoft.Extensions.Identity.Stores": {
               "target": "Package",
               "version": "[5.0.9, )"
             },
