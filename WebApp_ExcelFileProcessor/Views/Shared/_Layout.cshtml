@@ -26,26 +26,38 @@
         }
 
         <!--navbar-->
-        <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow custom-navbar">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <button class="btn btn-outline-light" id="menu-toggle"><i class="fa fa-bars"></i></button>
-                }
-                else
-                {
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">File Processor</a>
-                }
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <partial name="_LoginPartial" />
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <div id="page-content-wrapper">
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow custom-navbar">
+                    <button class="btn btn-outline-light" id="menu-toggle"><i class="fa fa-bars"></i></button>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </nav>
+                <div class="container mt-2">
+                    @RenderBody()
                 </div>
-            </nav>
-            <div class="container mt-2">
-                @RenderBody()
             </div>
-        </div>
+        }
+        else
+        {
+            <div id="page-content-wrapper">
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow custom-navbar">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">File Processor</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </nav>
+                <div class="container mt-2">
+                    @RenderBody()
+                </div>
+            </div>
+        }
+
     </div>
     <footer class="border-top footer text-muted">
         <div class="container text-center">

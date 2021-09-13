@@ -2,6 +2,43 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="mt-5">
-    you made it this far
+<!--Row 1-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12">
+        <h1 class="custom-dark-blue">Base Class</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+    <div class="col-xl-4 col-md-12 custom-col-responsiveness" onclick="dashboardRedirect('uploadbaseclass')">
+        <div class="card text-center h-100">
+            <div class="card-block">
+                <h2 class="icon-margin-top-fix"><i class="fa fa-file-upload fa-4x custom-dark-blue"></i></h2>
+            </div>
+            <div class="card-footer">
+                <h3>Upload Base Class</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-12 custom-col-responsiveness" onclick="dashboardRedirect('managebaseclass')">
+        <div class="card text-center h-100">
+            <div class="card-block">
+                <h2 class="icon-margin-top-fix"><i class="fa fa-graduation-cap fa-4x custom-dark-blue"></i></h2>
+            </div>
+            <div class="card-footer">
+                <h3>Manage Base Class</h3>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    function dashboardRedirect(destination) {
+        switch (destination) {
+            case 'uploadbaseclass':
+            window.location.href = '@Url.Action("UploadBaseClass", "Dashboard")';
+            break;
+        case 'managebaseclass':
+            window.location.href = '@Url.Action("ManageBaseClass", "Dashboard")';
+            break;
+        }
+    }
+</script>

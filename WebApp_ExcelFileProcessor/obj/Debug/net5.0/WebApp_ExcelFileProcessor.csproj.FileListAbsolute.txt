@@ -1436,3 +1436,5 @@ C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor
 C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\WebApp_ExcelFileProcessor.pdb
 C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\WebApp_ExcelFileProcessor.genruntimeconfig.cache
 C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\Shared\_SideMenu.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\BaseClass\UploadBaseClass.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\BaseClass\ManageBaseClass.cshtml.g.cs
