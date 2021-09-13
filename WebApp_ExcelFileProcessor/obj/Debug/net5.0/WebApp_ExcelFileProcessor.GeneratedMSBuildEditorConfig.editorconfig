@@ -6,3 +6,5 @@ build_property.ProjectTypeGuids =
 build_property.PublishSingleFile = 
 build_property.IncludeAllContentForSelfExtract = 
 build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows
+build_property.RootNamespace = WebApp_ExcelFileProcessor
+build_property.ProjectDir = C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\

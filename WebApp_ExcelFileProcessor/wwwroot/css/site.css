@@ -83,6 +83,41 @@ body {
     }
 }
 
+.custom-navbar {
+    background-color: #4eb8dd !important;
+    color: #FFF !important;
+    font-size: 1.35em !important;
+    margin-bottom: 3px !important;
+}
+    .custom-navbar a {
+        color: #FFF !important;
+        font-size: 1.35em !important;
+    }
+
+.custom-sidemenu-header {
+    background-color: #4eb8dd !important;
+    color: #FFF !important;
+    font-size: 1.4em !important;
+}
+.custom-sidemenu {
+    background-color: #4eb8dd !important;
+    color: #FFF !important;
+    font-size: 1em !important;
+}
+    .custom-sidemenu a {
+        background-color: #4eb8dd !important;
+        color: #FFF !important;
+        font-size: 1em !important;
+    }
+        .custom-sidemenu a:hover {
+            background-color: #FFF !important;
+            color: #4eb8dd !important;
+            font-size: 1.2em !important;
+        }
+.list-group a {
+    border-bottom: 1px solid #EFFF !important;
+    border-top: 1px solid #EFFF !important;
+}
 /*HomeController/Index*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 #loginEmail-error {
