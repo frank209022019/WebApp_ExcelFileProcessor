@@ -3,5 +3,112 @@
     ViewData["Title"] = "Upload Base Class";
 }
 
-<h1>UploadBaseClass</h1>
 
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness">
+        <h1 class="custom-dark-blue">Upload Base Class</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+    <div class="col-12 custom-col-responsiveness">
+        @using (Html.BeginForm("UploadBaseClass", "BaseClass", FormMethod.Post, new
+        {
+            @class = "dropzone dropzone-form round-corners",
+            id = "dropzone-form",
+        }))
+        {
+            <div class="fallback">
+                <input name="file" type="file" multiple />
+            </div>
+            <div class="dz-message" data-dz-message><span><i class="fas fa-upload fa-5x"></i></span></div>
+        }
+    </div>
+</div>
+
+<!-- Submit Button -->
+<div class="form-row mt-1 custom-row-responsiveness">
+    <div class="col-xl-3 offset-xl-6  col-md-12 mt-2">
+        <button class="btn btn-outline-danger full-width" id="btnClearQueue" data-toggle="tooltip" data-placement="bottom" title="Clears all files from the Dropzone.">Remove Files</button>
+    </div>
+    <div class="col-xl-3 col-md-12 mt-2">
+        <button class="btn btn-outline-primary custom-primary-button full-width" id="btnProcessQueue" data-toggle="tooltip" data-placement="bottom" title="Uploads all files from the Dropzone.">Upload Files</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        checkFileCount();
+    });
+
+    // DropZone Configuration
+    var totalFiles = 0;
+        Dropzone.options.dropzoneForm = {
+        autoProcessQueue: false,
+        addRemoveLinks: true,
+        paramName: "file",
+        maxFilesize: 20,
+        maxFiles: 1,
+        acceptedFiles: ".xlsx, .xls, .xlsm, .xlsb",
+        dictMaxFilesExceeded: "You have reached the max file limit! Please remove any extra files!",
+        dictFileTooBig: "This file is too big! Max size is 20Mb!",
+        init: function () {
+            var dropzone = this;
+            this.on("addedfile", function (file) {
+                totalFiles++;
+                checkFileCount();
+            });
+            this.on("removedfile", function (file) {
+                totalFiles--;
+                checkFileCount();
+            });
+            $("#btnClearQueue").click(function () {
+                dropzone.removeAllFiles(true);
+            });
+            $("#btnProcessQueue").click(function () {
+                // check if queue has invalid files
+                var totalRejectedFiles = dropzone.getRejectedFiles();
+                if (totalRejectedFiles.length > 0) {
+                    sweetAlertWarning();
+                }
+                else {
+                    debugger
+                    var totalAcceptedFiles = dropzone.getAcceptedFiles();
+                    var formData = new FormData();
+                    for (var i = 0; i < totalAcceptedFiles.length; i++) {
+                        formData.append("files", totalAcceptedFiles[i])
+                    }
+                    $.ajax({
+                        url: '@Url.Action("UploadBaseClass", "BaseClass")',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            sweetAlertSuccess("Base Class File Upload", data.message);
+                            dropzone.removeAllFiles(true);
+                        },
+                        error: function (data) {
+                            sweetAlertError("Base Class File Upload", data.message);
+                        }
+                    });
+
+                }
+            });
+        }
+    };
+
+    // Remove/Upload Button Functions
+    function checkFileCount() {
+        if (totalFiles <= 0)
+            disableButtons();
+        if (totalFiles > 0)
+            enableButtons();
+    }
+    function enableButtons() {
+        $("#btnClearQueue").prop("disabled", false);
+        $("#btnProcessQueue").prop("disabled", false);
+    }
+    function disableButtons() {
+        $("#btnClearQueue").prop("disabled", true);
+        $("#btnProcessQueue").prop("disabled", true);
+    }
+</script>

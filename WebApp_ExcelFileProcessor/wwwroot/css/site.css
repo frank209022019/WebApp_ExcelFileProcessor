@@ -15,9 +15,9 @@ a {
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    color: #217093 !important;
+    background-color: #FFF;
+    border-color: #217093 !important;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -184,6 +184,39 @@ body {
 .custom-light-blue {
     color: #4eb8dd !important;
 }
+
+   .dropzone-form {
+        width: 100% !important;
+    }
+
+.round-corners {
+    border-radius: 25px;
+    border-color: #217093 !important;
+    /*background: #73AD21;*/
+    padding: 20px;
+    /*width: 200px;*/
+    /*height: 150px;*/
+}
+
+    .dropzone .dz-preview .dz-error-message {
+        top: 150px !important;
+    }
+
+.full-width{
+    width: 100% !important;
+}
+
+
+.custom-primary-button {
+    color: #217093 !important;
+    background-color: #FFF !important;
+    border-color: #217093 !important;
+}
+    .custom-primary-button:hover {
+        color: #FFF !important;
+        background-color: #217093 !important;
+        border-color: #217093 !important;
+    }
 
 /*HomeController/Index*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/

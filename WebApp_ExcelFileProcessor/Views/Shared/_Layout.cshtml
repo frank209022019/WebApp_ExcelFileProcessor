@@ -12,9 +12,15 @@
     <!--Stylesheets-->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/packages/simple-sidebar/sidebar-menu.css" rel="stylesheet" />
+    <link href="~/packages/sweetalert2-11.0.18/dist/sweetalert2.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <link href="~/packages/dropzone-5.7.0/dist/min/dropzone.min.css" rel="stylesheet" />
+
+    <!--DropZone-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/packages/dropzone-5.7.0/dist/min/dropzone.min.js"></script>
 
 </head>
 <body>
@@ -67,13 +73,12 @@
     </footer>
 
     <!--Javascripts-->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/js/site.js"></script>
     <script src="~/packages/simple-sidebar/sidebar-menu.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="~/packages/sweetalert2-11.0.18/dist/sweetalert2.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

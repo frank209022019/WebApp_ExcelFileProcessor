@@ -25,7 +25,15 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         public IActionResult Index()
         {
-            return View(new LoginViewModel() { Email = String.Empty, Password = String.Empty, RememberMe = true });
+            bool userLoggedIn = User.Identity.IsAuthenticated;
+            if(userLoggedIn)
+            {
+               return  RedirectToAction("Index", "Dashboard");
+            }
+            else
+            {
+                return View(new LoginViewModel() { Email = String.Empty, Password = String.Empty, RememberMe = true });
+            }
         }
 
         [HttpPost]

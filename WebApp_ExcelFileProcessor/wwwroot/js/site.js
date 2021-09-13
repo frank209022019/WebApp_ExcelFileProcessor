@@ -1,4 +1,26 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿//  SweetAlert2 notifications
 
-// Write your JavaScript code.
+function sweetAlertSuccess(_title, _message)
+{
+    Swal.fire({
+        icon: 'success',
+        title: _title,
+        text: _message,
+    })
+}
+
+function sweetAlertError(_title, _message) {
+    Swal.fire({
+        icon: 'error',
+        title: _title,
+        text: _message,
+    })
+}
+
+function sweetAlertWarning(_title, _message) {
+    Swal.fire({
+        icon: 'warning',
+        title: _title,
+        text: _message,
+    })
+}
