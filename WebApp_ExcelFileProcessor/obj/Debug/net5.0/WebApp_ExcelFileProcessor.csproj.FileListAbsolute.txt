@@ -1441,3 +1441,6 @@ C:\Users\Frank\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProces
 C:\Users\Frank\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\WebApp_ExcelFileProcessor.pdb
 C:\Users\Frank\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\WebApp_ExcelFileProcessor.genruntimeconfig.cache
 C:\Users\Frank\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\WebApp_ExcelFileProcessor.csproj.AssemblyReference.cache
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\bin\Debug\net5.0\EPPlus.dll
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\bin\Debug\net5.0\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\bin\Debug\net5.0\System.Xml.XPath.XmlDocument.dll

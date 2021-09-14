@@ -4,6 +4,7 @@
 }
 
 
+
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness">
         <h1 class="custom-dark-blue">Upload Base Class</h1>
@@ -36,7 +37,7 @@
 
 <script>
     $(document).ready(function () {
-        checkFileCount();
+        checkFileCount();       
     });
 
     // DropZone Configuration
@@ -50,7 +51,9 @@
         acceptedFiles: ".xlsx, .xls, .xlsm, .xlsb",
         dictMaxFilesExceeded: "You have reached the max file limit! Please remove any extra files!",
         dictFileTooBig: "This file is too big! Max size is 20Mb!",
-        init: function () {
+            init: function () {
+                $("#overlay").fadeIn(300);　
+
             var dropzone = this;
             this.on("addedfile", function (file) {
                 totalFiles++;
@@ -63,14 +66,15 @@
             $("#btnClearQueue").click(function () {
                 dropzone.removeAllFiles(true);
             });
-            $("#btnProcessQueue").click(function () {
+                $("#btnProcessQueue").click(function () {
+                    loadingSpinner_Show();
                 // check if queue has invalid files
                 var totalRejectedFiles = dropzone.getRejectedFiles();
                 if (totalRejectedFiles.length > 0) {
                     sweetAlertWarning();
                 }
-                else {
-                    debugger
+                else {     
+
                     var totalAcceptedFiles = dropzone.getAcceptedFiles();
                     var formData = new FormData();
                     for (var i = 0; i < totalAcceptedFiles.length; i++) {
@@ -83,7 +87,8 @@
                         processData: false,
                         contentType: false,
                         success: function (data) {
-                            sweetAlertSuccess("Base Class File Upload", data.message);
+                            loadingSpinner_Hide();
+                            sweetAlertSuccess_BaseClassUpload();
                             dropzone.removeAllFiles(true);
                         },
                         error: function (data) {

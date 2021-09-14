@@ -156,7 +156,7 @@ body {
     color: #343a40 !important;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 1300px) {
     .card-block {
         margin-top: 15px !important;
         margin-bottom: 15px !important;
@@ -219,6 +219,42 @@ body {
         border-color: #217093 !important;
     }
 
+
+/* Loading Spinner*/
+.loading-overlay {
+    display: none;
+    background: rgba(255, 255, 255, 0.7);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 9998;
+ /*   align-items: center;
+    justify-content: center;*/
+ text-align: center;
+}
+
+    .loading-overlay.is-active {
+        display: flex;
+    }
+
+.custom-spinner-format {
+    color: #217093 !important;
+    width: 3rem;
+    height: 3rem;
+    margin-top: 8em;
+}
+
+@keyframes sp-anime {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.is-hide {
+    display: none;
+}
 
 /*HomeController/Index*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
