@@ -13,7 +13,9 @@ function sweetAlertSuccess(_title, _message) {
         },
         showConfirmButton: true,
         confirmButtonColor: '#217093 ',
-        allowOutsideClick: false
+        allowOutsideClick: false,
+        reverseButtons: true
+
     })
 }
 
@@ -31,6 +33,7 @@ function sweetAlertError(_title, _message) {
         showConfirmButton: true,
         confirmButtonColor: '#217093 ',
         allowOutsideClick: false,
+        reverseButtons: true
     })
 }
 
@@ -47,7 +50,8 @@ function sweetAlertWarning(_title, _message) {
         },
         showConfirmButton: true,
         confirmButtonColor: '#217093 ',
-        allowOutsideClick: false
+        allowOutsideClick: false,
+        reverseButtons: true
     })
 }
 
@@ -65,7 +69,8 @@ function sweetAlertSuccess_BaseClassUpload() {
         showConfirmButton: true,
         confirmButtonColor: '#217093 ',
         confirmButtonText: 'View Result',
-        allowOutsideClick: false
+        allowOutsideClick: false,
+        reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
             // redirect to result page
@@ -88,7 +93,10 @@ function sweetAlert2_DeleteStudentTempRecord() {
         showConfirmButton: true,
         confirmButtonColor: '#217093 ',
         confirmButtonText: 'View Result',
-        allowOutsideClick: false
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
@@ -115,6 +123,85 @@ function sweetAlert2_DeleteStudentTempRecord() {
         }
     })
 }
+
+function sweetAlert2_CompleteBaseClassUpload() {
+    Swal.fire({
+        icon: 'question',
+        title: "Complete Process",
+        text: 'Are you sure you want to save these records?',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        },
+        showConfirmButton: true,
+        confirmButtonColor: '#217093 ',
+        confirmButtonText: 'Complete Process',
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            loadingSpinner_Show();
+            $.ajax({
+                url: '/BaseClass/CompleteProcessBaseStudentUpload/',
+                type: 'GET',
+                success: function () {
+                    loadingSpinner_Hide();
+                    sweetAlertSuccess("Base Class Upload", "All records saved successfully.");
+                    setTimeout(function () {
+                        window.location.href = '/BaseClass/ManageBaseClass/';
+                    }, 8000);
+                },
+                error: function () {
+                    loadingSpinner_Hide();
+                    sweetAlertError("Base Class Upload", "Failed to upload the records.");
+                }
+            });
+        }
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $.ajax({
+        url: '@Url.Action("CompleteProcessBaseStudentUpload", "BaseClass")',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            loadingSpinner_Hide();
+            sweetAlertSuccess_BaseClassUpload();
+            dropzone.removeAllFiles(true);
+        },
+        error: function (data) {
+            loadingSpinner_Hide();
+            sweetAlertError("Base Class File Upload", data.message);
+            dropzone.removeAllFiles(true);
+        }
+    });
+}
+
+//  Loading spinner
 
 function loadingSpinner_Show() {
     $(".loading-overlay").fadeIn(500);

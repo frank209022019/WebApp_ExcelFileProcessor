@@ -276,9 +276,15 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                         //  check if similar records already exists in the database
                                         var alreadyExists = CheckIfStudentExisits(tempModel);
                                         if (alreadyExists)
+                                        {
                                             tempModel.RowType = 'U';
+                                            //  further process to check if row needs to be updated
+
+                                        }
                                         else
+                                        {
                                             tempModel.RowType = 'C';
+                                        }
                                         returnValue.SuccessList.Add(tempModel);
                                     }
                                     else
@@ -326,8 +332,10 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper()
-                                                                                    && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
+                //return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper()
+                //                                                                    && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
+
+                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper());
             }
             catch (Exception ex)
             {
@@ -451,6 +459,78 @@ namespace WebApp_ExcelFileProcessor.Controllers
             catch (Exception ex)
             {
                 return BadRequest("Error occurred while trying to delete the record");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CompleteProcessBaseStudentUpload()
+        {
+            try
+            {           
+                var tempList = _context.StudentTemps.ToList();
+                if (tempList.Count() > 0)
+                {
+                    //  create new records
+                    var createList = tempList.Where(i => i.RowType == 'C').ToList();
+                    if (createList.Count() > 0)
+                    {
+                        List<Student> studentList = new List<Student>();
+                        foreach (var item in createList)
+                        {
+                            studentList.Add(new Student()
+                            {
+                                StudentNr = (Int32)item.StudentNr,
+                                QRCode = item.QRCode,
+                                LastName = item.LastName,
+                                FirstName = item.FirstName,
+                                GenderId = (Guid)item.GenderId,
+                                StudentColorId = (Guid)item.StudentColorId,
+                                StudentClassId = (Guid)item.StudentClassId,
+                                StudentGroupId = (Guid)item.StudentGroupId,
+                                IsDeleted = false,
+                                DateCreated = DateTime.Now
+                            });
+                        }
+                        _context.Students.AddRange(studentList);
+                        _context.SaveChanges();
+                    }
+
+                    //  update current records
+                    var updateList = tempList.Where(i => i.RowType == 'U').ToList();
+                    if(updateList.Count() > 0)
+                    {
+                        foreach(var item in updateList)
+                        {
+                            //  get student records (with QRCode)
+                            var currStudent = _context.Students.SingleOrDefault(i => i.QRCode.ToUpper() == item.QRCode.ToUpper());
+                            if(currStudent != null)
+                            {
+                                currStudent.StudentNr = (Int32)item.StudentNr;
+                                currStudent.QRCode = item.QRCode;
+                                currStudent.LastName = item.LastName;
+                                currStudent.FirstName = item.FirstName;
+                                currStudent.GenderId = (Guid)item.GenderId;
+                                currStudent.StudentColorId = (Guid)item.StudentColorId;
+                                currStudent.StudentClassId = (Guid)item.StudentClassId;
+                                currStudent.StudentGroupId =(Guid) item.StudentGroupId;
+                                _context.SaveChanges();
+                            }
+                        }
+                    }
+                }
+
+                //  clear temp list
+                tempList.ForEach(item =>
+                {
+                    _context.StudentTemps.Remove(item);
+                });
+                _context.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occurred while trying to complete processing records.");
             }
         }
 
