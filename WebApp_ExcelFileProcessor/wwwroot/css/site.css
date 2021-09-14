@@ -302,6 +302,10 @@ body {
     border-color: #217093 !important;
 }
 /*Icons*/
+.icon-light-grey {
+    color: #6e7d88;
+}
+
 .icon-view {
     font-size: 18px !important;
     color: #217093 !important;

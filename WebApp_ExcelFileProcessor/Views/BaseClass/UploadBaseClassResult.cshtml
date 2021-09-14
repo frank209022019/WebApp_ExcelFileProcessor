@@ -4,31 +4,22 @@
 }
 
 <div class="form-row custom-row-responsiveness">
-    <div class="col-12 custom-col-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
         <h1 class="custom-dark-blue">Upload Base Class Result</h1>
         <hr class="custom-blue-hr" />
     </div>
     <!--Tabs-->
     <div class="col-12 custom-col-responsiveness">
-        <ul class="nav nav-tabs" role="tablist">
-            @if (Model.CreateList.Count() > 0)
-            {
+        <ul class="nav nav-tabs" role="tablist">          
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" onclick="setNewTab()">New Records</a>
                 </li>
-            }
-            @if (Model.UpdateList.Count() > 0)
-            {
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" onclick="setNewTab()">Updates</a>
                 </li>
-            }
-            @if (Model.ErrorList.Count() > 0)
-            {
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" onclick="setNewTab()">Row Errors</a>
-                </li>
-            }
+                </li>          
         </ul>
     </div>
 
@@ -52,6 +43,12 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if (Model.CreateList.Count() < 1)
+                        {
+                            <tr class="text-center">
+                                <td colspan="9">No records available</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -72,6 +69,12 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if (Model.UpdateList.Count() < 1)
+                        {
+                            <tr class="text-center">
+                                <td colspan="9">No records available</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -87,11 +90,16 @@
                             <th>Gender</th>
                             <th>Class</th>
                             <th>Group</th>
-                            <th>Color</th>
-                            <th class="text-center"> Actions</th>
+                            <th>Color</th>                         
                         </tr>
                     </thead>
                     <tbody>
+                        @if (Model.UpdateList.Count() < 1)
+                        {
+                            <tr class="text-center">
+                                <td colspan="8">No records available</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -134,7 +142,7 @@
             Swal.fire({
                 icon: 'warning',
                 title: "Delete Record",
-                text: 'Are you sure you want to delete this customer?',
+                text: 'Are you sure you want to delete this record?',
                 showClass: {
                     popup: 'animate__animated animate__fadeInDown'
                 },
@@ -182,7 +190,7 @@
           Swal.fire({
                 icon: 'warning',
                 title: "Delete Record",
-                text: 'Are you sure you want to delete this customer?',
+                text: 'Are you sure you want to delete this record?',
                 showClass: {
                     popup: 'animate__animated animate__fadeInDown'
                 },
@@ -225,60 +233,11 @@
             })
 
         });
-
-        $('#table-error').on('click', '.js-delete', function (data) {
-            var button = $(this);
-             Swal.fire({
-                icon: 'warning',
-                title: "Delete Record",
-                text: 'Are you sure you want to delete this customer?',
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                },
-                showConfirmButton: true,
-                confirmButtonColor: '#217093 ',
-                confirmButtonText: 'Delete',
-                showCancelButton: true,
-                cancelButtonText: "Cancel",
-                allowOutsideClick: false,
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var studTempId = button.attr("data-student-id")
-                    $.ajax({
-                         url: '@Url.Action("DeleteStudentTempRecord", "BaseClass")',
-                        data: { studentTempId: studTempId },
-                        method: "DELETE",
-                        success: function () {
-                            /*button.parents("tr").remove();*/
-                            tableError.row(button.parents("tr")).remove().draw();    // remove from internal list
-                        },
-                        error: function () {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'This record can not be deleted!',
-                                showClass: {
-                                    popup: 'animate__animated animate__fadeInDown'
-                                },
-                                hideClass: {
-                                    popup: 'animate__animated animate__fadeOutUp'
-                                },
-                            })
-                        }
-                    });
-                }
-            })
-        });
-
     });
 
     function loadCreateTable() {
         var table =   $('#table-create').DataTable({
-              ajax: {
+            ajax: {               
                 url: "@Url.Action("GetCreateStudentList", "BaseClass")",
                 dataSrc: ""
             },
@@ -418,19 +377,10 @@
                     visible: true
                 },
                 {
-                    data: "studentGroupDisplayName",
-                    visible: true
-                },
-                {
-                    data: "studentTempId",
-                    render: function (data) {
-                        var result = "<div class='row text-center'>"
-                        result += "<div class='col'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Delete</button></div>";
-                        result += "</div>";
-                        return result;
-                    }
-                }
-            ]
+                   data: "studentGroupDisplayName",
+                   visible: true
+               }             
+           ]
        });
         return table;
     }

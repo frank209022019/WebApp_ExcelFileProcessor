@@ -79,51 +79,6 @@ function sweetAlertSuccess_BaseClassUpload() {
     })
 }
 
-function sweetAlert2_DeleteStudentTempRecord() {
-    Swal.fire({
-        icon: 'warning',
-        title: "Delete Record",
-        text: 'Are you sure you want to delete this customer?',
-        showClass: {
-            popup: 'animate__animated animate__fadeInDown'
-        },
-        hideClass: {
-            popup: 'animate__animated animate__fadeOutUp'
-        },
-        showConfirmButton: true,
-        confirmButtonColor: '#217093 ',
-        confirmButtonText: 'View Result',
-        showCancelButton: true,
-        cancelButtonText: "Cancel",
-        allowOutsideClick: false,
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: "https://localhost:44375/api/Customers/" + button.attr("data-customer-id"),
-                method: "DELETE",
-                success: function () {
-                    /*button.parents("tr").remove();*/
-                    table.row(button.parents("tr")).remove().draw();    // remove from internal list
-                },
-                error: function () {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'This record can not be deleted!',
-                        showClass: {
-                            popup: 'animate__animated animate__fadeInUp'
-                        },
-                        hideClass: {
-                            popup: 'animate__animated animate__fadeOutDown'
-                        }
-                    })
-                }
-            });
-        }
-    })
-}
-
 function sweetAlert2_CompleteBaseClassUpload() {
     Swal.fire({
         icon: 'question',
@@ -153,7 +108,7 @@ function sweetAlert2_CompleteBaseClassUpload() {
                     sweetAlertSuccess("Base Class Upload", "All records saved successfully.");
                     setTimeout(function () {
                         window.location.href = '/BaseClass/ManageBaseClass/';
-                    }, 8000);
+                    }, 5000);
                 },
                 error: function () {
                     loadingSpinner_Hide();
