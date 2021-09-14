@@ -1,0 +1,312 @@
+﻿@model UploadBaseClassResultViewModel
+@{
+    ViewData["Title"] = "Upload Base Class Result";
+}
+
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness">
+        <h1 class="custom-dark-blue">Upload Base Class Result</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+    <div class="col-12 custom-col-responsiveness">
+        <ul class="nav nav-tabs" role="tablist">
+            @if (Model.CreateList.Count() > 0)
+            {
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" onclick="setNewTab()">New Records</a>
+                </li>
+            }
+            @if (Model.UpdateList.Count() > 0)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" onclick="setNewTab()">Updates</a>
+                </li>
+            }
+            @if (Model.ErrorList.Count() > 0)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" onclick="setNewTab()">Row Errors</a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="col-12 custom-col-responsiveness">
+        <!-- Tab panes -->
+        <div class="tab-content mt-3" id="tab-content-main">
+            <!--New Records-->
+            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                <table class="table table-striped" id="table-create">
+                    <thead>
+                        <tr>
+                            <th>Row #</th>
+                            <th>QR Code</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Gender</th>
+                            <th>Class</th>
+                            <th class="text-center"> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.CreateList.Count() > 0)
+                        {
+                            @foreach (var item in Model.CreateList)
+                            {
+                                <tr>
+                                    <td>@item.RowNumber.ToString()</td>
+                                    <td>@item.QRCode</td>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.LastName</td>
+                                    <td>@item.Gender.GenderName</td>
+                                    <td>@item.StudentClass.DisplayName</td>
+                                    <td class="text-center">
+                                        <div class="row">
+                                            <div class="icon-col col" onclick="viewStudentTemp('@item.StudentTempId')"><i class="fas fa-eye fa-1x icon-view" data-toggle="tooltip" data-placement="top" title="View Record" id="iconViewRecord"></i></div>
+                                            <div class="icon-col col" onclick="editStudentTemp('@item.StudentTempId')"><i class="fas fa-edit fa-1x icon-edit" data-toggle="tooltip" data-placement="top" title="Edit Record" id="iconEditRecord"></i></div>
+                                            <div class="icon-col col" onclick="deleteStudentTemp('@item.StudentTempId')"><i class="fas fa-trash-alt fa-1x icon-delete" data-toggle="tooltip" data-placement="top" title="Delete Record" id="iconDeleteRecord"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="text-center">
+                                <td colspan="7">No records available.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!--Updates-->
+            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                <table class="table table-striped" id="table-update">
+                    <thead>
+                        <tr>
+                            <th>Row #</th>
+                            <th>QR Code</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Gender</th>
+                            <th>Class</th>
+                            <th class="text-center"> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.UpdateList.Count() > 0)
+                        {
+                            @foreach (var item in Model.UpdateList)
+                            {
+                                <tr>
+                                    <td>@item.RowNumber.ToString()</td>
+                                    <td>@item.QRCode</td>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.LastName</td>
+                                    <td>@item.Gender.GenderName</td>
+                                    <td>@item.StudentClass.DisplayName</td>
+                                    <td class="text-center">
+                                        <div class="row">
+                                            <div class="icon-col col" onclick="viewStudentTemp('@item.StudentTempId')"><i class="fas fa-eye fa-1x icon-view" data-toggle="tooltip" data-placement="top" title="View Record" id="iconViewRecord"></i></div>
+                                            <div class="icon-col col" onclick="editStudentTemp('@item.StudentTempId')"><i class="fas fa-edit fa-1x icon-edit" data-toggle="tooltip" data-placement="top" title="Edit Record" id="iconEditRecord"></i></div>
+                                            <div class="icon-col col" onclick="deleteStudentTemp('@item.StudentTempId')"><i class="fas fa-trash-alt fa-1x icon-delete" data-toggle="tooltip" data-placement="top" title="Delete Record" id="iconDeleteRecord"></i></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="text-center">
+                                <td colspan="7">No records available.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!--Row Errors-->
+            <div class="tab-pane" id="tabs-3" role="tabpanel">
+                <div class="tab-pane" id="tabs-2" role="tabpanel">
+                    <table class="table table-striped" id="table-error">
+                        <thead>
+                            <tr>
+                                <th>Row #</th>
+                                <th>QR Code</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Gender</th>
+                                <th>Class</th>
+                                <th class="text-center"> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.ErrorList.Count() > 0)
+                            {
+                                @foreach (var item in Model.ErrorList)
+                                {
+                                    <tr>
+                                        <td>@item.RowNumber.ToString()</td>
+
+                                        @if (item.QRCode == null || item.QRCode == String.Empty)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>@item.QRCode</td>
+
+                                        }
+
+                                        @if (item.FirstName == null || item.FirstName == String.Empty)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>@item.FirstName</td>
+
+                                        }
+
+                                        @if (item.LastName == null || item.LastName == String.Empty)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>@item.LastName</td>
+
+                                        }
+
+                                        @if (item.Gender == null)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>@item.Gender.GenderName</td>
+
+                                        }
+
+                                        @if (item.StudentClass == null)
+                                        {
+                                            <td></td>
+                                        }
+                                        else
+                                        {
+                                            <td>@item.StudentClass.DisplayName</td>
+                                        }
+
+                                        <td class="text-center">
+                                            <div class="row">
+                                                <div class="icon-col col" onclick="viewStudentTemp('@item.StudentTempId')"><i class="fas fa-eye fa-1x icon-view" data-toggle="tooltip" data-placement="top" title="View Record" id="iconViewRecord"></i></div>
+                                                <div class="icon-col col" onclick="editStudentTemp('@item.StudentTempId')"><i class="fas fa-edit fa-1x icon-edit" data-toggle="tooltip" data-placement="top" title="Edit Record" id="iconEditRecord"></i></div>
+                                                <div class="icon-col col" onclick="deleteStudentTemp('@item.StudentTempId')"><i class="fas fa-trash-alt fa-1x icon-delete" data-toggle="tooltip" data-placement="top" title="Delete Record" id="iconDeleteRecord"></i></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="text-center">
+                                    <td colspan="7">No records available.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-row mt-4 custom-row-responsiveness">
+    <div class="col-xl-4 offset-xl-8 col-md-12 mt-2">
+        <button class="btn btn-outline-primary custom-primary-button full-width" id="btnCompleteProcess" data-toggle="tooltip" data-placement="bottom" title="Saves student base class records.">Complete Process</button>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        determineWhichTableToLoad();
+    });
+
+    function determineWhichTableToLoad() {
+        var createCount = '@Model.CreateList.Count()';
+        if (createCount != 0 && createCount != '0') {
+            loadCreateTable();
+        }
+        var updateCount = '@Model.UpdateList.Count()';
+        if (updateCount != 0 && updateCount != '0') {
+            loadUpdateTable();
+        }
+        var errorCount = '@Model.ErrorList.Count()';
+        if (errorCount != 0 && errorCount != '0') {
+            loadErrorTable();
+        }
+    }
+
+    function loadCreateTable() {
+        $('#table-create').DataTable({
+            columns: [
+                //"dummy" configuration
+                { visible: true }, //col 1
+                { visible: true }, //col 2
+                { visible: true }, //col 3
+                { visible: true }, //col 4
+                { visible: true }, //col 5
+                { visible: true }, //col 6
+                { visible: true }, //col 7
+            ]
+        });
+    }
+
+    function loadUpdateTable() {
+        $('#table-update').DataTable({
+            columns: [
+                //"dummy" configuration
+                { visible: true }, //col 1
+                { visible: true }, //col 2
+                { visible: true }, //col 3
+                { visible: true }, //col 4
+                { visible: true }, //col 5
+                { visible: true }, //col 6
+                { visible: true }, //col 7
+            ]
+        });
+    }
+
+    function loadErrorTable(){
+        $('#table-error').DataTable({
+            columns: [
+                //"dummy" configuration
+                { visible: true }, //col 1
+                { visible: true }, //col 2
+                { visible: true }, //col 3
+                { visible: true }, //col 4
+                { visible: true }, //col 5
+                { visible: true }, //col 6
+                { visible: true }, //col 7
+            ]
+        });
+    }
+
+    function setNewTab() {
+        loadingSpinner_Show();
+        setTimeout(function () { loadingSpinner_Hide() }, 800);
+    }
+
+    function viewStudentTemp(studTempId) {
+
+    }
+    function editStudentTemp(studTempId) {
+
+    }
+    function deleteStudentTemp(studTempId) {
+
+    }
+
+    function completeProcess() {
+
+    }
+</script>

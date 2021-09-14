@@ -92,7 +92,9 @@
                             dropzone.removeAllFiles(true);
                         },
                         error: function (data) {
+                            loadingSpinner_Hide();
                             sweetAlertError("Base Class File Upload", data.message);
+                            dropzone.removeAllFiles(true);
                         }
                     });
 

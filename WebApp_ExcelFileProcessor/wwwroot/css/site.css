@@ -83,6 +83,8 @@ body {
     }
 }
 
+/*Navbar & SIdemenu*/
+
 .custom-navbar {
     background-color: #217093 !important;
     color: #FFF !important;
@@ -130,6 +132,8 @@ body {
         border-right: #EFFF !important;
     }
 
+/*Dashboard cards*/
+
 .card {
     border: 0.5px solid #217093;
     padding-top: 10px !important;
@@ -156,7 +160,7 @@ body {
     color: #343a40 !important;
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1400px) {
     .card-block {
         margin-top: 15px !important;
         margin-bottom: 15px !important;
@@ -184,6 +188,8 @@ body {
 .custom-light-blue {
     color: #4eb8dd !important;
 }
+
+/*DropZone*/
 
 + .dropzone-form {
     width: 100% !important;
@@ -230,9 +236,9 @@ body {
     right: 0;
     top: 0;
     z-index: 9998;
- /*   align-items: center;
+    /*   align-items: center;
     justify-content: center;*/
- text-align: center;
+    text-align: center;
 }
 
     .loading-overlay.is-active {
@@ -255,6 +261,75 @@ body {
 .is-hide {
     display: none;
 }
+
+/*Tabs  */
+.nav-tabs .nav-item .nav-link {
+    background-color: #217093;
+    color: #FFF;
+}
+
+    .nav-tabs .nav-item .nav-link.active {
+        background-color: #FFF;
+        color: #217093;
+    }
+
+.tab-content {
+    /* border: 1px solid #dee2e6;
+    border-top: transparent;*/
+    padding: 5px;
+}
+
+    .tab-content .tab-pane {
+        background-color: #FFF;
+        color: #217093;
+        min-height: 200px;
+        height: auto;
+    }
+
+/*Tables*/
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #217093 !important;
+    border-color: #217093 !important;
+}
+.page-link {
+    color: #217093;
+    background-color: #fff !important;
+    border-color: #217093 !important;
+}
+/*Icons*/
+.icon-view {
+    font-size: 18px !important;
+    color: #217093 !important;
+}
+
+    .icon-view:hover {
+     font-size: 25px !important;
+        cursor: pointer;
+    }
+
+.icon-edit {
+    font-size: 18px !important;
+    color: #8B8000 !important;
+}
+
+    .icon-edit:hover {
+        font-size: 25px !important;
+        cursor: pointer;
+    }
+
+.icon-delete {
+    font-size: 18px !important;
+    color: #dc3545 !important;
+}
+
+    .icon-delete:hover {
+        font-size: 25px !important;
+        cursor: pointer;
+    }
+
+
 
 /*HomeController/Index*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
@@ -285,6 +360,6 @@ input:-webkit-autofill {
 
 /*DashboardController/Index*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
-.icon-margin-top-fix{
+.icon-margin-top-fix {
     margin-top: 12px !important;
 }

@@ -81,10 +81,38 @@ namespace WebApp_ExcelFileProcessor.Controllers
         }
 
         [Authorize]
+        public IActionResult UploadBaseClassResult()
+        {
+            UploadBaseClassResultViewModel model = new UploadBaseClassResultViewModel();
+            var tempResults = _context.StudentTemps.ToList();
+            if (tempResults.Count() > 0)
+            {
+                //  add to different model lists
+                var createTemp = tempResults.Where(i => i.RowType == 'C').ToList();
+                if (createTemp.Count() > 0)
+                    model.CreateList = createTemp;
+                var updateTemp = tempResults.Where(i => i.RowType == 'U').ToList();
+                if (updateTemp.Count() > 0)
+                    model.UpdateList = updateTemp;
+                var errorTemp = tempResults.Where(i => i.RowType == 'E').ToList();
+                if (errorTemp.Count() > 0)
+                    model.ErrorList = errorTemp;
+
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("UploadBaseClass", "BaseClass");
+            }
+        }
+
+        [Authorize]
         public IActionResult ManageBaseClass()
         {
             return View();
         }
+
+        #region Utilities
 
         private async Task<UploadBaseClassProcessViewModel> ProcessBaseClassUploadFile(IFormFile file)
         {
@@ -207,7 +235,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     {
                                         var valueLastName = worksheet.Cells[row, 6].Value;
                                         if (valueLastName != null)
-                                            tempModel.LastName = valueLastName.ToString();
+                                            tempModel.LastName = valueLastName.ToString().ToUpper();
                                         else
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "LastName"));
                                     }
@@ -217,7 +245,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     {
                                         var valueFirstName = worksheet.Cells[row, 7].Value;
                                         if (valueFirstName != null)
-                                            tempModel.FirstName = valueFirstName.ToString();
+                                            tempModel.FirstName = valueFirstName.ToString().ToUpper();
                                         else
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "FirstName"));
                                     }
@@ -264,8 +292,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 {
                                     tempModel.RowType = 'E';
                                     returnValue.ErrorList.Add(tempModel);
-                                }          
-                            }                           
+                                }
+                            }
                         }
                         else
                         {
@@ -298,13 +326,64 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                return _context.Students.Any(i => i.StudentNr == tempModel.StudentNr && i.QRCode.ToUpper() == tempModel.QRCode.ToUpper()
-                                                                                    && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper() && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
+                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper() 
+                                                                                    && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
             }
             catch (Exception ex)
             {
                 return false;
             }
         }
+
+        public async Task<List<StudentTemp>> GetCreateStudentList()
+        {
+            try
+            {
+                var tempResults = _context.StudentTemps.ToList();
+                var returnList = tempResults.Where(i => i.RowType == 'C').ToList();
+                if (returnList.Count() > 0)
+                    return returnList.ToList();
+                else
+                    return new List<StudentTemp>();
+            }
+            catch(Exception ex)
+            {
+                return new List<StudentTemp>();
+            }
+        }
+        public async Task<List<StudentTemp>> GetUpdateStudentList()
+        {
+            try
+            {
+                var tempResults = _context.StudentTemps.ToList();
+                var returnList = tempResults.Where(i => i.RowType == 'U').ToList();
+                if (returnList.Count() > 0)
+                    return returnList.ToList();
+                else
+                    return new List<StudentTemp>();
+            }
+            catch (Exception ex)
+            {
+                return new List<StudentTemp>();
+            }
+        }
+        public async Task<List<StudentTemp>> GetRowErrorStudentList()
+        {
+            try
+            {
+                var tempResults = _context.StudentTemps.ToList();
+                var returnList = tempResults.Where(i => i.RowType == 'E').ToList();
+                if (returnList.Count() > 0)
+                    return returnList.ToList();
+                else
+                    return new List<StudentTemp>();
+            }
+            catch (Exception ex)
+            {
+                return new List<StudentTemp>();
+            }
+        }
+
+        #endregion Utilities
     }
 }

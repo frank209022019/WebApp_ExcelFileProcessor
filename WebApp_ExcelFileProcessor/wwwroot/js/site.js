@@ -69,8 +69,8 @@ function sweetAlertSuccess_BaseClassUpload() {
         allowOutsideClick: false
     }).then((result) => {
         if (result.isConfirmed) {
-          /*  Swal.fire('Saved!', '', 'success')*/
             // redirect to result page
+            window.location.href = '/BaseClass/UploadBaseClassResult/';
         } 
     })
 }
