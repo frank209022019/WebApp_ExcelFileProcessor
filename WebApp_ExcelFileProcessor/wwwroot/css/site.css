@@ -3,7 +3,7 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /*Global*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
-.container{
+.container {
     max-width: 80% !important;
 }
 
@@ -216,7 +216,6 @@ body {
     width: 100% !important;
 }
 
-
 .custom-primary-button {
     color: #217093 !important;
     background-color: #FFF !important;
@@ -228,7 +227,6 @@ body {
         background-color: #217093 !important;
         border-color: #217093 !important;
     }
-
 
 /* Loading Spinner*/
 .loading-overlay {
@@ -297,6 +295,7 @@ body {
     background-color: #217093 !important;
     border-color: #217093 !important;
 }
+
 .page-link {
     color: #217093;
     background-color: #fff !important;
@@ -309,7 +308,7 @@ body {
 }
 
     .icon-view:hover {
-     font-size: 25px !important;
+        font-size: 25px !important;
         cursor: pointer;
     }
 
@@ -332,8 +331,6 @@ body {
         font-size: 25px !important;
         cursor: pointer;
     }
-
-
 
 /*HomeController/Index*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/

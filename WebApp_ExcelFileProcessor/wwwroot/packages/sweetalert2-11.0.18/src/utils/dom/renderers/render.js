@@ -11,20 +11,20 @@ import { renderTitle } from './renderTitle.js'
 import { renderPopup } from './renderPopup.js'
 
 export const render = (instance, params) => {
-  renderPopup(instance, params)
-  renderContainer(instance, params)
+    renderPopup(instance, params)
+    renderContainer(instance, params)
 
-  renderProgressSteps(instance, params)
-  renderIcon(instance, params)
-  renderImage(instance, params)
-  renderTitle(instance, params)
-  renderCloseButton(instance, params)
+    renderProgressSteps(instance, params)
+    renderIcon(instance, params)
+    renderImage(instance, params)
+    renderTitle(instance, params)
+    renderCloseButton(instance, params)
 
-  renderContent(instance, params)
-  renderActions(instance, params)
-  renderFooter(instance, params)
+    renderContent(instance, params)
+    renderActions(instance, params)
+    renderFooter(instance, params)
 
-  if (typeof params.didRender === 'function') {
-    params.didRender(getPopup())
-  }
+    if (typeof params.didRender === 'function') {
+        params.didRender(getPopup())
+    }
 }

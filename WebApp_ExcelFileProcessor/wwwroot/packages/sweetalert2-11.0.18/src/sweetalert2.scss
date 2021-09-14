@@ -5,6 +5,6 @@
 @import 'scss/animations';
 
 body {
-  @include sweetalert2-body();
-  @include sweetalert2-toasts-body();
+    @include sweetalert2-body();
+    @include sweetalert2-toasts-body();
 }

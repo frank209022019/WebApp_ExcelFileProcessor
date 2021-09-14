@@ -1,9 +1,6 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Upload Base Class";
 }
-
-
 
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness">
@@ -37,7 +34,7 @@
 
 <script>
     $(document).ready(function () {
-        checkFileCount();       
+        checkFileCount();
     });
 
     // DropZone Configuration
@@ -73,7 +70,7 @@
                 if (totalRejectedFiles.length > 0) {
                     sweetAlertWarning();
                 }
-                else {     
+                else {
 
                     var totalAcceptedFiles = dropzone.getAcceptedFiles();
                     var formData = new FormData();

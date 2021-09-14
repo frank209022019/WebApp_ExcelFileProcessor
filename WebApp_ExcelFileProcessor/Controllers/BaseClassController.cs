@@ -326,7 +326,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper() 
+                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper()
                                                                                     && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
             }
             catch (Exception ex)
@@ -349,7 +349,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         StudentTempId = i.StudentTempId.ToString(),
                         RowNumber = i.RowNumber.ToString(),
                         QRCode = i.QRCode == null ? String.Empty : i.QRCode.ToString(),
-                        FirstName = i.FirstName == null ? String.Empty :  i.FirstName.ToString(),
+                        FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
                         LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                         GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
                         StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
@@ -362,7 +362,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     return new List<StudentTempViewModel>();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new List<StudentTempViewModel>();
             }
@@ -422,7 +422,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
                         StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString()
                     }).ToList();
-                }   
+                }
                 else
                 {
                     return new List<StudentTempViewModel>();
@@ -439,7 +439,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                if(studentTempId == null)
+                if (studentTempId == null)
                     return BadRequest("Invalid parameter.");
                 var record = _context.StudentTemps.SingleOrDefault(i => i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());
                 if (record == null)
@@ -448,7 +448,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 _context.SaveChanges();
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest("Error occurred while trying to delete the record");
             }

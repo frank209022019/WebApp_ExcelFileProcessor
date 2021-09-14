@@ -26,9 +26,9 @@ namespace WebApp_ExcelFileProcessor.Controllers
         public IActionResult Index()
         {
             bool userLoggedIn = User.Identity.IsAuthenticated;
-            if(userLoggedIn)
+            if (userLoggedIn)
             {
-               return  RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {

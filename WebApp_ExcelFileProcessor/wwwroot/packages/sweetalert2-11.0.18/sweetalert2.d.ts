@@ -13,7 +13,6 @@ declare module 'sweetalert2' {
    * ```
    */
   namespace Swal {
-
     /**
      * Function to display a SweetAlert2 popup, with an object of options, all being optional.
      * See the `SweetAlertOptions` interface for the list of accepted fields and values.

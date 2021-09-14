@@ -24,16 +24,19 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             return View();
         }
+
         [Authorize]
         public IActionResult UploadBaseClass()
-        {          
+        {
             return RedirectToAction("UploadBaseClass", "BaseClass");
         }
+
         [Authorize]
         public IActionResult ManageBaseClass()
-        {           
+        {
             return RedirectToAction("ManageBaseClass", "BaseClass");
         }
+
         [Authorize]
         public IActionResult Signout()
         {

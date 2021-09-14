@@ -1,7 +1,6 @@
 ﻿//  SweetAlert2 notifications
 
-function sweetAlertSuccess(_title, _message)
-{
+function sweetAlertSuccess(_title, _message) {
     Swal.fire({
         icon: 'success',
         title: _title,
@@ -62,7 +61,7 @@ function sweetAlertSuccess_BaseClassUpload() {
         },
         hideClass: {
             popup: 'animate__animated animate__fadeOutUp'
-        },  
+        },
         showConfirmButton: true,
         confirmButtonColor: '#217093 ',
         confirmButtonText: 'View Result',
@@ -71,7 +70,7 @@ function sweetAlertSuccess_BaseClassUpload() {
         if (result.isConfirmed) {
             // redirect to result page
             window.location.href = '/BaseClass/UploadBaseClassResult/';
-        } 
+        }
     })
 }
 

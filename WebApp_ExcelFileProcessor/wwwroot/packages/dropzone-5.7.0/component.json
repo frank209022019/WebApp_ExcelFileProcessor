@@ -5,6 +5,6 @@
   "description": "Handles drag and drop of files for you.",
   "scripts": [ "index.js", "dist/dropzone.js" ],
   "styles": [ "dist/basic.css" ],
-  "dependencies": { },
+  "dependencies": {},
   "license": "MIT"
 }
