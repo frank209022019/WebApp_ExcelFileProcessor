@@ -335,52 +335,122 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        public async Task<List<StudentTemp>> GetCreateStudentList()
+        [HttpGet]
+        public async Task<List<StudentTempViewModel>> GetCreateStudentList()
         {
             try
             {
                 var tempResults = _context.StudentTemps.ToList();
                 var returnList = tempResults.Where(i => i.RowType == 'C').ToList();
                 if (returnList.Count() > 0)
-                    return returnList.ToList();
+                {
+                    return returnList.Select(i => new StudentTempViewModel()
+                    {
+                        StudentTempId = i.StudentTempId.ToString(),
+                        RowNumber = i.RowNumber.ToString(),
+                        QRCode = i.QRCode == null ? String.Empty : i.QRCode.ToString(),
+                        FirstName = i.FirstName == null ? String.Empty :  i.FirstName.ToString(),
+                        LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
+                        GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
+                        StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
+                        StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
+                        StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString()
+                    }).ToList();
+                }
                 else
-                    return new List<StudentTemp>();
+                {
+                    return new List<StudentTempViewModel>();
+                }
             }
             catch(Exception ex)
             {
-                return new List<StudentTemp>();
+                return new List<StudentTempViewModel>();
             }
         }
-        public async Task<List<StudentTemp>> GetUpdateStudentList()
+
+        [HttpGet]
+        public async Task<List<StudentTempViewModel>> GetUpdateStudentList()
         {
             try
             {
                 var tempResults = _context.StudentTemps.ToList();
                 var returnList = tempResults.Where(i => i.RowType == 'U').ToList();
                 if (returnList.Count() > 0)
-                    return returnList.ToList();
+                {
+                    return returnList.Select(i => new StudentTempViewModel()
+                    {
+                        StudentTempId = i.StudentTempId.ToString(),
+                        RowNumber = i.RowNumber.ToString(),
+                        QRCode = i.QRCode == null ? String.Empty : i.QRCode.ToString(),
+                        FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
+                        LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
+                        GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
+                        StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
+                        StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
+                        StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString()
+                    }).ToList();
+                }
                 else
-                    return new List<StudentTemp>();
+                {
+                    return new List<StudentTempViewModel>();
+                }
             }
             catch (Exception ex)
             {
-                return new List<StudentTemp>();
+                return new List<StudentTempViewModel>();
             }
         }
-        public async Task<List<StudentTemp>> GetRowErrorStudentList()
+
+        [HttpGet]
+        public async Task<List<StudentTempViewModel>> GetRowErrorStudentList()
         {
             try
             {
                 var tempResults = _context.StudentTemps.ToList();
                 var returnList = tempResults.Where(i => i.RowType == 'E').ToList();
                 if (returnList.Count() > 0)
-                    return returnList.ToList();
+                {
+                    return returnList.Select(i => new StudentTempViewModel()
+                    {
+                        StudentTempId = i.StudentTempId.ToString(),
+                        RowNumber = i.RowNumber.ToString(),
+                        QRCode = i.QRCode == null ? String.Empty : i.QRCode.ToString(),
+                        FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
+                        LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
+                        GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
+                        StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
+                        StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
+                        StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString()
+                    }).ToList();
+                }   
                 else
-                    return new List<StudentTemp>();
+                {
+                    return new List<StudentTempViewModel>();
+                }
             }
             catch (Exception ex)
             {
-                return new List<StudentTemp>();
+                return new List<StudentTempViewModel>();
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteStudentTempRecord(String studentTempId)
+        {
+            try
+            {
+                if(studentTempId == null)
+                    return BadRequest("Invalid parameter.");
+                var record = _context.StudentTemps.SingleOrDefault(i => i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());
+                if (record == null)
+                    return BadRequest("Error occurred while trying to delete the record");
+                _context.StudentTemps.Remove(record);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Error occurred while trying to delete the record");
             }
         }
 
