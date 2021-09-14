@@ -161,45 +161,7 @@ function sweetAlert2_CompleteBaseClassUpload() {
                 }
             });
         }
-    })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    $.ajax({
-        url: '@Url.Action("CompleteProcessBaseStudentUpload", "BaseClass")',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            loadingSpinner_Hide();
-            sweetAlertSuccess_BaseClassUpload();
-            dropzone.removeAllFiles(true);
-        },
-        error: function (data) {
-            loadingSpinner_Hide();
-            sweetAlertError("Base Class File Upload", data.message);
-            dropzone.removeAllFiles(true);
-        }
-    });
-}
+    })}
 
 //  Loading spinner
 
