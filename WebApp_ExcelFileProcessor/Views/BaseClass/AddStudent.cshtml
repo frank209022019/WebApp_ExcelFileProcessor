@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="QRCode" class="control-label"></label>
-                <input asp-for="QRCode" class="form-control" required  />
+                <input asp-for="QRCode" class="form-control" required />
                 <span asp-validation-for="QRCode" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -60,7 +60,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="StudentClass.DisplayName" class="control-label"></label>
-                <select asp-for="StudentClassId" class="form-control" asp-items="Model.ClassList"required >
+                <select asp-for="StudentClassId" class="form-control" asp-items="Model.ClassList" required>
                     <option value="" disabled selected hidden>Select Class</option>
                 </select>
                 <span asp-validation-for="StudentClass.DisplayName" class="text-danger"></span>
@@ -110,18 +110,18 @@
             }).then((result) => {
                 if (result.isConfirmed) {
 
-                    var currForm = 
+                    var currForm =
 
-                    loadingSpinner_Show();    
+                        loadingSpinner_Show();
                     if ($('#formAddStudent').valid()) {
                         $("#formAddStudent").submit();
                     }
                     else {
                         loadingSpinner_Hide();
                         sweetAlertError("Add Student", "Please ensure all fields are correct and valid.'");
-                    }    
+                    }
                 }
             })
-        });   
+        });
     });
 </script>

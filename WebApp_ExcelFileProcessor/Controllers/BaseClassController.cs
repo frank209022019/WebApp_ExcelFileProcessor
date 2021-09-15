@@ -182,7 +182,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         [HttpPost]
         public IActionResult UpdateStudent(Student model)
         {
-          try
+            try
             {
                 var currModel = _context.Students.SingleOrDefault(i => i.StudentId == model.StudentId);
                 currModel.StudentNr = model.StudentNr;
@@ -198,7 +198,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                 return RedirectToAction("ManageBaseClass");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return RedirectToAction("ManageBaseClass");
@@ -208,7 +208,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         [Authorize]
         public IActionResult DeleteStudent(String StudentId)
         {
-             try
+            try
             {
                 var model = _context.Students.SingleOrDefault(i => i.StudentId.ToString().ToUpper() == StudentId.ToUpper());
                 if (model != null)
@@ -227,13 +227,12 @@ namespace WebApp_ExcelFileProcessor.Controllers
         [HttpPost]
         public IActionResult DeleteStudent(Student model)
         {
-
             try
             {
                 var currModel = _context.Students.SingleOrDefault(i => i.StudentId == model.StudentId);
                 currModel.IsDeleted = true;
                 _context.Students.Update(currModel);
-                _context.SaveChanges();       
+                _context.SaveChanges();
 
                 return RedirectToAction("ManageBaseClass");
             }
@@ -260,7 +259,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 _logger.LogError(ex.Message);
                 return View(new Student() { });
             }
-        }     
+        }
 
         #region Utilities
 
@@ -750,13 +749,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName } ).OrderByDescending(i => i.Text);
+                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName }).OrderByDescending(i => i.Text);
                 model.ColorList = _context.StudentColors.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentColors.ToList().Select(i => new SelectListItem { Value = i.StudentColorId.ToString(), Text = i.ColorName }).OrderByDescending(i => i.Text);
                 model.ClassList = _context.StudentClasses.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentClasses.ToList().Select(i => new SelectListItem { Value = i.StudentClassId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
                 model.GroupList = _context.StudentGroups.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentGroups.ToList().Select(i => new SelectListItem { Value = i.StudentGroupId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
                 return model;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 model.GenderList = new List<SelectListItem>();

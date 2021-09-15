@@ -138,7 +138,6 @@ function sweetAlert_RedirectToManageBaseClass(_title, _message) {
     });
 }
 
-
 //  Loading spinner
 
 function loadingSpinner_Show() {

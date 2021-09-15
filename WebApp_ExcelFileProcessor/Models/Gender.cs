@@ -14,6 +14,7 @@ namespace WebApp_ExcelFileProcessor.Models
 
         [Display(Name = "Gender")]
         public String GenderName { get; set; }
+
         public Char GenderChar { get; set; }
         public virtual ICollection<Student> Students { get; set; }
     }

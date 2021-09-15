@@ -63,12 +63,14 @@ namespace WebApp_ExcelFileProcessor.Models
 
         [NotMapped]
         public IEnumerable<SelectListItem> GenderList { get; set; }
+
         [NotMapped]
         public IEnumerable<SelectListItem> ClassList { get; set; }
+
         [NotMapped]
         public IEnumerable<SelectListItem> ColorList { get; set; }
+
         [NotMapped]
         public IEnumerable<SelectListItem> GroupList { get; set; }
-
     }
 }

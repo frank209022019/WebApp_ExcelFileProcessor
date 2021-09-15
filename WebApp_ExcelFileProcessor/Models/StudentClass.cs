@@ -17,6 +17,7 @@ namespace WebApp_ExcelFileProcessor.Models
 
         [Display(Name = "Class")]
         public String DisplayName { get; set; }
+
         public virtual ICollection<Student> Students { get; set; }
     }
 }

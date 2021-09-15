@@ -14,6 +14,7 @@ namespace WebApp_ExcelFileProcessor.Models
 
         [Display(Name = "Color")]
         public String ColorName { get; set; }
+
         public virtual ICollection<Student> Students { get; set; }
     }
 }
