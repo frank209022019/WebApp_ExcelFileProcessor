@@ -10,16 +10,16 @@
     </div>
     <!--Tabs-->
     <div class="col-12 custom-col-responsiveness">
-        <ul class="nav nav-tabs" role="tablist">          
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" onclick="setNewTab()">New Records</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" onclick="setNewTab()">Updates</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" onclick="setNewTab()">Row Errors</a>
-                </li>          
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" onclick="setNewTab()">New Records</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" onclick="setNewTab()">Updates</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" onclick="setNewTab()">Row Errors</a>
+            </li>
         </ul>
     </div>
 
@@ -90,7 +90,7 @@
                             <th>Gender</th>
                             <th>Class</th>
                             <th>Group</th>
-                            <th>Color</th>                         
+                            <th>Color</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -107,7 +107,7 @@
     </div>
 </div>
 <div class="form-row mt-4 mb-4 custom-row-responsiveness">
-    <div class="col-xl-4 offset-xl-8 col-md-12 mt-2">
+    <div class="col-xl-2 offset-xl-10 col-md-12 mt-2">
         <button class="btn btn-outline-primary custom-primary-button full-width" id="btnCompleteProcess" data-toggle="tooltip" data-placement="bottom" title="Saves student base class records." onclick="sweetAlert2_CompleteBaseClassUpload()">Complete Process</button>
     </div>
 </div>
@@ -237,7 +237,7 @@
 
     function loadCreateTable() {
         var table =   $('#table-create').DataTable({
-            ajax: {               
+            ajax: {
                 url: "@Url.Action("GetCreateStudentList", "BaseClass")",
                 dataSrc: ""
             },
@@ -379,7 +379,7 @@
                 {
                    data: "studentGroupDisplayName",
                    visible: true
-               }             
+               }
            ]
        });
         return table;

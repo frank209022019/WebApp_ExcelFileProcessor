@@ -3,6 +3,9 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /*Global*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
+.hidden-html {
+    display: none !important;
+}
 .container {
     max-width: 80% !important;
 }

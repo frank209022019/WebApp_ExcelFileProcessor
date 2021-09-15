@@ -12,6 +12,7 @@ namespace WebApp_ExcelFileProcessor.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid GenderId { get; set; }
 
+        [Display(Name = "Gender")]
         public String GenderName { get; set; }
         public Char GenderChar { get; set; }
         public virtual ICollection<Student> Students { get; set; }

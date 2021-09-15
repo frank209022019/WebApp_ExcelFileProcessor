@@ -12,6 +12,7 @@ namespace WebApp_ExcelFileProcessor.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid StudentColorId { get; set; }
 
+        [Display(Name = "Color")]
         public String ColorName { get; set; }
         public virtual ICollection<Student> Students { get; set; }
     }

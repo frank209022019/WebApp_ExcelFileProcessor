@@ -14,6 +14,8 @@ namespace WebApp_ExcelFileProcessor.Models
 
         public Char GroupChar { get; set; }
         public Int32 GroupInt { get; set; }
+
+        [Display(Name = "Group")]
         public String DisplayName { get; set; }
         public virtual ICollection<Student> Students { get; set; }
     }

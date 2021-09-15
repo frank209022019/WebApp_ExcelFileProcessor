@@ -14,6 +14,8 @@ namespace WebApp_ExcelFileProcessor.Models
 
         public Int32 GradeInt { get; set; }
         public Char ClassChar { get; set; }
+
+        [Display(Name = "Class")]
         public String DisplayName { get; set; }
         public virtual ICollection<Student> Students { get; set; }
     }

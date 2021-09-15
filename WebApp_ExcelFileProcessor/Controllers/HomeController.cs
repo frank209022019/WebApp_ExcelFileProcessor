@@ -96,6 +96,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return View();
             }
         }

@@ -15,7 +15,6 @@ function sweetAlertSuccess(_title, _message) {
         confirmButtonColor: '#217093 ',
         allowOutsideClick: false,
         reverseButtons: true
-
     })
 }
 
@@ -105,10 +104,7 @@ function sweetAlert2_CompleteBaseClassUpload() {
                 type: 'GET',
                 success: function () {
                     loadingSpinner_Hide();
-                    sweetAlertSuccess("Base Class Upload", "All records saved successfully.");
-                    setTimeout(function () {
-                        window.location.href = '/BaseClass/ManageBaseClass/';
-                    }, 5000);
+                    sweetAlert_RedirectToManageBaseClass("Base Class Upload", "All records saved successfully.");
                 },
                 error: function () {
                     loadingSpinner_Hide();
@@ -116,7 +112,32 @@ function sweetAlert2_CompleteBaseClassUpload() {
                 }
             });
         }
-    })}
+    })
+}
+
+function sweetAlert_RedirectToManageBaseClass(_title, _message) {
+    Swal.fire({
+        icon: 'success',
+        title: _title,
+        text: _message,
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        },
+        showConfirmButton: true,
+        confirmButtonColor: '#217093 ',
+        confirmButtonText: 'Manage Base Class',
+        allowOutsideClick: false,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/BaseClass/ManageBaseClass/';
+        }
+    });
+}
+
 
 //  Loading spinner
 

@@ -24,10 +24,10 @@
 
 <!-- Submit Button -->
 <div class="form-row mt-1 custom-row-responsiveness">
-    <div class="col-xl-3 offset-xl-6  col-md-12 mt-2">
+    <div class="col-xl-2 offset-xl-8  col-md-12 mt-2">
         <button class="btn btn-outline-danger full-width" id="btnClearQueue" data-toggle="tooltip" data-placement="bottom" title="Clears all files from the Dropzone.">Remove Files</button>
     </div>
-    <div class="col-xl-3 col-md-12 mt-2">
+    <div class="col-xl-2 col-md-12 mt-2">
         <button class="btn btn-outline-primary custom-primary-button full-width" id="btnProcessQueue" data-toggle="tooltip" data-placement="bottom" title="Uploads all files from the Dropzone.">Upload Files</button>
     </div>
 </div>
@@ -88,9 +88,9 @@
                             sweetAlertSuccess_BaseClassUpload();
                             dropzone.removeAllFiles(true);
                         },
-                        error: function (data) {
+                        error: function (data) {                        
                             loadingSpinner_Hide();
-                            sweetAlertError("Base Class File Upload", data.message);
+                            sweetAlertError("Base Class File Upload", "Your file could not be processed.");
                             dropzone.removeAllFiles(true);
                         }
                     });

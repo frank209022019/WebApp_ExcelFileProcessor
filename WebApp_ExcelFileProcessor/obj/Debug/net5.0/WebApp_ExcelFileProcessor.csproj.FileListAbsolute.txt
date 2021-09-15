@@ -1449,3 +1449,7 @@ C:\Users\Frank\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProces
 C:\Users\Frank\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\bin\Debug\net5.0\Microsoft.IO.RecyclableMemoryStream.dll
 C:\Users\Frank\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\bin\Debug\net5.0\System.Xml.XPath.XmlDocument.dll
 C:\Users\Frank\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\BaseClass\UploadBaseClassResult.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\BaseClass\AddStudent.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\BaseClass\UpdateStudent.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\BaseClass\DeleteStudent.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\BaseClass\ViewStudent.cshtml.g.cs

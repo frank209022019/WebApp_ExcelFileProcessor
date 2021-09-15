@@ -1,0 +1,107 @@
+﻿@model WebApp_ExcelFileProcessor.Models.Student
+
+@{
+    ViewData["Title"] = "Delete Student";
+}
+
+<!--Header-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">Delete Student</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+</div>
+
+<!--Content-->
+<form asp-action="DeleteStudent" asp-controller="BaseClass" method="post" id="formDeleteStudent">
+    <div class="form-row custom-row-responsiveness">
+        <input type="hidden" asp-for="StudentId" value="@Model.StudentId" />
+        <input type="hidden" asp-for="DateCreated" value="@Model.DateCreated" />
+        <input type="hidden" asp-for="IsDeleted" value="@Model.IsDeleted" />
+
+        <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+            <div class="form-group">
+                <label asp-for="StudentNr" class="control-label"></label>
+                <input asp-for="StudentNr" class="form-control" readonly />
+                <span asp-validation-for="StudentNr" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QRCode" class="control-label"></label>
+                <input asp-for="QRCode" class="form-control" readonly />
+                <span asp-validation-for="QRCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" readonly />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QRCode" class="control-label"></label>
+                <input asp-for="QRCode" class="form-control" readonly />
+                <span asp-validation-for="QRCode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+            <div class="form-group">
+                <label asp-for="Gender.GenderName" class="control-label"></label>
+                <input asp-for="Gender.GenderName" class="form-control" readonly />
+                <span asp-validation-for="Gender.GenderName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudentColor.ColorName" class="control-label"></label>
+                <input asp-for="StudentColor.ColorName" class="form-control" readonly />
+                <span asp-validation-for="StudentColor.ColorName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudentClass.DisplayName" class="control-label"></label>
+                <input asp-for="StudentClass.DisplayName" class="form-control" readonly />
+                <span asp-validation-for="StudentClass.DisplayName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StudentGroup.DisplayName" class="control-label"></label>
+                <input asp-for="StudentGroup.DisplayName" class="form-control" readonly />
+                <span asp-validation-for="StudentGroup.DisplayName" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>
+<!--Buttons-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-xl-2 offset-xl-8 col-md-12 custom-col-responsiveness mb-2">
+        <a asp-action="ManageBaseClass" asp-controller="BaseClass" class="btn btn-outline-secondary full-width">Back to List</a>
+    </div>
+    <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-2">
+        <input type="button" value="Delete" id="btnPostForm" class="btn btn-outline-danger full-width" />
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#btnPostForm").click(function () {
+            Swal.fire({
+                icon: 'error',
+                title: "Delete Record",
+                text: 'Are you sure you want to save these records?',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                showConfirmButton: true,
+                confirmButtonColor: '#217093 ',
+                confirmButtonText: 'Delete Record',
+                showCancelButton: true,
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    loadingSpinner_Show();
+                    $("#formDeleteStudent").submit();
+                }
+            })
+        });
+    });
+</script>

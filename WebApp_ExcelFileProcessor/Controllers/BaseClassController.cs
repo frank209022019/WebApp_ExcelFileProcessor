@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using System;
@@ -70,13 +71,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                 var processResult = await ProcessBaseClassUploadFile(files.FirstOrDefault());
                 if (!processResult.ResponseValid)
-                    throw new Exception("An error while uploading your file!");
+                    throw new Exception(processResult.ResponseMessage);
 
                 return Ok(new { success = true, message = "All files uploaded successfully!", result = model });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { success = false, message = "An error while uploading your file!" });
+                return BadRequest(new { success = false, message = ex.Message });
             }
         }
 
@@ -109,8 +110,157 @@ namespace WebApp_ExcelFileProcessor.Controllers
         [Authorize]
         public IActionResult ManageBaseClass()
         {
-            return View();
+            try
+            {
+                var currentStudents = _context.Students.Where(i => !i.IsDeleted).ToList();
+                if (currentStudents.Count() == 0)
+                    throw new Exception("No student records found.");
+
+                return View(currentStudents);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return View(new List<Student>());
+            }
         }
+
+        [Authorize]
+        public IActionResult AddStudent()
+        {
+            Student model = new Student()
+            {
+                IsDeleted = false,
+                DateCreated = DateTime.Now
+            };
+            model = UpdateStudentWithLists(model);
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AddStudent(Student model)
+        {
+            try
+            {
+                _context.Students.Add(model);
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageBaseClass");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return RedirectToAction("ManageBaseClass");
+            }
+        }
+
+        [Authorize]
+        public IActionResult UpdateStudent(String StudentId)
+        {
+            try
+            {
+                var model = _context.Students.SingleOrDefault(i => i.StudentId.ToString().ToUpper() == StudentId.ToUpper());
+                if (model != null)
+                {
+                    model = UpdateStudentWithLists(model);
+                    return View(model);
+                }
+                else
+                {
+                    return View(new Student() { });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return View(new Student() { });
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult UpdateStudent(Student model)
+        {
+          try
+            {
+                var currModel = _context.Students.SingleOrDefault(i => i.StudentId == model.StudentId);
+                currModel.StudentNr = model.StudentNr;
+                currModel.QRCode = model.QRCode;
+                currModel.FirstName = model.FirstName;
+                currModel.LastName = model.LastName;
+                currModel.GenderId = model.GenderId;
+                currModel.StudentClassId = model.StudentClassId;
+                currModel.StudentColorId = model.StudentColorId;
+                currModel.StudentGroupId = model.StudentGroupId;
+                _context.Students.Update(currModel);
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageBaseClass");
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return RedirectToAction("ManageBaseClass");
+            }
+        }
+
+        [Authorize]
+        public IActionResult DeleteStudent(String StudentId)
+        {
+             try
+            {
+                var model = _context.Students.SingleOrDefault(i => i.StudentId.ToString().ToUpper() == StudentId.ToUpper());
+                if (model != null)
+                    return View(model);
+                else
+                    return View(new Student() { });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return View(new Student() { });
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteStudent(Student model)
+        {
+
+            try
+            {
+                var currModel = _context.Students.SingleOrDefault(i => i.StudentId == model.StudentId);
+                currModel.IsDeleted = true;
+                _context.Students.Update(currModel);
+                _context.SaveChanges();       
+
+                return RedirectToAction("ManageBaseClass");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return RedirectToAction("ManageBaseClass");
+            }
+        }
+
+        [Authorize]
+        public IActionResult ViewStudent(String StudentId)
+        {
+            try
+            {
+                var model = _context.Students.SingleOrDefault(i => i.StudentId.ToString().ToUpper() == StudentId.ToUpper());
+                if (model != null)
+                    return View(model);
+                else
+                    return View(new Student() { });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return View(new Student() { });
+            }
+        }     
 
         #region Utilities
 
@@ -162,7 +312,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                             for (int row = 6; row <= rowCount; row++)
                             {
                                 //  StudentTemp
-                                Boolean rowIsEmpty = true;
                                 Boolean rowHasError = false;
                                 StudentTemp tempModel = new StudentTemp()
                                 {
@@ -273,13 +422,17 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     //  Determine if row is create, update or error
                                     if (!rowHasError)
                                     {
-                                        //  check if similar records already exists in the database
+                                        //  check if similar records already exists in the database && needs create or update
                                         var alreadyExists = CheckIfStudentExisits(tempModel);
                                         if (alreadyExists)
                                         {
-                                            tempModel.RowType = 'U';
                                             //  further process to check if row needs to be updated
-
+                                            //  incomplete validation - not able to create with upload
+                                            var needsUpdate = CheckIfStudentNeedsUpdate(tempModel);
+                                            if (needsUpdate)
+                                                tempModel.RowType = 'U';
+                                            else
+                                                tempModel.RowType = 'X';
                                         }
                                         else
                                         {
@@ -324,6 +477,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new UploadBaseClassProcessViewModel() { ResponseId = null, ResponseValid = false, ResponseDateTime = DateTime.Now, ResponseMessage = ex.Message, SuccessList = new List<StudentTemp>(), ErrorList = new List<StudentTemp>() };
             }
         }
@@ -334,17 +488,70 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 //return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper()
                 //                                                                    && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
-
                 return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper());
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
+                return false;
+            }
+        }
+
+        private Boolean CheckIfStudentNeedsUpdate(StudentTemp tempModel)
+        {
+            try
+            {
+                Boolean needsUpdate = false;
+                Int32 totalUpdates = 0;
+                var currModel = _context.Students.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper());
+                if (currModel != null)
+                {
+                    //  StudentNr
+                    if (currModel.StudentNr.ToString().ToUpper() != tempModel.StudentNr.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  QRCode
+                    if (currModel.QRCode.ToUpper() != tempModel.QRCode.ToUpper())
+                        totalUpdates++;
+
+                    //  LastName
+                    if (currModel.LastName.ToUpper() != tempModel.LastName.ToUpper())
+                        totalUpdates++;
+
+                    //  FirstName
+                    if (currModel.FirstName.ToUpper() != tempModel.FirstName.ToUpper())
+                        totalUpdates++;
+
+                    //  GenderId
+                    if (currModel.GenderId.ToString().ToUpper() != tempModel.GenderId.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  StudentColorId
+                    if (currModel.StudentColorId.ToString().ToUpper() != tempModel.StudentColorId.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  StudentClassId
+                    if (currModel.StudentClassId.ToString().ToUpper() != tempModel.StudentClassId.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  StudentGroupId
+                    if (currModel.StudentGroupId.ToString().ToUpper() != tempModel.StudentGroupId.ToString().ToUpper())
+                        totalUpdates++;
+                }
+
+                if (totalUpdates > 0)
+                    needsUpdate = true;
+                return needsUpdate;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
                 return false;
             }
         }
 
         [HttpGet]
-        public async Task<List<StudentTempViewModel>> GetCreateStudentList()
+        public List<StudentTempViewModel> GetCreateStudentList()
         {
             try
             {
@@ -372,12 +579,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new List<StudentTempViewModel>();
             }
         }
 
         [HttpGet]
-        public async Task<List<StudentTempViewModel>> GetUpdateStudentList()
+        public List<StudentTempViewModel> GetUpdateStudentList()
         {
             try
             {
@@ -405,12 +613,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new List<StudentTempViewModel>();
             }
         }
 
         [HttpGet]
-        public async Task<List<StudentTempViewModel>> GetRowErrorStudentList()
+        public List<StudentTempViewModel> GetRowErrorStudentList()
         {
             try
             {
@@ -438,12 +647,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return new List<StudentTempViewModel>();
             }
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteStudentTempRecord(String studentTempId)
+        public IActionResult DeleteStudentTempRecord(String studentTempId)
         {
             try
             {
@@ -458,15 +668,16 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest("Error occurred while trying to delete the record");
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> CompleteProcessBaseStudentUpload()
+        public IActionResult CompleteProcessBaseStudentUpload()
         {
             try
-            {           
+            {
                 var tempList = _context.StudentTemps.ToList();
                 if (tempList.Count() > 0)
                 {
@@ -497,13 +708,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                     //  update current records
                     var updateList = tempList.Where(i => i.RowType == 'U').ToList();
-                    if(updateList.Count() > 0)
+                    if (updateList.Count() > 0)
                     {
-                        foreach(var item in updateList)
+                        foreach (var item in updateList)
                         {
                             //  get student records (with QRCode)
                             var currStudent = _context.Students.SingleOrDefault(i => i.QRCode.ToUpper() == item.QRCode.ToUpper());
-                            if(currStudent != null)
+                            if (currStudent != null)
                             {
                                 currStudent.StudentNr = (Int32)item.StudentNr;
                                 currStudent.QRCode = item.QRCode;
@@ -512,7 +723,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 currStudent.GenderId = (Guid)item.GenderId;
                                 currStudent.StudentColorId = (Guid)item.StudentColorId;
                                 currStudent.StudentClassId = (Guid)item.StudentClassId;
-                                currStudent.StudentGroupId =(Guid) item.StudentGroupId;
+                                currStudent.StudentGroupId = (Guid)item.StudentGroupId;
                                 _context.SaveChanges();
                             }
                         }
@@ -530,7 +741,29 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest("Error occurred while trying to complete processing records.");
+            }
+        }
+
+        private Student UpdateStudentWithLists(Student model)
+        {
+            try
+            {
+                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName } ).OrderByDescending(i => i.Text);
+                model.ColorList = _context.StudentColors.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentColors.ToList().Select(i => new SelectListItem { Value = i.StudentColorId.ToString(), Text = i.ColorName }).OrderByDescending(i => i.Text);
+                model.ClassList = _context.StudentClasses.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentClasses.ToList().Select(i => new SelectListItem { Value = i.StudentClassId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
+                model.GroupList = _context.StudentGroups.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentGroups.ToList().Select(i => new SelectListItem { Value = i.StudentGroupId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
+                return model;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                model.GenderList = new List<SelectListItem>();
+                model.ColorList = new List<SelectListItem>();
+                model.ClassList = new List<SelectListItem>();
+                model.GroupList = new List<SelectListItem>();
+                return model;
             }
         }
 
