@@ -28,80 +28,86 @@
         <div class="tab-content mt-3" id="tab-content-main">
             <!--New Records-->
             <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                <table class="table table-striped full-width" id="table-create">
-                    <thead>
-                        <tr>
-                            <th>Row #</th>
-                            <th>QR Code</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Gender</th>
-                            <th>Class</th>
-                            <th>Group</th>
-                            <th>Color</th>
-                            <th class="text-center"> Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.CreateList.Count() < 1)
-                        {
-                            <tr class="text-center">
-                                <td colspan="9">No records available</td>
+                <div class="table-responsive">
+                    <table class="table table-striped full-width" id="table-create">
+                        <thead>
+                            <tr>
+                                <th>Row #</th>
+                                <th>QR Code</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Gender</th>
+                                <th>Class</th>
+                                <th>Group</th>
+                                <th>Color</th>
+                                <th class="text-center"> Actions</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if (Model.CreateList.Count() < 1)
+                            {
+                                <tr class="text-center">
+                                    <td colspan="9">No records available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!--Updates-->
             <div class="tab-pane" id="tabs-2" role="tabpanel">
-                <table class="table table-striped full-width" id="table-update">
-                    <thead>
-                        <tr>
-                            <th>Row #</th>
-                            <th>QR Code</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Gender</th>
-                            <th>Class</th>
-                            <th>Group</th>
-                            <th>Color</th>
-                            <th class="text-center"> Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.UpdateList.Count() < 1)
-                        {
-                            <tr class="text-center">
-                                <td colspan="9">No records available</td>
+                <div class="table-responsive">
+                    <table class="table table-striped full-width" id="table-update">
+                        <thead>
+                            <tr>
+                                <th>Row #</th>
+                                <th>QR Code</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Gender</th>
+                                <th>Class</th>
+                                <th>Group</th>
+                                <th>Color</th>
+                                <th class="text-center"> Actions</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if (Model.UpdateList.Count() < 1)
+                            {
+                                <tr class="text-center">
+                                    <td colspan="9">No records available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!--Row Errors-->
             <div class="tab-pane" id="tabs-3" role="tabpanel">
-                <table class="table table-striped full-width" id="table-error">
-                    <thead>
-                        <tr>
-                            <th>Row #</th>
-                            <th>QR Code</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Gender</th>
-                            <th>Class</th>
-                            <th>Group</th>
-                            <th>Color</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.UpdateList.Count() < 1)
-                        {
-                            <tr class="text-center">
-                                <td colspan="8">No records available</td>
+                <div class="table-responsive">
+                    <table class="table table-striped full-width" id="table-error">
+                        <thead>
+                            <tr>
+                                <th>Row #</th>
+                                <th>QR Code</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Gender</th>
+                                <th>Class</th>
+                                <th>Group</th>
+                                <th>Color</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @if (Model.UpdateList.Count() < 1)
+                            {
+                                <tr class="text-center">
+                                    <td colspan="8">No records available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -278,7 +284,7 @@
                     data: "studentTempId",
                     render: function (data) {
                         var result = "<div class='row text-center'>"
-                        result += "<div class='col'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Delete</button></div>";
+                        result += "<div class='col-xl-4 col-md-12'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Delete</button></div>";
                         result += "</div>";
                         return result;
                     }
@@ -331,7 +337,7 @@
                     data: "studentTempId",
                     render: function (data) {
                         var result = "<div class='row text-center'>"
-                        result += "<div class='col'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Delete</button></div>";
+                        result += "<div class='col-xl-4 col-md-12'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Delete</button></div>";
                         result += "</div>";
                         return result;
                     }

@@ -9,59 +9,62 @@
         <hr class="custom-blue-hr" />
     </div>
 
+
     <div class="col-12 custom-col-responsiveness">
-        <table class="table table-striped full-width" id="table-student">
-            <thead>
-                <tr>
-                    <th>QR Code</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Gender</th>
-                    <th>Class</th>
-                    <th>Group</th>
-                    <th>Color</th>
-                    <th>Date Created</th>
-                    <th class="text-center"> Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Count() < 1)
-                {
-                    <tr class="text-center">
-                        <td colspan="9">No records available</td>
+        <div class="table-responsive">
+            <table class="table table-striped full-width" id="table-student">
+                <thead>
+                    <tr>
+                        <th>QR Code</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Gender</th>
+                        <th>Class</th>
+                        <th>Group</th>
+                        <th>Color</th>
+                        <th>Date Created</th>
+                        <th class="text-center"> Actions</th>
                     </tr>
-                }
-                else
-                {
-                    @foreach (var item in Model)
+                </thead>
+                <tbody>
+                    @if (Model.Count() < 1)
                     {
-                        <tr>
-                            <td>@item.QRCode</td>
-                            <td>@item.FirstName</td>
-                            <td>@item.LastName</td>
-                            <td>@item.Gender.GenderName</td>
-                            <td>@item.StudentClass.DisplayName</td>
-                            <td>@item.StudentGroup.DisplayName</td>
-                            <td>@item.StudentColor.ColorName</td>
-                            <td>@item.DateCreated.ToString("dd-MM-yyyy")</td>
-                            <td>
-                                <div class="form-row">
-                                    <div class="col-4">
-                                        <a asp-action="ViewStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-secondary full-width">View</a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a asp-action="UpdateStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-warning full-width">Update</a>
-                                    </div>
-                                    <div class="col-4">
-                                        <a asp-action="DeleteStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-danger full-width">Delete</a>
-                                    </div>
-                                </div>
-                            </td>
+                        <tr class="text-center">
+                            <td colspan="9">No records available</td>
                         </tr>
                     }
-                }
-            </tbody>
-        </table>
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.QRCode</td>
+                                <td>@item.FirstName</td>
+                                <td>@item.LastName</td>
+                                <td>@item.Gender.GenderName</td>
+                                <td>@item.StudentClass.DisplayName</td>
+                                <td>@item.StudentGroup.DisplayName</td>
+                                <td>@item.StudentColor.ColorName</td>
+                                <td>@item.DateCreated.ToString("dd-MM-yyyy")</td>
+                                <td>
+                                    <div class="form-row">
+                                        <div class="col-xl-4 col-md-12">
+                                            <a asp-action="ViewStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-secondary full-width">View</a>
+                                        </div>
+                                        <div class="col-xl-4 col-md-12">
+                                            <a asp-action="UpdateStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-warning full-width">Update</a>
+                                        </div>
+                                        <div class="col-xl-4 col-md-12">
+                                            <a asp-action="DeleteStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-danger full-width">Delete</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="col-xl-2 col-md-12 custom-col-responsiveness mt-3 mb-3">
@@ -74,6 +77,6 @@
         var tableCount = '@Model.Count()';
         if (tableCount != 0 && tableCount != '0') {
             $('#table-student').DataTable({});
-        }     
+        }
     });
 </script>
