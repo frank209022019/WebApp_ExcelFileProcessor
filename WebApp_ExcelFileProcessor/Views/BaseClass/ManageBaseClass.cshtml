@@ -5,8 +5,12 @@
 
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness mb-2">
-        <h1 class="custom-dark-blue">Manage Base Class</h1>
+        <h1 class="custom-dark-blue">Manage Base Class</h1>       
         <hr class="custom-blue-hr" />
+    </div>
+
+    <div class="col-xl-2 offset-xl-10 col-md-12 custom-col-responsiveness mb-3">
+        <a asp-action="AddStudent" asp-controller="BaseClass" class="btn btn-outline-primary full-width">Add Student</a>
     </div>
 
     <div class="col-12 custom-col-responsiveness">
@@ -15,6 +19,7 @@
                 <thead>
                     <tr>
                         <th>QR Code</th>
+                        <th>Student #</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Gender</th>
@@ -29,53 +34,101 @@
                     @if (Model.Count() < 1)
                     {
                         <tr class="text-center">
-                            <td colspan="9">No records available</td>
+                            <td colspan="10">No records available</td>
                         </tr>
-                    }
-                    else
-                    {
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>@item.QRCode</td>
-                                <td>@item.FirstName</td>
-                                <td>@item.LastName</td>
-                                <td>@item.Gender.GenderName</td>
-                                <td>@item.StudentClass.DisplayName</td>
-                                <td>@item.StudentGroup.DisplayName</td>
-                                <td>@item.StudentColor.ColorName</td>
-                                <td>@item.DateCreated.ToString("dd-MM-yyyy")</td>
-                                <td>
-                                    <div class="form-row">
-                                        <div class="col-xl-4 col-md-12">
-                                            <a asp-action="ViewStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-secondary full-width">View</a>
-                                        </div>
-                                        <div class="col-xl-4 col-md-12">
-                                            <a asp-action="UpdateStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-warning full-width">Update</a>
-                                        </div>
-                                        <div class="col-xl-4 col-md-12">
-                                            <a asp-action="DeleteStudent" asp-controller="BaseClass" asp-route-StudentId="@item.StudentId.ToString()" class="btn btn-outline-danger full-width">Delete</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
                     }
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="col-xl-2 col-md-12 custom-col-responsiveness mt-3 mb-3">
-        <a asp-action="AddStudent" asp-controller="BaseClass" class="btn btn-outline-primary full-width">Add Student</a>
-    </div>
+
 </div>
 
 <script>
     $(document).ready(function () {
+        var studentTable;
+
+        loadingSpinner_Show();
+
         var tableCount = '@Model.Count()';
         if (tableCount != 0 && tableCount != '0') {
-            $('#table-student').DataTable({});
+            loadStudentTable();
         }
+
+        setTimeout(function () { loadingSpinner_Hide(); }, 1500)
     });
+
+    function loadStudentTable() {
+        var table = $('#table-student').DataTable({
+             ajax: {
+                url: "@Url.Action("GetStudentClassList", "BaseClass")",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    data: "qrCode",
+                    visible: true
+                },
+                {
+                    data: "studentNr",
+                    visible: true
+                },
+                {
+                    data: "firstName",
+                    visible: true
+                },
+                {
+                    data: "lastName",
+                    visible: true
+                },
+                {
+                    data: "genderGenderName",
+                    visible: true
+                },
+                {
+                    data: "studentClassdisplayName",
+                    visible: true
+                },
+                {
+                    data: "studentColorColorName",
+                    visible: true
+                },
+                {
+                    data: "studentGroupDisplayName",
+                    visible: true
+                },
+                {
+                    data: "dateCreated",
+                    visible: true
+                },
+                {
+                    data: "studentId",
+                    render: function (data) {
+                        var result = "<div class='form-row text-center'>"
+
+                        result += "<div class='col-xl-4 col-md-12'>";
+                        result += " <a class='btn btn-outline-secondary full-width' href='/BaseClass/ViewStudent?StudentId="+ data +"'>View</a>";
+                        //result += "<a asp-action='ViewStudent' asp-controller='BaseClass' asp-route-StudentId=" + data + " class='btn btn-outline-secondary full-width'>View</a> ";
+                        result += "</div>";
+
+                        result += "<div class='col-xl-4 col-md-12'>";
+                        result += " <a class='btn btn-outline-warning full-width' href='/BaseClass/UpdateStudent?StudentId=" + data + "'>Update</a>";
+                        //result += "<a asp-action='UpdateStudent' asp-controller='BaseClass' asp-route-StudentId=" + data + " class='btn btn-outline-warning full-width'>Update</a> ";
+                        result += "</div>";
+
+                        result += "<div class='col-xl-4 col-md-12'>";
+                        result += " <a class='btn btn-outline-danger full-width' href='/BaseClass/DeleteStudent?StudentId=" + data + "'>Delete</a>";
+                        //result += "<a asp-action='DeleteStudent' asp-controller='BaseClass' asp-route-StudentId=" + data + " class='btn btn-outline-danger full-width'>Delete</a> ";
+                        result += "</div>";
+
+                        return result;
+                    }
+                }
+            ]
+        });
+
+        return table;
+    }
 </script>
+

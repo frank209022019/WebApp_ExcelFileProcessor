@@ -30,6 +30,36 @@
     </div>
 </div>
 
+<!--Row 2-->
+<div class="form-row custom-row-responsiveness mt-5">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">Student Screenings</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+    <div class="col-xl-4 col-md-12 custom-col-responsiveness" onclick="dashboardRedirect('uploadstudentscreening')">
+        <div class="card text-center h-100">
+            <div class="card-block">
+                <h2 class="icon-margin-top-fix"><i class="fas fa-cloud-upload-alt fa-4x icon-light-grey"></i></h2>
+            </div>
+            <div class="card-footer">
+                <h3>Upload Student Screenings</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-12 custom-col-responsiveness" onclick="dashboardRedirect('managestudentscreening')">
+        <div class="card text-center h-100">
+            <div class="card-block">
+                <h2 class="icon-margin-top-fix"><i class="fa fa-temperature-low fa-4x icon-light-grey"></i></h2>
+            </div>
+            <div class="card-footer">
+                <h3>Manage Student Screenings</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     function dashboardRedirect(destination) {
         switch (destination) {
@@ -38,6 +68,12 @@
             break;
         case 'managebaseclass':
             window.location.href = '@Url.Action("ManageBaseClass", "Dashboard")';
+                break;
+            case 'uploadstudentscreening':
+            window.location.href = '@Url.Action("UploadStudentScreening", "StudentScreening")';
+                break;
+            case 'managestudentscreening':
+            window.location.href = '@Url.Action("ManageStudentScreening", "StudentScreening")';
             break;
         }
     }

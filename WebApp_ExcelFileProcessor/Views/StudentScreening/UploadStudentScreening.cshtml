@@ -1,14 +1,15 @@
-﻿@{
-    ViewData["Title"] = "Upload Base Class";
+﻿
+@{
+    ViewData["Title"] = "Upload Student Screening";
 }
 
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness mb-2">
-        <h1 class="custom-dark-blue">Upload Base Class</h1>
+        <h1 class="custom-dark-blue">Upload Student Screening</h1>
         <hr class="custom-blue-hr" />
     </div>
     <div class="col-12 custom-col-responsiveness dropzone-div">
-        @using (Html.BeginForm("UploadBaseClass", "BaseClass", FormMethod.Post, new
+        @using (Html.BeginForm("UploadStudentScreening", "StudentScreeningController", FormMethod.Post, new
         {
             @class = "dropzone dropzone-form round-corners",
             id = "dropzone-form",
@@ -17,7 +18,7 @@
             <div class="fallback">
                 <input name="file" type="file" multiple />
             </div>
-            <div class="dz-message" data-dz-message><span><i class="fas fa-upload fa-5x icon-light-grey"></i></span></div>
+            <div class="dz-message" data-dz-message><span><i class="fas fa-cloud-upload-alt fa-5x icon-light-grey"></i></span></div>
         }
     </div>
 </div>
@@ -54,8 +55,8 @@
             var dropzone = this;
             this.on("addedfile", function (file) {
                 totalFiles++;
-                checkFileCount();                
-                this.emit("thumbnail", file, "/icons/dropzone-icon.jpg");         
+                checkFileCount();
+                this.emit("thumbnail", file, "/icons/dropzone-icon.jpg");
             });
             this.on("removedfile", function (file) {
                 totalFiles--;
@@ -79,19 +80,19 @@
                         formData.append("files", totalAcceptedFiles[i])
                     }
                     $.ajax({
-                        url: '@Url.Action("UploadBaseClass", "BaseClass")',
+                        url: '@Url.Action("UploadStudentScreening", "StudentScreening")',
                         type: 'POST',
                         data: formData,
                         processData: false,
                         contentType: false,
                         success: function (data) {
                             loadingSpinner_Hide();
-                            sweetAlertSuccess_BaseClassUpload();
+                            sweetAlertSuccess_StudentScreeningUpload();
                             dropzone.removeAllFiles(true);
                         },
                         error: function (data) {
                             loadingSpinner_Hide();
-                            sweetAlertError("Base Class File Upload", "Your file could not be processed.");
+                            sweetAlertError("Student Screening File Upload", "Your file could not be processed.");
                             dropzone.removeAllFiles(true);
                         }
                     });
@@ -101,7 +102,7 @@
         }
     };
 
-  
+
 
 
 
@@ -121,3 +122,4 @@
         $("#btnProcessQueue").prop("disabled", true);
     }
 </script>
+

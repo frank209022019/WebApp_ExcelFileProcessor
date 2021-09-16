@@ -32,6 +32,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
             _context = context;
         }
 
+        #region Views
+
         [Authorize]
         public IActionResult UploadBaseClass()
         {
@@ -44,12 +46,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
+                //  get file details
                 FileDetailsViewModel model = new FileDetailsViewModel()
                 {
                     DateUploaded = DateTime.Now
-                };
-
-                //  get file details
+                };           
                 if (files.Count() > 0)
                 {
                     var file = files.FirstOrDefault();
@@ -68,7 +69,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 }
 
                 //  save file details to database temp
-
                 var processResult = await ProcessBaseClassUploadFile(files.FirstOrDefault());
                 if (!processResult.ResponseValid)
                     throw new Exception(processResult.ResponseMessage);
@@ -84,25 +84,34 @@ namespace WebApp_ExcelFileProcessor.Controllers
         [Authorize]
         public IActionResult UploadBaseClassResult()
         {
-            UploadBaseClassResultViewModel model = new UploadBaseClassResultViewModel();
-            var tempResults = _context.StudentTemps.ToList();
-            if (tempResults.Count() > 0)
+            try
             {
-                //  add to different model lists
-                var createTemp = tempResults.Where(i => i.RowType == 'C').ToList();
-                if (createTemp.Count() > 0)
-                    model.CreateList = createTemp;
-                var updateTemp = tempResults.Where(i => i.RowType == 'U').ToList();
-                if (updateTemp.Count() > 0)
-                    model.UpdateList = updateTemp;
-                var errorTemp = tempResults.Where(i => i.RowType == 'E').ToList();
-                if (errorTemp.Count() > 0)
-                    model.ErrorList = errorTemp;
+                UploadBaseClassResultViewModel model = new UploadBaseClassResultViewModel();
 
-                return View(model);
+                var tempResults = _context.StudentTemps.ToList();
+                if (tempResults.Count() > 0)
+                {
+                    //  add to different model lists
+                    var createTemp = tempResults.Where(i => i.RowType == 'C').ToList();
+                    if (createTemp.Count() > 0)
+                        model.CreateList = createTemp;
+                    var updateTemp = tempResults.Where(i => i.RowType == 'U').ToList();
+                    if (updateTemp.Count() > 0)
+                        model.UpdateList = updateTemp;
+                    var errorTemp = tempResults.Where(i => i.RowType == 'E').ToList();
+                    if (errorTemp.Count() > 0)
+                        model.ErrorList = errorTemp;
+
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("UploadBaseClass", "BaseClass");
+                }
             }
-            else
+            catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return RedirectToAction("UploadBaseClass", "BaseClass");
             }
         }
@@ -229,7 +238,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                var currModel = _context.Students.SingleOrDefault(i => i.StudentId == model.StudentId);
+                var currModel = _context.Students.SingleOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
                 currModel.IsDeleted = true;
                 _context.Students.Update(currModel);
                 _context.SaveChanges();
@@ -261,12 +270,20 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
+        #endregion Views
+
         #region Utilities
 
+        [Authorize]
         private async Task<UploadBaseClassProcessViewModel> ProcessBaseClassUploadFile(IFormFile file)
         {
             try
             {
+                //  Validate Template
+                var validTemplate = await ValidateFileTemplate(file);
+                if (!validTemplate)
+                    throw new Exception("Invalid template used.");
+
                 //  Clear all temp records
                 var currentTempList = _context.StudentTemps.ToList();
                 if (currentTempList.Count() > 0)
@@ -297,7 +314,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 using (var stream = new MemoryStream())
                 {
                     await file.CopyToAsync(stream);
-                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                     using (ExcelPackage package = new ExcelPackage(stream))
                     {
                         //  Get the first worksheet in the workbook
@@ -321,13 +337,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                                 try
                                 {
-                                    //  Check if current rows columns have null values
-                                    for (int col = 2; col <= 9; col++)
-                                    {
-                                        if (worksheet.Cells[row, col].Value == null)
-                                            rowHasError = true;
-                                    }
-
                                     //  Get values from row/col
                                     //Col2        Gold            StudentColor
                                     //Col3        G1                 StudentGroup
@@ -337,6 +346,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     //Col7        Name
                                     //Col8        Gender
                                     //Col9        8A              StudentClass
+
+                                    //  Check if current rows columns have null values
+                                    for (int col = 2; col <= 9; col++)
+                                    {
+                                        if (worksheet.Cells[row, col].Value == null)
+                                            rowHasError = true;
+                                    }                                   
 
                                     //  StudentColor
                                     if (worksheet.Cells[row, 2].Value != null)
@@ -455,7 +471,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         }
                         else
                         {
-                            throw new Exception("No rows found in the document.");
+                            throw new Exception("No rows found in the file.");
                         }
                     }
                 }
@@ -481,13 +497,40 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        private Boolean CheckIfStudentExisits(StudentTemp tempModel)
+        [Authorize]
+        private async Task<Boolean> ValidateFileTemplate(IFormFile file)
         {
             try
             {
-                //return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper()
-                //                                                                    && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
-                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper());
+                //  D3 = nr
+                //  F3 = surname
+                //  G3  =   name
+
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                using (var stream = new MemoryStream())
+                {
+                    await file.CopyToAsync(stream);
+                    using (ExcelPackage package = new ExcelPackage(stream))
+                    {
+                        //  Get the first worksheet in the workbook
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                        int colCount = worksheet.Dimension.End.Column;
+                        int rowCount = worksheet.Dimension.End.Row;
+
+                        var validateNr = worksheet.Cells["D3"].Value;
+                        if (validateNr == null || validateNr.ToString().ToLower() != "nr")
+                            throw new Exception("Invalid template used");
+
+                        var validateSurname = worksheet.Cells["F3"].Value;
+                        if (validateSurname == null || validateSurname.ToString().ToLower() != "surname")
+                            throw new Exception("Invalid template used");
+
+                        var validateName = worksheet.Cells["G3"].Value;
+                        if (validateName == null || validateName.ToString().ToLower() != "name")
+                            throw new Exception("Invalid template used");
+                    }
+                }
+                return true;
             }
             catch (Exception ex)
             {
@@ -496,13 +539,30 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
+        [Authorize]
+        private Boolean CheckIfStudentExisits(StudentTemp tempModel)
+        {
+            try
+            {
+                //return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper()
+                //                                                                    && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
+                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && !i.IsDeleted);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
+            }
+        }
+
+        [Authorize]
         private Boolean CheckIfStudentNeedsUpdate(StudentTemp tempModel)
         {
             try
             {
                 Boolean needsUpdate = false;
                 Int32 totalUpdates = 0;
-                var currModel = _context.Students.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper());
+                var currModel = _context.Students.SingleOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && !i.IsDeleted);
                 if (currModel != null)
                 {
                     //  StudentNr
@@ -549,6 +609,29 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
+        [Authorize]
+        private Student UpdateStudentWithLists(Student model)
+        {
+            try
+            {
+                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName }).OrderByDescending(i => i.Text);
+                model.ColorList = _context.StudentColors.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentColors.ToList().Select(i => new SelectListItem { Value = i.StudentColorId.ToString(), Text = i.ColorName }).OrderByDescending(i => i.Text);
+                model.ClassList = _context.StudentClasses.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentClasses.ToList().Select(i => new SelectListItem { Value = i.StudentClassId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
+                model.GroupList = _context.StudentGroups.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentGroups.ToList().Select(i => new SelectListItem { Value = i.StudentGroupId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                model.GenderList = new List<SelectListItem>();
+                model.ColorList = new List<SelectListItem>();
+                model.ClassList = new List<SelectListItem>();
+                model.GroupList = new List<SelectListItem>();
+                return model;
+            }
+        }
+
+        [Authorize]
         [HttpGet]
         public List<StudentTempViewModel> GetCreateStudentList()
         {
@@ -563,6 +646,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         StudentTempId = i.StudentTempId.ToString(),
                         RowNumber = i.RowNumber.ToString(),
                         QRCode = i.QRCode == null ? String.Empty : i.QRCode.ToString(),
+                        StudentNr = i.StudentNr == null ? String.Empty : i.StudentNr.ToString(),
                         FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
                         LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                         GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
@@ -583,6 +667,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public List<StudentTempViewModel> GetUpdateStudentList()
         {
@@ -597,6 +682,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         StudentTempId = i.StudentTempId.ToString(),
                         RowNumber = i.RowNumber.ToString(),
                         QRCode = i.QRCode == null ? String.Empty : i.QRCode.ToString(),
+                        StudentNr = i.StudentNr == null ? String.Empty : i.StudentNr.ToString(),
                         FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
                         LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                         GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
@@ -617,6 +703,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public List<StudentTempViewModel> GetRowErrorStudentList()
         {
@@ -631,6 +718,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         StudentTempId = i.StudentTempId.ToString(),
                         RowNumber = i.RowNumber.ToString(),
                         QRCode = i.QRCode == null ? String.Empty : i.QRCode.ToString(),
+                        StudentNr = i.StudentNr == null ? String.Empty : i.StudentNr.ToString(),
                         FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
                         LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                         GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
@@ -651,27 +739,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [HttpDelete]
-        public IActionResult DeleteStudentTempRecord(String studentTempId)
-        {
-            try
-            {
-                if (studentTempId == null)
-                    return BadRequest("Invalid parameter.");
-                var record = _context.StudentTemps.SingleOrDefault(i => i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());
-                if (record == null)
-                    return BadRequest("Error occurred while trying to delete the record");
-                _context.StudentTemps.Remove(record);
-                _context.SaveChanges();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest("Error occurred while trying to delete the record");
-            }
-        }
-
+        [Authorize]
         [HttpGet]
         public IActionResult CompleteProcessBaseStudentUpload()
         {
@@ -712,7 +780,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         foreach (var item in updateList)
                         {
                             //  get student records (with QRCode)
-                            var currStudent = _context.Students.SingleOrDefault(i => i.QRCode.ToUpper() == item.QRCode.ToUpper());
+                            var currStudent = _context.Students.SingleOrDefault(i => i.QRCode.ToUpper() == item.QRCode.ToUpper() && !i.IsDeleted);
                             if (currStudent != null)
                             {
                                 currStudent.StudentNr = (Int32)item.StudentNr;
@@ -745,24 +813,55 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        private Student UpdateStudentWithLists(Student model)
+        [Authorize]
+        [HttpGet]
+        public List<StudentViewModel> GetStudentClassList()
         {
             try
             {
-                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName }).OrderByDescending(i => i.Text);
-                model.ColorList = _context.StudentColors.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentColors.ToList().Select(i => new SelectListItem { Value = i.StudentColorId.ToString(), Text = i.ColorName }).OrderByDescending(i => i.Text);
-                model.ClassList = _context.StudentClasses.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentClasses.ToList().Select(i => new SelectListItem { Value = i.StudentClassId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
-                model.GroupList = _context.StudentGroups.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentGroups.ToList().Select(i => new SelectListItem { Value = i.StudentGroupId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
-                return model;
+                var studentList = _context.Students.Where(i => !i.IsDeleted).ToList();
+                if (studentList.Count() == 0)
+                    throw new Exception("No students found.");
+                return studentList.Select(i => new StudentViewModel()
+                {
+                    StudentId = i.StudentId.ToString(),
+                    QRCode = i.QRCode == null ? String.Empty : i.QRCode.ToString(),
+                    StudentNr = i.StudentNr <= 0 ? String.Empty : i.StudentNr.ToString(),
+                    FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
+                    LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
+                    GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
+                    StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
+                    StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
+                    StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString(),
+                    DateCreated = i.DateCreated.ToShortDateString()
+                }).ToList();
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                model.GenderList = new List<SelectListItem>();
-                model.ColorList = new List<SelectListItem>();
-                model.ClassList = new List<SelectListItem>();
-                model.GroupList = new List<SelectListItem>();
-                return model;
+                return new List<StudentViewModel>();
+            }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public IActionResult DeleteStudentTempRecord(String studentTempId)
+        {
+            try
+            {
+                if (studentTempId == null)
+                    return BadRequest("Invalid parameter.");
+                var record = _context.StudentTemps.SingleOrDefault(i => i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());
+                if (record == null)
+                    return BadRequest("Error occurred while trying to delete the record");
+                _context.StudentTemps.Remove(record);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Error occurred while trying to delete the record");
             }
         }
 

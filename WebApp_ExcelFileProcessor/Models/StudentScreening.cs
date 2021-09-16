@@ -12,15 +12,16 @@ namespace WebApp_ExcelFileProcessor.Models
         public Guid StudentScreeningId { get; set; }
 
         public String QRCodeId { get; set; }
-        public Boolean GeneralSenseWellbeing { get; set; }
-        public Boolean WearingAMask { get; set; }
-        public Boolean HighRiskTravel14Days { get; set; }
-        public Boolean CloseContactInfectedPerson { get; set; }
-        public Boolean CloseContactProbableInfectedPerson { get; set; }
-        public Boolean AttendHealthFacility14Days { get; set; }
-        public Boolean AdmittedSeverPneumonia { get; set; }
-        public Boolean SufferFromChronicDisease { get; set; }
-        public Boolean AnyOfTheFollowingSymptoms { get; set; }
+        public String Temp { get; set; }
+        public String GeneralSenseWellbeing { get; set; }
+        public String WearingAMask { get; set; }
+        public String HighRiskTravel14Days { get; set; }
+        public String CloseContactInfectedPerson { get; set; }
+        public String CloseContactProbableInfectedPerson { get; set; }
+        public String AttendHealthFacility14Days { get; set; }
+        public String AdmittedSeverPneumonia { get; set; }
+        public String SufferFromChronicDisease { get; set; }
+        public String AnyOfTheFollowingSymptoms { get; set; }
         public DateTime ScrenningTimeStamp { get; set; }
 
         public Guid StudentId { get; set; }

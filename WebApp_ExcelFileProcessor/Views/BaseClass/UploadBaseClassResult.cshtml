@@ -23,6 +23,10 @@
         </ul>
     </div>
 
+    <div class="col-xl-2 offset-xl-10 col-md-12 mt-3">
+        <button class="btn btn-outline-primary custom-primary-button full-width" id="btnCompleteProcess" data-toggle="tooltip" data-placement="bottom" title="Saves student base class records." onclick="sweetAlert2_CompleteBaseClassUpload()">Complete Process</button>
+    </div>
+
     <div class="col-12 custom-col-responsiveness">
         <!-- Tab panes -->
         <div class="tab-content mt-3" id="tab-content-main">
@@ -34,6 +38,7 @@
                             <tr>
                                 <th>Row #</th>
                                 <th>QR Code</th>
+                                <th>Student #</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Gender</th>
@@ -47,7 +52,7 @@
                             @if (Model.CreateList.Count() < 1)
                             {
                                 <tr class="text-center">
-                                    <td colspan="9">No records available</td>
+                                    <td colspan="10">No records available</td>
                                 </tr>
                             }
                         </tbody>
@@ -62,6 +67,7 @@
                             <tr>
                                 <th>Row #</th>
                                 <th>QR Code</th>
+                                <th>Student #</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Gender</th>
@@ -75,7 +81,7 @@
                             @if (Model.UpdateList.Count() < 1)
                             {
                                 <tr class="text-center">
-                                    <td colspan="9">No records available</td>
+                                    <td colspan="10">No records available</td>
                                 </tr>
                             }
                         </tbody>
@@ -90,6 +96,7 @@
                             <tr>
                                 <th>Row #</th>
                                 <th>QR Code</th>
+                                <th>Student #</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Gender</th>
@@ -102,7 +109,7 @@
                             @if (Model.UpdateList.Count() < 1)
                             {
                                 <tr class="text-center">
-                                    <td colspan="8">No records available</td>
+                                    <td colspan="9">No records available</td>
                                 </tr>
                             }
                         </tbody>
@@ -112,16 +119,10 @@
         </div>
     </div>
 </div>
-<div class="form-row mt-4 mb-4 custom-row-responsiveness">
-    <div class="col-xl-2 offset-xl-10 col-md-12 mt-2">
-        <button class="btn btn-outline-primary custom-primary-button full-width" id="btnCompleteProcess" data-toggle="tooltip" data-placement="bottom" title="Saves student base class records." onclick="sweetAlert2_CompleteBaseClassUpload()">Complete Process</button>
-    </div>
-</div>
 
 <script>
 
     $(document).ready(function () {
-
         var tableCreate;
         var tableUpdate;
         var tableError;
@@ -147,8 +148,8 @@
             var button = $(this);
             Swal.fire({
                 icon: 'warning',
-                title: "Delete Record",
-                text: 'Are you sure you want to delete this record?',
+                title: "Delete Action",
+                text: 'Are you sure you want to delete this action?',
                 showClass: {
                     popup: 'animate__animated animate__fadeInDown'
                 },
@@ -170,8 +171,7 @@
                         data: { studentTempId: studTempId },
                         method: "DELETE",
                         success: function () {
-                            /*button.parents("tr").remove();*/
-                            tableCreate.row(button.parents("tr")).remove().draw();    // remove from internal list
+                            tableCreate.row(button.parents("tr")).remove().draw();    
                         },
                         error: function () {
                             Swal.fire({
@@ -195,8 +195,8 @@
             var button = $(this);
           Swal.fire({
                 icon: 'warning',
-                title: "Delete Record",
-                text: 'Are you sure you want to delete this record?',
+                title: "Delete Action",
+                text: 'Are you sure you want to delete this action?',
                 showClass: {
                     popup: 'animate__animated animate__fadeInDown'
                 },
@@ -257,6 +257,10 @@
                     visible: true
                 },
                 {
+                    data: "studentNr",
+                    visible: true
+                },
+                {
                     data: "firstName",
                     visible: true
                 },
@@ -284,7 +288,7 @@
                     data: "studentTempId",
                     render: function (data) {
                         var result = "<div class='row text-center'>"
-                        result += "<div class='col-xl-4 col-md-12'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Delete</button></div>";
+                        result += "<div class='col-12'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove Action</button></div>";
                         result += "</div>";
                         return result;
                     }
@@ -310,6 +314,10 @@
                     visible: true
                 },
                 {
+                    data: "studentNr",
+                    visible: true
+                },
+                {
                     data: "firstName",
                     visible: true
                 },
@@ -337,7 +345,7 @@
                     data: "studentTempId",
                     render: function (data) {
                         var result = "<div class='row text-center'>"
-                        result += "<div class='col-xl-4 col-md-12'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Delete</button></div>";
+                        result += "<div class='col-12'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove Action</button></div>";
                         result += "</div>";
                         return result;
                     }
@@ -360,6 +368,10 @@
                 },
                 {
                     data: "qrCode",
+                    visible: true
+                },
+                {
+                    data: "studentNr",
                     visible: true
                 },
                 {

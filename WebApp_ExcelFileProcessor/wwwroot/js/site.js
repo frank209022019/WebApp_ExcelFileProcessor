@@ -138,6 +138,31 @@ function sweetAlert_RedirectToManageBaseClass(_title, _message) {
     });
 }
 
+
+function sweetAlertSuccess_StudentScreeningUpload() {
+    Swal.fire({
+        icon: 'success',
+        title: "Student Screening File Upload",
+        text: "Your file was processed",
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        },
+        showConfirmButton: true,
+        confirmButtonColor: '#217093 ',
+        confirmButtonText: 'View Result',
+        allowOutsideClick: false,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // redirect to result page
+            window.location.href = '/StudentScreening/UploadStudentScreeningResult/';
+        }
+    })
+}
+
 //  Loading spinner
 
 function loadingSpinner_Show() {

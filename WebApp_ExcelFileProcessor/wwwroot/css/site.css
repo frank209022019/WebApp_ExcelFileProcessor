@@ -22,11 +22,25 @@ a {
     color: #0366d6;
 }
 
+.btn{
+    font-size: 16px !important;
+}
+
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #217093;
+    border-color: #217093;
 }
+.btn-outline-primary {
+    color: #217093;
+    background-color: #fff;
+    border-color: #217093;
+}
+    .btn-outline-primary:hover {
+        color: #fff;
+        background-color: #217093;
+        border-color: #217093;
+    }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
@@ -93,34 +107,46 @@ body {
 
 /*Navbar & SIdemenu*/
 
+#sidebar-wrapper .list-group {
+    width: 25rem;
+}
+
+@media (min-width: 768px) {
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -25rem;
+    }
+}
+
 .custom-navbar {
     background-color: #217093 !important;
     color: #FFF !important;
-    font-size: 1.35em !important;
+    font-size: 26px !important;
     margin-bottom: 3px !important;
+    padding: 0.96rem 1.25rem;
 }
 
     .custom-navbar a {
         color: #FFF !important;
-        font-size: 1.35em !important;
+        font-size: 26px !important;
     }
 
 .custom-sidemenu-header {
     background-color: #217093 !important;
     color: #FFF !important;
-    font-size: 1.4em !important;
+    font-size: 26px !important;
+    /*border-bottom: 1px solid #FFF !important;*/
 }
 
 .custom-sidemenu {
     background-color: #217093 !important;
     color: #FFF !important;
-    font-size: 1em !important;
+    font-size: 16px !important;
 }
 
     .custom-sidemenu a {
         background-color: #217093 !important;
         color: #FFF !important;
-        font-size: 1em !important;
+        font-size: 20px !important;
     }
 
         .custom-sidemenu a:hover {
@@ -199,7 +225,123 @@ body {
 
 /*DropZone*/
 
-+ .dropzone-form {
+/*.dropzone .dz-preview .dz-details .dz-filename {
+ white-space: unset !important;
+}*/
+.dz-progress {
+    display: none !important;
+}
+
+.dropzone-div:hover i {
+    display: inline-block;
+    position: relative;
+    -moz-animation: bounce 1.5s infinite linear;
+    -o-animation: bounce 1.5s infinite linear;
+    bounce 1.5s infinite linear;
+    bounce 1.5s infinite linear;
+    bounce 1.5s infinite linear;
+    bounce 1.5s infinite linear;
+    bounce 1.5s infinite linear;
+    bounce 1.5s infinite linear;
+    bounce s infinite linear;
+    bounce s infinite linear;
+    bounce s infinite linear;
+    bounce 2s infinite linear;
+    -webkit-animation: bounce 1.5s infinite linear;
+    animation: bounce 1.5s infinite linear;
+}
+
+@-webkit-keyframes bounce {
+    0% {
+        top: 0;
+    }
+
+    50% {
+        top: -0.2em;
+    }
+
+    70% {
+        top: -0.3em;
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+@-moz-keyframes bounce {
+    0% {
+        top: 0;
+    }
+
+    50% {
+        top: -0.2em;
+    }
+
+    70% {
+        top: -0.3em;
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+@-o-keyframes bounce {
+    0% {
+        top: 0;
+    }
+
+    50% {
+        top: -0.2em;
+    }
+
+    70% {
+        top: -0.3em;
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+@-ms-keyframes bounce {
+    0% {
+        top: 0;
+    }
+
+    50% {
+        top: -0.2em;
+    }
+
+    70% {
+        top: -0.3em;
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+@keyframes bounce {
+    0% {
+        top: 0;
+    }
+
+    50% {
+        top: -0.2em;
+    }
+
+    70% {
+        top: -0.3em;
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+.dropzone-form {
     width: 100% !important;
 }
 
@@ -293,6 +435,46 @@ body {
     }
 
 /*Tables*/
+
+.paginate_button{
+    margin: 5px !important;
+}
+/*#table-student_ellipsis{
+    display: none !important;
+}*/
+
+.table-responsive {
+    padding-bottom: 25px !important;
+}
+
+.table {
+    font-size: 16px !important;
+}
+
+.table a {
+    font-size: 16px !important;
+}
+
+@media only screen and (max-width: 1400px) {
+    .table a {
+        margin-bottom: 2px !important;
+        margin-top: 2px !important;
+    }
+
+}
+
+.table {
+    text-align: center !important;
+}
+
+thead {
+    color: #217093 !important;
+}
+
+/*.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #217093 !important;
+}*/
+
 .page-item.active .page-link {
     z-index: 3;
     color: #fff;
