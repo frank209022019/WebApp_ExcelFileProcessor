@@ -465,10 +465,15 @@ body {
 
 .table {
     text-align: center !important;
+    vertical-align: middle;
 }
 
 thead {
     color: #217093 !important;
+}
+
+th{
+    vertical-align: middle !important;
 }
 
 /*.table-striped tbody tr:nth-of-type(odd) {

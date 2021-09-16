@@ -111,14 +111,22 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 if (tempResults.Count() > 0)
                 {
                     var createTemp = tempResults.Where(i => i.RowType == 'C').ToList();
-                    if (createTemp.Count() > 0)
+                    if (createTemp != null && createTemp.Count() > 0)
                         model.CreateList = createTemp;
+                    else
+                        model.CreateList = new List<StudentScreeningTemp>();
+
                     var existTemp = tempResults.Where(i => i.RowType == 'X').ToList();
-                    if (existTemp.Count() > 0)
+                    if (existTemp != null &&existTemp.Count() > 0)
                         model.ExisitingList = existTemp;
+                    else
+                        model.ExisitingList = new List<StudentScreeningTemp>();
+
                     var errorTemp = tempResults.Where(i => i.RowType == 'E').ToList();
-                    if (errorTemp.Count() > 0)
+                    if (errorTemp != null && errorTemp.Count() > 0)
                         model.ErrorList = errorTemp;
+                    else
+                        model.ErrorList = new List<StudentScreeningTemp>();
 
                     return View(model);
                 }
@@ -486,7 +494,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         [Authorize]
         [HttpGet]
-        public List<StudentScreeningTempViewModel> GetCreateStudentScreeningLis()
+        public List<StudentScreeningTempViewModel> GetCreateStudentScreeningList()
         {
             try
             {
@@ -528,7 +536,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         [Authorize]
         [HttpGet]
-        public List<StudentScreeningTempViewModel> GetExistingStudentScreeningLis()
+        public List<StudentScreeningTempViewModel> GetExistingStudentScreeningList()
         {
             try
             {
@@ -570,7 +578,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         [Authorize]
         [HttpGet]
-        public List<StudentScreeningTempViewModel> GetErrorStudentScreeningLis()
+        public List<StudentScreeningTempViewModel> GetErrorStudentScreeningList()
         {
             try
             {
@@ -607,6 +615,28 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 _logger.LogError(ex.Message);
                 return new List<StudentScreeningTempViewModel>();
+            }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public IActionResult DeleteStudentScreeningTempRecord(String screenTempId)
+        {
+            try
+            {
+                if (screenTempId == null)
+                    return BadRequest("Invalid parameter.");
+                var record = _context.StudentScreeningTemps.SingleOrDefault(i => i.StudentScreeningTempId.ToString().ToUpper() == screenTempId.ToUpper());
+                if (record == null)
+                    return BadRequest("Error occurred while trying to delete the record");
+                _context.StudentScreeningTemps.Remove(record);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Error occurred while trying to delete the record");
             }
         }
 

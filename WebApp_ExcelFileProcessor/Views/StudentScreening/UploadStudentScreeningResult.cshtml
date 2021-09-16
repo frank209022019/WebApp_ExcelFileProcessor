@@ -1,7 +1,446 @@
-﻿
+﻿@model UploadStudentScreeningResultViewModel
 @{
-    ViewData["Title"] = "UploadStudentScreeningResult";
+    ViewData["Title"] = "Upload Student Screening Result";
 }
 
-<h1>UploadStudentScreeningResult</h1>
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">Upload Student Screening Result</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+    <!--Tabs-->
+    <div class="col-12 custom-col-responsiveness">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" onclick="setNewTab()">New Screenings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" onclick="setNewTab()">Existing Screenings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab" onclick="setNewTab()">Row Errors</a>
+            </li>
+        </ul>
+    </div>
 
+    <div class="col-xl-2 offset-xl-10 col-md-12 mt-3">
+        <button class="btn btn-outline-primary custom-primary-button full-width" id="btnCompleteProcess" data-toggle="tooltip" data-placement="bottom" title="Saves student base class records." onclick="sweetAlert2_CompleteBaseClassUpload()">Complete Process</button>
+    </div>
+
+    <div class="col-12 custom-col-responsiveness">
+        <!-- Tab panes -->
+        <div class="tab-content mt-3" id="tab-content-main">
+            <!--New Records-->
+            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-striped full-width" id="table-create">
+                        <thead>
+                            <tr>
+                                <th>Row #</th>
+                                <th>QR Code</th>
+                                <th>Student #</th>
+                                <th>Class</th>
+                                <th>Temp</th>
+                                <th>General Sense of Wellbeing</th>
+                                <th>Wearing a Mask</th>
+                                <th>High Risk Travel within 14Days</th>
+                                <th>Close Contact with InfectedPerson</th>
+                                <th>Close Contact with Probable Infected Person</th>
+                                <th>Attend Health Facility within 14Days</th>
+                                <th>Admitted with Severe Pneumonia</th>
+                                <th>Suffer from Chronic Disease</th>
+                                <th>Any Following Symptoms</th>
+                                <th>TimeStamp</th>
+                                <th class="text-center"> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.CreateList.Count() < 1)
+                            {
+                                <tr class="text-center">
+                                    <td colspan="16">No records available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--Updates-->
+            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-striped full-width" id="table-existing">
+                        <thead>
+                            <tr>
+                                <th>Row #</th>
+                                <th>QR Code</th>
+                                <th>Student #</th>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>General Sense of Wellbeing</th>
+                                <th>Wearing a Mask</th>
+                                <th>High Risk Travel within 14Days</th>
+                                <th>Close Contact with InfectedPerson</th>
+                                <th>Close Contact with Probable Infected Person</th>
+                                <th>Attend Health Facility within 14Days</th>
+                                <th>Admitted with Severe Pneumonia</th>
+                                <th>Suffer from Chronic Disease</th>
+                                <th>Any Following Symptoms</th>
+                                <th>TimeStamp</th>
+                                <th class="text-center"> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.ExisitingList.Count() < 1)
+                            {
+                                <tr class="text-center">
+                                    <td colspan="15">No records available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--Row Errors-->
+            <div class="tab-pane" id="tabs-3" role="tabpanel">
+                <div class="table-responsive">
+                    <table class="table table-striped full-width" id="table-error">
+                        <thead>
+                            <tr>
+                                <th>Row #</th>
+                                <th>QR Code</th>
+                                <th>Student #</th>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>General Sense of Wellbeing</th>
+                                <th>Wearing a Mask</th>
+                                <th>High Risk Travel within 14Days</th>
+                                <th>Close Contact with InfectedPerson</th>
+                                <th>Close Contact with Probable Infected Person</th>
+                                <th>Attend Health Facility within 14Days</th>
+                                <th>Admitted with Severe Pneumonia</th>
+                                <th>Suffer from Chronic Disease</th>
+                                <th>Any Following Symptoms</th>
+                                <th>TimeStamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.ErrorList.Count() < 1)
+                            {
+                                <tr class="text-center">
+                                    <td colspan="15">No records available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var tableCreate;
+        var tableExisting;
+        var tableError;
+
+        loadingSpinner_Show();
+
+        var createCount = '@Model.CreateList.Count()';
+        if (createCount != 0 && createCount != '0') {
+            tableCreate = loadCreateTable();
+        }
+
+        var updateCount = '@Model.ExisitingList.Count()';
+        if (updateCount != 0 && updateCount != '0') {
+            tableExisting = loadExistingTable();
+        }
+
+        var errorCount = '@Model.ErrorList.Count()';
+        if (errorCount != 0 && errorCount != '0') {
+            tableError = loadErrorTable();
+        }
+
+        setTimeout(function () { loadingSpinner_Hide(); }, 1500)
+
+             $('#table-create').on('click', '.js-delete', function (data) {
+            var button = $(this);
+            Swal.fire({
+                icon: 'warning',
+                title: "Delete Action",
+                text: 'Are you sure you want to delete this action?',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                showConfirmButton: true,
+                confirmButtonColor: '#217093 ',
+                confirmButtonText: 'Delete',
+                showCancelButton: true,
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var screenTempId = button.attr("data-screening-id")
+                    $.ajax({
+                         url: '@Url.Action("DeleteStudentScreeningTempRecord", "StudentScreening")',
+                        data: { screenTempId: screenTempId },
+                        method: "DELETE",
+                        success: function () {
+                            tableCreate.row(button.parents("tr")).remove().draw();
+                        },
+                        error: function () {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'This record can not be deleted!',
+                                showClass: {
+                                    popup: 'animate__animated animate__fadeInDown'
+                                },
+                                hideClass: {
+                                    popup: 'animate__animated animate__fadeOutUp'
+                                },
+                            })
+                        }
+                    });
+                }
+            })
+        });
+
+    });
+
+     function loadCreateTable() {
+        var table =   $('#table-create').DataTable({
+            ajax: {
+                url: "@Url.Action("GetCreateStudentScreeningList", "StudentScreening")",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    data: "rowNumber",
+                    visible: true
+                },
+                {
+                    data: "qrCodeId",
+                    visible: true
+                },
+                {
+                    data: "studentDisplayName",
+                    visible: true
+                },
+                {
+                    data: "studentClass",
+                    visible: true
+                },
+                {
+                    data: "temp",
+                    visible: true
+                },
+                {
+                    data: "generalSenseWellbeing",
+                    visible: true
+                },
+                {
+                    data: "wearingAMask",
+                    visible: true
+                },
+                {
+                    data: "highRiskTravel14Days",
+                    visible: true
+                },
+                {
+                    data: "closeContactInfectedPerson",
+                    visible: true
+                },
+                {
+                    data: "closeContactProbableInfectedPerson",
+                    visible: true
+                },
+                {
+                    data: "attendHealthFacility14Days",
+                    visible: true
+                },
+                {
+                    data: "admittedSeverPneumonia",
+                    visible: true
+                },
+                {
+                    data: "sufferFromChronicDisease",
+                    visible: true
+                },
+                {
+                    data: "anyOfTheFollowingSymptoms",
+                    visible: true
+                },
+                {
+                    data: "screeningTimeStamp",
+                    visible: true
+            },
+            {
+                data: "studentScreeningTempId",
+                render: function (data) {
+                    var result = "<div class='row text-center'>"
+                    result += "<div class='col-12'><button class='btn btn-outline-danger js-delete control-full-width' data-screening-id=" + data + ">Remove Action</button></div>";
+                    result += "</div>";
+                    return result;
+                }
+            }
+        ]
+        });
+        return table;
+    }
+
+    function loadExistingTable() {
+        var table =   $('#table-existing').DataTable({
+            ajax: {
+                url: "@Url.Action("GetExistingStudentScreeningList", "StudentScreening")",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    data: "rowNumber",
+                    visible: true
+                },
+                {
+                    data: "qrCodeId",
+                    visible: true
+                },
+                {
+                    data: "studentDisplayName",
+                    visible: true
+                },
+                {
+                    data: "studentClass",
+                    visible: true
+                },
+                {
+                    data: "temp",
+                    visible: true
+                },
+                {
+                    data: "generalSenseWellbeing",
+                    visible: true
+                },
+                {
+                    data: "wearingAMask",
+                    visible: true
+                },
+                {
+                    data: "highRiskTravel14Days",
+                    visible: true
+                },
+                {
+                    data: "closeContactInfectedPerson",
+                    visible: true
+                },
+                {
+                    data: "closeContactProbableInfectedPerson",
+                    visible: true
+                },
+                {
+                    data: "attendHealthFacility14Days",
+                    visible: true
+                },
+                {
+                    data: "admittedSeverPneumonia",
+                    visible: true
+                },
+                {
+                    data: "sufferFromChronicDisease",
+                    visible: true
+                },
+                {
+                    data: "anyOfTheFollowingSymptoms",
+                    visible: true
+                },
+                {
+                    data: "screeningTimeStamp",
+                    visible: true
+                }
+            ]
+     });
+        return table;
+    }
+
+    function loadErrorTable() {
+        var table =   $('#table-error').DataTable({
+            ajax: {
+               url: "@Url.Action("GetErrorStudentScreeningList", "StudentScreening")",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    data: "rowNumber",
+                    visible: true
+                },
+                {
+                    data: "qrCodeId",
+                    visible: true
+                },
+                {
+                    data: "studentDisplayName",
+                    visible: true
+                },
+                {
+                    data: "studentClass",
+                    visible: true
+                },
+                {
+                    data: "temp",
+                    visible: true
+                },
+                {
+                    data: "generalSenseWellbeing",
+                    visible: true
+                },
+                {
+                    data: "wearingAMask",
+                    visible: true
+                },
+                {
+                    data: "highRiskTravel14Days",
+                    visible: true
+                },
+                {
+                    data: "closeContactInfectedPerson",
+                    visible: true
+                },
+                {
+                    data: "closeContactProbableInfectedPerson",
+                    visible: true
+                },
+                {
+                    data: "attendHealthFacility14Days",
+                    visible: true
+                },
+                {
+                    data: "admittedSeverPneumonia",
+                    visible: true
+                },
+                {
+                    data: "sufferFromChronicDisease",
+                    visible: true
+                },
+                {
+                    data: "anyOfTheFollowingSymptoms",
+                    visible: true
+                },
+                {
+                    data: "screeningTimeStamp",
+                    visible: true
+                }
+            ]
+     });
+        return table;
+    }
+
+    function setNewTab() {
+        loadingSpinner_Show();
+        setTimeout(function () { loadingSpinner_Hide() }, 800);
+    }
+
+</script>

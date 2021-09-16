@@ -93,14 +93,22 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 {
                     //  add to different model lists
                     var createTemp = tempResults.Where(i => i.RowType == 'C').ToList();
-                    if (createTemp.Count() > 0)
+                    if (createTemp != null && createTemp.Count() > 0)
                         model.CreateList = createTemp;
+                    else
+                        model.CreateList = new List<StudentTemp>();
+
                     var updateTemp = tempResults.Where(i => i.RowType == 'U').ToList();
-                    if (updateTemp.Count() > 0)
+                    if (updateTemp != null && updateTemp.Count() > 0)
                         model.UpdateList = updateTemp;
+                    else
+                        model.UpdateList = new List<StudentTemp>();
+
                     var errorTemp = tempResults.Where(i => i.RowType == 'E').ToList();
-                    if (errorTemp.Count() > 0)
+                    if (errorTemp != null && errorTemp.Count() > 0)
                         model.ErrorList = errorTemp;
+                    else
+                        model.ErrorList = new List<StudentTemp>();
 
                     return View(model);
                 }

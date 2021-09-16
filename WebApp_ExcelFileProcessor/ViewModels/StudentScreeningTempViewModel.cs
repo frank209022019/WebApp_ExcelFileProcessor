@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebApp_ExcelFileProcessor.ViewModels
 {
     public class StudentScreeningTempViewModel
     {
         public String StudentScreeningTempId { get; set; }
+        public String RowNumber { get; set; }
         public String QRCodeId { get; set; }
+
+        public String StudentDisplayName { get; set; }
+        public String StudentClass { get; set; }
+
         public String Temp { get; set; }
         public String GeneralSenseWellbeing { get; set; }
         public String WearingAMask { get; set; }
@@ -20,8 +22,5 @@ namespace WebApp_ExcelFileProcessor.ViewModels
         public String SufferFromChronicDisease { get; set; }
         public String AnyOfTheFollowingSymptoms { get; set; }
         public String ScreeningTimeStamp { get; set; }
-        public String RowNumber { get; set; }
-        public String StudentDisplayName { get; set; }
-        public String StudentClass { get; set; }
     }
 }
