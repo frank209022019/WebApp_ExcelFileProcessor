@@ -166,11 +166,30 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                //var student = _context.Students.FirstOrDefault(i => i.StudentId.ToString().ToUpper() == model.StudentId.ToString().ToUpper() && !i.IsDeleted);
-                //model.StudentId = student.StudentId;
-                _context.StudentScreenings.Add(model);
+                var exisitingStudent = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
+                StudentScreening newModel = new StudentScreening()
+                {
+                    
+                    QRCodeId = model.QRCodeId,
+                    Temp = model.Temp,
+                    GeneralSenseWellbeing = model.GeneralSenseWellbeing,
+                    WearingAMask = model.WearingAMask,
+                    HighRiskTravel14Days = model.HighRiskTravel14Days,
+                    CloseContactInfectedPerson = model.CloseContactInfectedPerson,
+                    CloseContactProbableInfectedPerson = model.CloseContactProbableInfectedPerson,
+                    AttendHealthFacility14Days = model.AttendHealthFacility14Days,
+                    AdmittedSeverPneumonia = model.AdmittedSeverPneumonia,
+                    SufferFromChronicDisease = model.SufferFromChronicDisease,
+                    AnyOfTheFollowingSymptoms = model.AnyOfTheFollowingSymptoms,
+                    ScrenningTimeStamp = model.ScrenningTimeStamp,
+                    StudentDisplayName = exisitingStudent.FirstName + " " + exisitingStudent.LastName,
+                    StudentId = exisitingStudent.StudentId,
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now
+                };
+                _context.StudentScreenings.Add(newModel);
                 _context.SaveChanges();
-
+                
                 return RedirectToAction("ManageStudentScreening");
             }
             catch (Exception ex)
@@ -630,7 +649,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 && i.ScrenningTimeStamp.Year == validDT.Year
                                 && i.ScrenningTimeStamp.Hour == validDT.Hour
                                 && i.ScrenningTimeStamp.Minute == validDT.Minute
-                                && i.ScrenningTimeStamp.Second == validDT.Second && !i.IsDeleted);
+                                && i.ScrenningTimeStamp.Second == validDT.Second
+                                && !i.IsDeleted);
             }
             catch (Exception ex)
             {

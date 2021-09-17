@@ -49,9 +49,7 @@ namespace WebApp_ExcelFileProcessor.Models
         [Required(ErrorMessage = "This is a required field.")]
         public DateTime ScrenningTimeStamp { get; set; }
 
-        [Required(ErrorMessage = "This is a required field.")]
         public Guid StudentId { get; set; }
-
         [ForeignKey("StudentId")]
         public virtual Student Student { get; set; }
 
