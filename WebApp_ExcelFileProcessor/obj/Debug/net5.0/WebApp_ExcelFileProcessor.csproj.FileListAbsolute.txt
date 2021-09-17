@@ -1457,3 +1457,7 @@ C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor
 C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\StudentScreening\UploadStudentScreening.cshtml.g.cs
 C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\StudentScreening\ManageStudentScreening.cshtml.g.cs
 C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\StudentScreening\UploadStudentScreeningResult.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\StudentScreening\ViewScreening.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\StudentScreening\DeleteScreening.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\StudentScreening\AddScreening.cshtml.g.cs
+C:\Users\S4\Documents\GitHub\WebApp_ExcelFileProcessor\WebApp_ExcelFileProcessor\obj\Debug\net5.0\Razor\Views\StudentScreening\UpdateScreening.cshtml.g.cs

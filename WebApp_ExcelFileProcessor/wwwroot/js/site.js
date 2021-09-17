@@ -163,6 +163,67 @@ function sweetAlertSuccess_StudentScreeningUpload() {
     })
 }
 
+function sweetAlert_CompleteStudentScreeningUpload() {
+    Swal.fire({
+        icon: 'question',
+        title: "Complete Process",
+        text: 'Are you sure you want to save these records?',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        },
+        showConfirmButton: true,
+        confirmButtonColor: '#217093 ',
+        confirmButtonText: 'Complete Process',
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        allowOutsideClick: false,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            loadingSpinner_Show();
+            $.ajax({
+                url: '/StudentScreening/CompleteStudentScreeningUpload/',
+                type: 'GET',
+                success: function () {
+                    loadingSpinner_Hide();
+                    sweetAlert_RedirectToManageStudentScreening("Student Screening Upload", "All records saved successfully.");
+                },
+                error: function () {
+                    loadingSpinner_Hide();
+                    sweetAlertError("Student Screening Upload", "Failed to upload the records.");
+                }
+            });
+        }
+    })
+}
+
+function sweetAlert_RedirectToManageStudentScreening(_title, _message) {
+    Swal.fire({
+        icon: 'success',
+        title: _title,
+        text: _message,
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        },
+        showConfirmButton: true,
+        confirmButtonColor: '#217093 ',
+        confirmButtonText: 'Manage Base Class',
+        allowOutsideClick: false,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/StudentScreening/ManageStudentScreening/';
+        }
+    });
+}
+
+
 //  Loading spinner
 
 function loadingSpinner_Show() {

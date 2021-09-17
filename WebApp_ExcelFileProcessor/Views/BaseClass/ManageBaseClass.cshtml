@@ -41,8 +41,6 @@
             </table>
         </div>
     </div>
-
-
 </div>
 
 <script>
@@ -53,7 +51,7 @@
 
         var tableCount = '@Model.Count()';
         if (tableCount != 0 && tableCount != '0') {
-            loadStudentTable();
+            studentTable = loadStudentTable();
         }
 
         setTimeout(function () { loadingSpinner_Hide(); }, 1500)

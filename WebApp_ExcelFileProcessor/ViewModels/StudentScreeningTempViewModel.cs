@@ -7,10 +7,8 @@ namespace WebApp_ExcelFileProcessor.ViewModels
         public String StudentScreeningTempId { get; set; }
         public String RowNumber { get; set; }
         public String QRCodeId { get; set; }
-
         public String StudentDisplayName { get; set; }
         public String StudentClass { get; set; }
-
         public String Temp { get; set; }
         public String GeneralSenseWellbeing { get; set; }
         public String WearingAMask { get; set; }

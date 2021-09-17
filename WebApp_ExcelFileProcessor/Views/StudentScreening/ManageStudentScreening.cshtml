@@ -1,7 +1,153 @@
-﻿
+﻿@model List<StudentScreening>
 @{
     ViewData["Title"] = "Manage Student Screening";
 }
 
-<h1>ManageStudentScreening</h1>
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">Manage Student Screening</h1>
+        <hr class="custom-blue-hr" />
+    </div>
 
+    <div class="col-xl-2 offset-xl-10 col-md-12 custom-col-responsiveness mb-3">
+        <a asp-action="AddScreening" asp-controller="StudentScreening" class="btn btn-outline-primary full-width">Add Screening</a>
+    </div>
+
+    <div class="col-12 custom-col-responsiveness">
+        <div class="table-responsive">
+            <table class="table table-striped full-width" id="table-student">
+                <thead>
+                    <tr>
+                        <th>QR Code</th>
+                        <th>Student Full Name</th>
+                        <th>Class</th>
+                        <th>Temp</th>
+                        <th>General Sense of Wellbeing</th>
+                        <th>Wearing a Mask</th>
+                        @*<th>High Risk Travel within 14 Days</th>
+                            <th>Close Contact with InfectedPerson</th>
+                            <th>Close Contact with Probable Infected Person</th>
+                            <th>Attend Health Facility within 14 Days</th>
+                            <th>Admitted with Severe Pneumonia</th>
+                            <th>Suffer from Chronic Disease</th>*@
+                        <th>Any Following Symptoms</th>
+                        <th>Time Stamp</th>
+                        <th class="text-center"> Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count() < 1)
+                    {
+                        <tr class="text-center">
+                            <td colspan="15">No records available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+    var studentTable;
+
+          loadingSpinner_Show();
+
+        var tableCount = '@Model.Count()';
+        if (tableCount != 0 && tableCount != '0') {
+            studentTable = loadStudentTable();
+        }
+
+        setTimeout(function () { loadingSpinner_Hide(); }, 1500)
+    });
+
+    function loadStudentTable() {
+         var table = $('#table-student').DataTable({
+             ajax: {
+                url: "@Url.Action("GetStudentScreeningList", "StudentScreening")",
+                dataSrc: ""
+            },
+            columns: [       
+                {
+                    data: "qrCodeId",
+                    visible: true
+                },
+                {
+                    data: "studentDisplayName",
+                    visible: true
+                },
+                {
+                    data: "studentClass",
+                    visible: true
+                },
+                {
+                    data: "temp",
+                    visible: true
+                },
+                {
+                    data: "generalSenseWellbeing",
+                    visible: true
+                },
+                {
+                    data: "wearingAMask",
+                    visible: true
+                },
+                //{
+                //    data: "highRiskTravel14Days",
+                //    visible: true
+                //},
+                //{
+                //    data: "closeContactInfectedPerson",
+                //    visible: true
+                //},
+                //{
+                //    data: "closeContactProbableInfectedPerson",
+                //    visible: true
+                //},
+                //{
+                //    data: "attendHealthFacility14Days",
+                //    visible: true
+                //},
+                //{
+                //    data: "admittedSeverPneumonia",
+                //    visible: true
+                //},
+                //{
+                //    data: "sufferFromChronicDisease",
+                //    visible: true
+                //},
+                {
+                    data: "anyOfTheFollowingSymptoms",
+                    visible: true
+                },
+                {
+                    data: "screeningTimeStamp",
+                    visible: true
+                },
+                {
+                    data: "studentScreeningId",
+                    render: function (data) {
+                        var result = "<div class='form-row text-center'>"
+
+                        result += "<div class='col-xl-4 col-md-12'>";
+                        result += " <a class='btn btn-outline-secondary full-width' href='/StudentScreening/ViewScreening?ScreeningId="+ data +"'>View</a>";
+                        result += "</div>";
+
+                        result += "<div class='col-xl-4 col-md-12'>";
+                        result += " <a class='btn btn-outline-warning full-width' href='/StudentScreening/UpdateScreening?ScreeningId=" + data + "'>Update</a>";
+                        result += "</div>";
+
+                        result += "<div class='col-xl-4 col-md-12'>";
+                        result += " <a class='btn btn-outline-danger full-width' href='/StudentScreening/DeleteScreening?ScreeningId=" + data + "'>Delete</a>";
+                        result += "</div>";
+
+                        return result;
+                    }
+                }
+            ]
+        });
+
+        return table;
+    }
+</script>

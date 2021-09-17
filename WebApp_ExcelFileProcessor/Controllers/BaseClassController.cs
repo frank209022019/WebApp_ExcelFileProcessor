@@ -805,11 +805,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  clear temp list
-                tempList.ForEach(item =>
-                {
-                    _context.StudentTemps.Remove(item);
-                });
+                //  clear temp list          
+                _context.StudentTemps.RemoveRange(tempList);
                 _context.SaveChanges();
 
                 return Ok();
@@ -837,10 +834,10 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     StudentNr = i.StudentNr <= 0 ? String.Empty : i.StudentNr.ToString(),
                     FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
                     LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
-                    GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
-                    StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
-                    StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
-                    StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString(),
+                    GenderGenderName = i.GenderId == Guid.Empty ? String.Empty : i.Gender.GenderName.ToString(),
+                    StudentClassdisplayName = i.StudentClassId == Guid.Empty ? String.Empty : i.StudentClass.DisplayName.ToString(),
+                    StudentColorColorName = i.StudentColorId == Guid.Empty ? String.Empty : i.StudentColor.ColorName.ToString(),
+                    StudentGroupDisplayName = i.StudentGroupId == Guid.Empty ? String.Empty : i.StudentGroup.DisplayName.ToString(),
                     DateCreated = i.DateCreated.ToShortDateString()
                 }).ToList();
             }

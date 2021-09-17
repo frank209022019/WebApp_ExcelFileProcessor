@@ -1,0 +1,112 @@
+﻿@model WebApp_ExcelFileProcessor.Models.StudentScreening
+@{
+    ViewData["Title"] = "View Screening";
+}
+
+<!--Header-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">View Screening</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+</div>
+
+<!--Content-->
+<div class="form-row custom-row-responsiveness">
+    <input type="hidden" asp-for="StudentScreeningId" value="@Model.StudentScreeningId" />
+    <input type="hidden" asp-for="StudentId" value="@Model.StudentId" />
+    <input type="hidden" asp-for="DateCreated" value="@Model.DateCreated" />
+    <input type="hidden" asp-for="IsDeleted" value="@Model.IsDeleted" />
+
+    <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label class="control-label">QR Code</label>
+            <input asp-for="QRCodeId" class="form-control" readonly />
+            <span asp-validation-for="QRCodeId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Student Full Name</label>
+            <input asp-for="StudentDisplayName" class="form-control" readonly />
+            <span asp-validation-for="StudentDisplayName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Class</label>
+            <input asp-for="Student.StudentClass.DisplayName" class="form-control" readonly />
+            <span asp-validation-for="Student.StudentClass.DisplayName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Temperature</label>
+            <input asp-for="Temp" class="form-control" readonly />
+            <span asp-validation-for="Temp" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">General sense of wellbeing?</label>
+            <input asp-for="GeneralSenseWellbeing" class="form-control" readonly />
+            <span asp-validation-for="GeneralSenseWellbeing" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Wearing a Mask?</label>
+            <input asp-for="WearingAMask" class="form-control" readonly />
+            <span asp-validation-for="WearingAMask" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Have you travelled to a high-risk area in the last 14 days?</label>
+            <input asp-for="HighRiskTravel14Days" class="form-control" readonly />
+            <span asp-validation-for="HighRiskTravel14Days" class="text-danger"></span>
+        </div>        
+    </div>
+
+
+    <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label class="control-label">Have you recently been in close contact with someone infected with the virus?</label>
+            <input asp-for="CloseContactInfectedPerson" class="form-control" readonly />
+            <span asp-validation-for="CloseContactInfectedPerson" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Have you recently been in contact with someone probable to be infected with the virus?</label>
+            <input asp-for="CloseContactProbableInfectedPerson" class="form-control" readonly />
+            <span asp-validation-for="CloseContactProbableInfectedPerson" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Have you attended a health facility where patients that have the virus are treated in the last 14 days?</label>
+            <input asp-for="AttendHealthFacility14Days" class="form-control" readonly />
+            <span asp-validation-for="AttendHealthFacility14Days" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Have you been admitted with severe pneumonia</label>
+            <input asp-for="AdmittedSeverPneumonia" class="form-control" readonly />
+            <span asp-validation-for="AdmittedSeverPneumonia" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Do you suffer from any chronic disease?</label>
+            <input asp-for="SufferFromChronicDisease" class="form-control" readonly />
+            <span asp-validation-for="SufferFromChronicDisease" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Do you have any of the following symptoms?</label>
+            <input asp-for="AnyOfTheFollowingSymptoms" class="form-control" readonly />
+            <span asp-validation-for="AnyOfTheFollowingSymptoms" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Time Stamp</label>
+            <input asp-for="ScrenningTimeStamp" class="form-control" readonly />
+            <span asp-validation-for="ScrenningTimeStamp" class="text-danger"></span>
+        </div>
+
+    </div>
+</div>
+
+<!--Buttons-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-xl-2 offset-xl-6 col-md-12 custom-col-responsiveness mb-2">
+        <a asp-action="ManageBaseClass" asp-controller="BaseClass" class="btn btn-outline-secondary full-width">Back to List</a>
+    </div>
+    <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-2">
+        <a asp-action="UpdateScreening" asp-controller="StudentScreening" asp-route-ScreeningId="@Model.StudentScreeningId.ToString()" class="btn btn-outline-warning full-width">Update</a>
+    </div>
+    <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-2">
+        <a asp-action="DeleteScreening" asp-controller="StudentScreening" asp-route-ScreeningId="@Model.StudentScreeningId.ToString()" class="btn btn-outline-danger full-width">Delete</a>
+    </div>  
+</div>
+

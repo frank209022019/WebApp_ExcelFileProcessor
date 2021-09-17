@@ -1,17 +1,18 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace WebApp_ExcelFileProcessor.Models
+namespace WebApp_ExcelFileProcessor.ViewModels
 {
-    [Table("StudentScreening")]
-    public class StudentScreening : ModelBase
+    public class StudentScreeningViewModel
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
-        public Guid StudentScreeningId { get; set; }
-
+        public String StudentScreeningId { get; set; }
         public String QRCodeId { get; set; }
+
+        public String StudentId { get; set; }
+        public String StudentDisplayName { get; set; }
+        public String StudentClass { get; set; }
         public String Temp { get; set; }
         public String GeneralSenseWellbeing { get; set; }
         public String WearingAMask { get; set; }
@@ -22,14 +23,6 @@ namespace WebApp_ExcelFileProcessor.Models
         public String AdmittedSeverPneumonia { get; set; }
         public String SufferFromChronicDisease { get; set; }
         public String AnyOfTheFollowingSymptoms { get; set; }
-        public DateTime ScrenningTimeStamp { get; set; }
-
-        public Guid StudentId { get; set; }
-
-        [ForeignKey("StudentId")]
-        public virtual Student Student { get; set; }
-
-        [NotMapped]
-        public String StudentDisplayName { get; set; }   
+        public String ScreeningTimeStamp { get; set; }
     }
 }

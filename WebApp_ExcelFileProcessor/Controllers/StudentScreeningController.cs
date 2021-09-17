@@ -82,7 +82,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
         }
 
         [Authorize]
-        [HttpPost]
         public IActionResult ManageStudentScreening()
         {
             try
@@ -117,7 +116,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         model.CreateList = new List<StudentScreeningTemp>();
 
                     var existTemp = tempResults.Where(i => i.RowType == 'X').ToList();
-                    if (existTemp != null &&existTemp.Count() > 0)
+                    if (existTemp != null && existTemp.Count() > 0)
                         model.ExisitingList = existTemp;
                     else
                         model.ExisitingList = new List<StudentScreeningTemp>();
@@ -139,6 +138,164 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 _logger.LogError(ex.Message);
                 return RedirectToAction("UploadStudentScreening", "StudentScreening");
+            }
+        }
+
+
+
+        [Authorize]
+        public IActionResult AddScreening()
+        {
+            StudentScreening model = new StudentScreening()
+            {
+                IsDeleted = false,
+                DateCreated = DateTime.Now
+            };            
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AddScreening(StudentScreening model)
+        {
+            try
+            {
+                _context.StudentScreenings.Add(model);
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageStudentScreening");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return RedirectToAction("ManageStudentScreening");
+            }
+        }
+
+
+
+        [Authorize]
+        public IActionResult UpdateScreening(String ScreeningId)
+        {
+            try
+            {
+                var model = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId.ToString().ToUpper() == ScreeningId.ToUpper());
+                if (model != null)
+                {
+                    var student = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
+                    model.StudentDisplayName = student.FirstName + " " + student.LastName;
+                    return View(model);
+                }
+                else
+                {
+                    return View(new Student() { });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return View(new Student() { });
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult UpdateScreening(StudentScreening model)
+        {
+            try
+            {
+                var currModel = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId == model.StudentScreeningId);
+                currModel.QRCodeId = model.QRCodeId;
+                currModel.Temp = model.Temp;
+                currModel.GeneralSenseWellbeing = model.GeneralSenseWellbeing;
+                currModel.WearingAMask = model.WearingAMask;
+                currModel.HighRiskTravel14Days = model.HighRiskTravel14Days;
+                currModel.CloseContactInfectedPerson = model.CloseContactInfectedPerson;
+                currModel.CloseContactProbableInfectedPerson = model.CloseContactProbableInfectedPerson;
+                currModel.AttendHealthFacility14Days = model.AttendHealthFacility14Days;
+                currModel.AdmittedSeverPneumonia = model.AdmittedSeverPneumonia;
+                currModel.SufferFromChronicDisease = model.SufferFromChronicDisease;
+                currModel.AnyOfTheFollowingSymptoms = model.AnyOfTheFollowingSymptoms;
+                currModel.ScrenningTimeStamp = model.ScrenningTimeStamp;
+                _context.StudentScreenings.Update(currModel);
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageStudentScreening");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return RedirectToAction("ManageStudentScreening");
+            }
+        }
+
+
+        [Authorize]
+        public IActionResult DeleteScreening(String ScreeningId)
+        {
+            try
+            {
+                var model = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId.ToString().ToUpper() == ScreeningId.ToUpper());
+                if (model != null)
+                {
+                    var student = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
+                    model.StudentDisplayName = student.FirstName + " " + student.LastName;
+                    return View(model);
+                }         
+                else
+                {
+                    return View(new Student() { });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return View(new Student() { });
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteScreening(StudentScreening model)
+        {
+            try
+            {
+                var currModel = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId == model.StudentScreeningId && !i.IsDeleted);
+                currModel.IsDeleted = true;
+                _context.StudentScreenings.Update(currModel);
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageStudentScreening");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return RedirectToAction("ManageStudentScreening");
+            }
+        }
+
+        [Authorize]
+        public IActionResult ViewScreening(String ScreeningId)
+        {
+            try
+            {
+                var model = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId.ToString().ToUpper() == ScreeningId.ToUpper());
+
+                if (model != null)
+                {
+                    var student = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
+                    model.StudentDisplayName = student.FirstName + " " + student.LastName;
+                    return View(model);
+                }
+                else
+                {
+                    return View(new Student() { });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return View(new Student() { });
             }
         }
 
@@ -235,7 +392,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                                         //  Get StudentId for record
                                         var getStudentId = _context.Students.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCodeId.ToUpper() && !i.IsDeleted).StudentId;
-                                        if (getStudentId == null || getStudentId == Guid.Empty)
+                                        if (getStudentId == Guid.Empty)
                                             rowHasError = true;
                                         else
                                             tempModel.StudentId = getStudentId;
@@ -374,6 +531,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 }
                                 catch (Exception ex)
                                 {
+                                    _logger.LogError(ex.Message);
                                     tempModel.RowType = 'E';
                                     returnValue.ErrorScreeningList.Add(tempModel);
                                 }
@@ -527,7 +685,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     return new List<StudentScreeningTempViewModel>();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return new List<StudentScreeningTempViewModel>();
@@ -615,6 +773,95 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 _logger.LogError(ex.Message);
                 return new List<StudentScreeningTempViewModel>();
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult CompleteStudentScreeningUpload()
+        {
+            try
+            {
+                var tempList = _context.StudentScreeningTemps.ToList();
+                if (tempList.Count() > 0)
+                {
+                    //  create new records
+                    var createList = tempList.Where(i => i.RowType == 'C').ToList();
+                    if (createList.Count() > 0)
+                    {
+                        List<StudentScreening> studentList = new List<StudentScreening>();
+                        foreach (var item in createList)
+                        {
+                            studentList.Add(new StudentScreening()
+                            {
+                                QRCodeId = item.QRCodeId,
+                                Temp = item.Temp,
+                                GeneralSenseWellbeing = item.GeneralSenseWellbeing,
+                                WearingAMask = item.WearingAMask,
+                                HighRiskTravel14Days = item.HighRiskTravel14Days,
+                                CloseContactInfectedPerson = item.CloseContactInfectedPerson,
+                                CloseContactProbableInfectedPerson = item.CloseContactProbableInfectedPerson,
+                                AttendHealthFacility14Days = item.AttendHealthFacility14Days,
+                                AdmittedSeverPneumonia = item.AdmittedSeverPneumonia,
+                                SufferFromChronicDisease = item.SufferFromChronicDisease,
+                                AnyOfTheFollowingSymptoms = item.AnyOfTheFollowingSymptoms,
+                                ScrenningTimeStamp = Convert.ToDateTime(item.ScrenningTimeStamp),
+                                StudentId = (Guid)item.StudentId,
+                                IsDeleted = false,
+                                DateCreated = DateTime.Now
+                            });
+                        }
+                        _context.StudentScreenings.AddRange(studentList);
+                        _context.SaveChanges();
+                    }
+                }
+
+                //  clear temp list               
+                _context.StudentScreeningTemps.RemoveRange(tempList);
+                _context.SaveChanges();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Error occurred while trying to complete processing records.");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public List<StudentScreeningViewModel> GetStudentScreeningList()
+        {
+            try
+            {
+                var studentList = _context.StudentScreenings.Where(i => !i.IsDeleted).ToList();
+                if (studentList.Count() == 0)
+                    throw new Exception("No student screenings found.");
+                return studentList.Select(i => new StudentScreeningViewModel()
+                {
+                    StudentScreeningId = i.StudentScreeningId.ToString(),
+                    QRCodeId = i.QRCodeId == null ? String.Empty : i.QRCodeId,
+                    Temp = i.QRCodeId == null ? String.Empty : i.Temp,
+                    GeneralSenseWellbeing = i.QRCodeId == null ? String.Empty : i.GeneralSenseWellbeing,
+                    WearingAMask = i.QRCodeId == null ? String.Empty : i.WearingAMask,
+                    HighRiskTravel14Days = i.QRCodeId == null ? String.Empty : i.HighRiskTravel14Days,
+                    CloseContactInfectedPerson = i.QRCodeId == null ? String.Empty : i.CloseContactInfectedPerson,
+                    CloseContactProbableInfectedPerson = i.QRCodeId == null ? String.Empty : i.CloseContactProbableInfectedPerson,
+                    AttendHealthFacility14Days = i.QRCodeId == null ? String.Empty : i.AttendHealthFacility14Days,
+                    AdmittedSeverPneumonia = i.QRCodeId == null ? String.Empty : i.AdmittedSeverPneumonia,
+                    SufferFromChronicDisease = i.QRCodeId == null ? String.Empty : i.SufferFromChronicDisease,
+                    AnyOfTheFollowingSymptoms = i.QRCodeId == null ? String.Empty : i.AnyOfTheFollowingSymptoms,
+                    ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScrenningTimeStamp.ToString(),
+                    StudentDisplayName = i.StudentId == Guid.Empty ? String.Empty : GetStudentDisplayName((Guid)i.StudentId),
+                    StudentId = i.StudentId != Guid.Empty ? String.Empty : i.StudentId.ToString(),
+                    StudentClass = i.StudentId == Guid.Empty ? String.Empty : _context.Students.FirstOrDefault(x => x.StudentId == (Guid)i.StudentId && !x.IsDeleted).StudentClass.DisplayName
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new List<StudentScreeningViewModel>();
             }
         }
 
