@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\icons\dropzone-icon.jpg" />
+    <Content Remove="wwwroot\icons\dropzone-icon-new.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\icons\dropzone-icon.jpg">
+    <EmbeddedResource Include="wwwroot\icons\dropzone-icon-new.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

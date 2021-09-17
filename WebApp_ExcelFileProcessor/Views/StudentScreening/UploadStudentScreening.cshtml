@@ -18,7 +18,10 @@
             <div class="fallback">
                 <input name="file" type="file" multiple />
             </div>
-            <div class="dz-message" data-dz-message><span><i class="fas fa-cloud-upload-alt fa-5x icon-light-grey"></i></span></div>
+            <div class="dz-message" data-dz-message>
+                <div class="col-12"> <span><i class="fas fa-cloud-upload-alt fa-5x icon-light-grey"></i></span></div>
+                <div class="col-12"><p class="dz-message-text">Drag or Select a File</p></div>             
+            </div>
         }
     </div>
 </div>
@@ -56,7 +59,7 @@
             this.on("addedfile", function (file) {
                 totalFiles++;
                 checkFileCount();
-                this.emit("thumbnail", file, "/icons/dropzone-icon.jpg");
+                this.emit("thumbnail", file, "/icons/dropzone-icon-new.jpg");
             });
             this.on("removedfile", function (file) {
                 totalFiles--;

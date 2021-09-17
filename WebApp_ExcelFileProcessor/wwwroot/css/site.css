@@ -239,6 +239,35 @@ body {
     display: none !important;
 }
 
+.dz-message p {
+    color: #217093 !important;
+    font-size: 26px !important;
+}
+
+.dropzone-div {
+    text-align: center !important;
+}
+
+.dropzone .dz-preview .dz-image {
+    border-radius: 20px;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: block;
+    z-index: 10;
+    margin: auto !important;
+}
+
+.dropzone .dz-preview .dz-remove {
+    color: #217093 !important;
+    font-size: 26px !important;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+    border: none;
+}
+
 .dropzone-div:hover i {
     display: inline-block;
     position: relative;
