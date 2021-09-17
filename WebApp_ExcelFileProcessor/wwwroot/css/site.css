@@ -3,6 +3,10 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /*Global*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
+
+.no-display{
+    display: none !important;
+}
 .control-label {
     color: #217093 !important;
     font-weight: bold !important;
@@ -480,6 +484,17 @@ body {
     }
 
 /*Tables*/
+
+.dataTables_filter label {
+    margin-top: 5px !important;
+}
+
+.dt-buttons {
+    float: left !important;
+ 
+}
+    .dt-buttons button:hover {
+    }
 
 .paginate_button {
     margin: 5px !important;

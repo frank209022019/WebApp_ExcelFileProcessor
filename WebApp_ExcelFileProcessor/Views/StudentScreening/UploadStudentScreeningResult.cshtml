@@ -213,7 +213,37 @@
     });
 
      function loadCreateTable() {
-        var table =   $('#table-create').DataTable({
+         var table = $('#table-create').DataTable({
+             dom: 'Bfrtip',
+             buttons: [
+                 {
+                     extend: 'excel',
+                     orientation: 'landscape',
+                     pageSize: 'A4',
+                     className: 'btn btn-success',
+                     exportOptions: {
+                         columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                     }
+                 },
+                 {
+                     extend: 'pdf',
+                     orientation: 'landscape',
+                     pageSize: 'A4',
+                     className: 'btn btn-danger',
+                     exportOptions: {
+                         columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                     }
+                 },
+                 {
+                     extend: 'print',
+                     orientation: 'landscape',
+                     className: 'btn btn-warning',
+                     pageSize: 'A4',
+                     exportOptions: {
+                         columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14]
+                     }
+                 }
+             ],
             ajax: {
                 url: "@Url.Action("GetCreateStudentScreeningList", "StudentScreening")",
                 dataSrc: ""
@@ -294,7 +324,37 @@
     }
 
     function loadExistingTable() {
-        var table =   $('#table-existing').DataTable({
+        var table = $('#table-existing').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'btn btn-danger',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                    }
+                },
+                {
+                    extend: 'print',
+                    orientation: 'landscape',
+                    className: 'btn btn-warning',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                    }
+                }
+            ],
             ajax: {
                 url: "@Url.Action("GetExistingStudentScreeningList", "StudentScreening")",
                 dataSrc: ""
@@ -366,7 +426,37 @@
     }
 
     function loadErrorTable() {
-        var table =   $('#table-error').DataTable({
+        var table = $('#table-error').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'btn btn-danger',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                    }
+                },
+                {
+                    extend: 'print',
+                    orientation: 'landscape',
+                    className: 'btn btn-warning',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+                    }
+                }
+            ],
             ajax: {
                url: "@Url.Action("GetErrorStudentScreeningList", "StudentScreening")",
                 dataSrc: ""

@@ -24,12 +24,12 @@
                         <th>Temp</th>
                         <th>General Sense of Wellbeing</th>
                         <th>Wearing a Mask</th>
-                        @*<th>High Risk Travel within 14 Days</th>
-                            <th>Close Contact with InfectedPerson</th>
-                            <th>Close Contact with Probable Infected Person</th>
-                            <th>Attend Health Facility within 14 Days</th>
-                            <th>Admitted with Severe Pneumonia</th>
-                            <th>Suffer from Chronic Disease</th>*@
+                        <th class="no-display">High Risk Travel within 14 Days</th>
+                        <th class="no-display">Close Contact with InfectedPerson</th>
+                        <th class="no-display">Close Contact with Probable Infected Person</th>
+                        <th class="no-display">Attend Health Facility within 14 Days</th>
+                        <th class="no-display">Admitted with Severe Pneumonia</th>
+                        <th class="no-display">Suffer from Chronic Disease</th>
                         <th>Any Following Symptoms</th>
                         <th>Time Stamp</th>
                         <th class="text-center"> Actions</th>
@@ -63,12 +63,42 @@
     });
 
     function loadStudentTable() {
-         var table = $('#table-student').DataTable({
-             ajax: {
+        var table = $('#table-student').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    className: 'btn btn-danger',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                    }
+                },
+                {
+                    extend: 'print',
+                    orientation: 'landscape',
+                    className: 'btn btn-warning',
+                    pageSize: 'A4',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                    }
+                }
+            ],
+             ajax: {            
                 url: "@Url.Action("GetStudentScreeningList", "StudentScreening")",
                 dataSrc: ""
             },
-            columns: [       
+            columns: [
                 {
                     data: "qrCodeId",
                     visible: true
@@ -93,30 +123,30 @@
                     data: "wearingAMask",
                     visible: true
                 },
-                //{
-                //    data: "highRiskTravel14Days",
-                //    visible: true
-                //},
-                //{
-                //    data: "closeContactInfectedPerson",
-                //    visible: true
-                //},
-                //{
-                //    data: "closeContactProbableInfectedPerson",
-                //    visible: true
-                //},
-                //{
-                //    data: "attendHealthFacility14Days",
-                //    visible: true
-                //},
-                //{
-                //    data: "admittedSeverPneumonia",
-                //    visible: true
-                //},
-                //{
-                //    data: "sufferFromChronicDisease",
-                //    visible: true
-                //},
+                {
+                    data: "highRiskTravel14Days",
+                    visible: false
+                },
+                {
+                    data: "closeContactInfectedPerson",
+                    visible: false
+                },
+                {
+                    data: "closeContactProbableInfectedPerson",
+                    visible: false
+                },
+                {
+                    data: "attendHealthFacility14Days",
+                    visible: false
+                },
+                {
+                    data: "admittedSeverPneumonia",
+                    visible: false
+                },
+                {
+                    data: "sufferFromChronicDisease",
+                    visible: false
+                },
                 {
                     data: "anyOfTheFollowingSymptoms",
                     visible: true
