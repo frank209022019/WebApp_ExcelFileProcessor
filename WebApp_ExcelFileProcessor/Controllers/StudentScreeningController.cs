@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using OfficeOpenXml;
 using System;
@@ -141,16 +142,21 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-
-
         [Authorize]
         public IActionResult AddScreening()
         {
             StudentScreening model = new StudentScreening()
             {
+                ScrenningTimeStamp = DateTime.Now,
                 IsDeleted = false,
                 DateCreated = DateTime.Now
-            };            
+            };
+            model.StudentList = _context.Students.ToList().Select(i => new SelectListItem()
+            {
+                Value = i.StudentId.ToString(),
+                Text = i.FirstName + " " + i.LastName
+
+            }).ToList();
             return View(model);
         }
 
@@ -160,6 +166,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
+                //var student = _context.Students.FirstOrDefault(i => i.StudentId.ToString().ToUpper() == model.StudentId.ToString().ToUpper() && !i.IsDeleted);
+                //model.StudentId = student.StudentId;
                 _context.StudentScreenings.Add(model);
                 _context.SaveChanges();
 
@@ -171,8 +179,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 return RedirectToAction("ManageStudentScreening");
             }
         }
-
-
 
         [Authorize]
         public IActionResult UpdateScreening(String ScreeningId)
@@ -229,7 +235,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-
         [Authorize]
         public IActionResult DeleteScreening(String ScreeningId)
         {
@@ -241,7 +246,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     var student = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
                     model.StudentDisplayName = student.FirstName + " " + student.LastName;
                     return View(model);
-                }         
+                }
                 else
                 {
                     return View(new Student() { });
@@ -634,7 +639,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-
         [Authorize]
         private String GetStudentDisplayName(Guid studentId)
         {
@@ -816,7 +820,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  clear temp list               
+                //  clear temp list
                 _context.StudentScreeningTemps.RemoveRange(tempList);
                 _context.SaveChanges();
 
@@ -866,6 +870,28 @@ namespace WebApp_ExcelFileProcessor.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        public StudentScreeningViewModel GetStudentDetail(String StudentId)
+        {
+            try
+            {
+                var student = _context.Students.FirstOrDefault(i => i.StudentId.ToString().ToUpper() == StudentId.ToUpper() && !i.IsDeleted);
+                if (student == null)
+                    throw new Exception("No student found.");
+                return new StudentScreeningViewModel()
+                {
+                    QRCodeId = student.QRCode.ToUpper(),
+                    StudentClass = student.StudentClass.DisplayName.ToUpper()      
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new StudentScreeningViewModel();
+            }
+        }
+
+        [Authorize]
         [HttpDelete]
         public IActionResult DeleteStudentScreeningTempRecord(String screenTempId)
         {
@@ -886,8 +912,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 return BadRequest("Error occurred while trying to delete the record");
             }
         }
-
-
 
         #endregion Utilities
     }

@@ -10,6 +10,7 @@ namespace WebApp_ExcelFileProcessor.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid StudentScreeningTempId { get; set; }
+
         public String QRCodeId { get; set; }
         public String Temp { get; set; }
         public String GeneralSenseWellbeing { get; set; }

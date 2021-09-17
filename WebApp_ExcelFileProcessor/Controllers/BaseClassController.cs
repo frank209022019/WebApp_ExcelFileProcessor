@@ -50,7 +50,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 FileDetailsViewModel model = new FileDetailsViewModel()
                 {
                     DateUploaded = DateTime.Now
-                };           
+                };
                 if (files.Count() > 0)
                 {
                     var file = files.FirstOrDefault();
@@ -117,7 +117,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     return RedirectToAction("UploadBaseClass", "BaseClass");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return RedirectToAction("UploadBaseClass", "BaseClass");
@@ -360,7 +360,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     {
                                         if (worksheet.Cells[row, col].Value == null)
                                             rowHasError = true;
-                                    }                                   
+                                    }
 
                                     //  StudentColor
                                     if (worksheet.Cells[row, 2].Value != null)
@@ -805,7 +805,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  clear temp list          
+                //  clear temp list
                 _context.StudentTemps.RemoveRange(tempList);
                 _context.SaveChanges();
 

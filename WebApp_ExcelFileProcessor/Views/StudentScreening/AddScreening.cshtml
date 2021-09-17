@@ -1,7 +1,163 @@
-﻿
+﻿@model WebApp_ExcelFileProcessor.Models.StudentScreening
 @{
-    ViewData["Title"] = "AddScreening";
+    ViewData["Title"] = "Add Screening";
 }
 
-<h1>AddScreening</h1>
+<!--Header-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">Add Screening</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+</div>
+
+<!--Content-->
+<form asp-action="AddScreening" asp-controller="StudentScreening" method="post" id="formAddScreening">
+    <div class="form-row custom-row-responsiveness">
+        <input type="hidden" asp-for="StudentScreeningId" value="@Model.StudentScreeningId" />
+        <input type="hidden" asp-for="DateCreated" value="@Model.DateCreated" />
+        <input type="hidden" asp-for="IsDeleted" value="@Model.IsDeleted" />
+
+        <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+            <div class="form-group">
+                <label class="control-label">Student Full Name</label>
+                <select id="inputStudentId" asp-for="StudentId" class="selectpicker form-control custom-select-style" title="Select Student" asp-items="Model.StudentList" data-live-search="true" data-size="15" required>
+                </select>
+                <span asp-validation-for="StudentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">QR Code</label>
+                <input id="inputStudentQRCode" asp-for="QRCodeId" class="form-control" readonly />
+                <span asp-validation-for="QRCodeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Class</label>
+                <input id="inputStudentClass" asp-for="Student.StudentClass.DisplayName" class="form-control" readonly />
+                <span asp-validation-for="Student.StudentClass.DisplayName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Temperature</label>
+                <input asp-for="Temp" class="form-control" required />
+                <span asp-validation-for="Temp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">General sense of wellbeing?</label>
+                <input asp-for="GeneralSenseWellbeing" class="form-control" required />
+                <span asp-validation-for="GeneralSenseWellbeing" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Wearing a Mask?</label>
+                <input asp-for="WearingAMask" class="form-control" required />
+                <span asp-validation-for="WearingAMask" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Have you travelled to a high-risk area in the last 14 days?</label>
+                <input asp-for="HighRiskTravel14Days" class="form-control" required />
+                <span asp-validation-for="HighRiskTravel14Days" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+            <div class="form-group">
+                <label class="control-label">Have you recently been in close contact with someone infected with the virus?</label>
+                <input asp-for="CloseContactInfectedPerson" class="form-control" required />
+                <span asp-validation-for="CloseContactInfectedPerson" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Have you recently been in contact with someone probable to be infected with the virus?</label>
+                <input asp-for="CloseContactProbableInfectedPerson" class="form-control" required />
+                <span asp-validation-for="CloseContactProbableInfectedPerson" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Have you attended a health facility where patients that have the virus are treated in the last 14 days?</label>
+                <input asp-for="AttendHealthFacility14Days" class="form-control" required />
+                <span asp-validation-for="AttendHealthFacility14Days" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Have you been admitted with severe pneumonia</label>
+                <input asp-for="AdmittedSeverPneumonia" class="form-control" required />
+                <span asp-validation-for="AdmittedSeverPneumonia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Do you suffer from any chronic disease?</label>
+                <input asp-for="SufferFromChronicDisease" class="form-control" required />
+                <span asp-validation-for="SufferFromChronicDisease" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Do you have any of the following symptoms?</label>
+                <input asp-for="AnyOfTheFollowingSymptoms" class="form-control" required />
+                <span asp-validation-for="AnyOfTheFollowingSymptoms" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Time Stamp</label>
+                <input asp-for="ScrenningTimeStamp" class="form-control" type="datetime-local" asp-format="{0:dd/MM/yyyy HH:mm}" required />
+                <span asp-validation-for="ScrenningTimeStamp" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Buttons-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-xl-2 offset-xl-8 col-md-12 custom-col-responsiveness mb-2">
+        <a asp-action="ManageStudentScreening" asp-controller="BaseClass" class="btn btn-outline-secondary full-width">Back to List</a>
+    </div>
+    <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-2">
+        <input type="button" value="Add" id="btnPostForm" class="btn btn-outline-primary full-width" />
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#inputStudentId').selectpicker();
+
+        $("#btnPostForm").click(function () {
+            Swal.fire({
+                icon: 'question',
+                title: "Add Screening",
+                text: 'Are you sure you want to save these changes?',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                showConfirmButton: true,
+                confirmButtonColor: '#217093 ',
+                confirmButtonText: 'Add Record',
+                showCancelButton: true,
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    loadingSpinner_Show();
+                    if ($('#formAddScreening').valid()) {
+                        $("#formAddScreening").submit();
+                    }
+                    else {
+                        loadingSpinner_Hide();
+                        sweetAlertError("Add Screening", "Please ensure all fields are correct and valid.'");
+                    }
+                }
+            })
+        });
+
+        $('#inputStudentId').on('change', function () {
+            var studentId = this.value;
+            $.ajax({
+                url: '@Url.Action("GetStudentDetail", "StudentScreening")',
+                 type: "GET",
+                data: { StudentId: studentId },
+                success: function (result) {
+                    console.log(result)
+                    $('#inputStudentQRCode').val(result.qrCodeId);
+                    $('#inputStudentClass').val(result.studentClass);
+                }
+            });
+        });
+
+    });
+</script>
 

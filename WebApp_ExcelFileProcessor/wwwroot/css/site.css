@@ -22,7 +22,7 @@ a {
     color: #0366d6;
 }
 
-.btn{
+.btn {
     font-size: 16px !important;
 }
 
@@ -31,11 +31,13 @@ a {
     background-color: #217093;
     border-color: #217093;
 }
+
 .btn-outline-primary {
     color: #217093;
     background-color: #fff;
     border-color: #217093;
 }
+
     .btn-outline-primary:hover {
         color: #fff;
         background-color: #217093;
@@ -410,6 +412,15 @@ body {
     display: none;
 }
 
+/*Custom Select*/
+.custom-select-style {
+    color: #495057 !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+}
+
 /*Tabs  */
 .nav-tabs .nav-item .nav-link {
     background-color: #217093;
@@ -436,7 +447,7 @@ body {
 
 /*Tables*/
 
-.paginate_button{
+.paginate_button {
     margin: 5px !important;
 }
 /*#table-student_ellipsis{
@@ -451,16 +462,15 @@ body {
     font-size: 16px !important;
 }
 
-.table a {
-    font-size: 16px !important;
-}
+    .table a {
+        font-size: 16px !important;
+    }
 
 @media only screen and (max-width: 1400px) {
     .table a {
         margin-bottom: 2px !important;
         margin-top: 2px !important;
     }
-
 }
 
 .table {
@@ -472,7 +482,7 @@ thead {
     color: #217093 !important;
 }
 
-th{
+th {
     vertical-align: middle !important;
 }
 

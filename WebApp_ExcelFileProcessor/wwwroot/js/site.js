@@ -138,7 +138,6 @@ function sweetAlert_RedirectToManageBaseClass(_title, _message) {
     });
 }
 
-
 function sweetAlertSuccess_StudentScreeningUpload() {
     Swal.fire({
         icon: 'success',
@@ -222,7 +221,6 @@ function sweetAlert_RedirectToManageStudentScreening(_title, _message) {
         }
     });
 }
-
 
 //  Loading spinner
 

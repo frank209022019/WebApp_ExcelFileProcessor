@@ -21,14 +21,14 @@
 
         <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
             <div class="form-group">
-                <label class="control-label">QR Code</label>
-                <input asp-for="QRCodeId" class="form-control" readonly />
-                <span asp-validation-for="QRCodeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label class="control-label">Student Full Name</label>
                 <input asp-for="StudentDisplayName" class="form-control" readonly />
                 <span asp-validation-for="StudentDisplayName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">QR Code</label>
+                <input asp-for="QRCodeId" class="form-control" readonly />
+                <span asp-validation-for="QRCodeId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="control-label">Class</label>
@@ -56,7 +56,6 @@
                 <span asp-validation-for="HighRiskTravel14Days" class="text-danger"></span>
             </div>
         </div>
-
 
         <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
             <div class="form-group">
@@ -94,12 +93,11 @@
                 <input asp-for="ScrenningTimeStamp" class="form-control" readonly />
                 <span asp-validation-for="ScrenningTimeStamp" class="text-danger"></span>
             </div>
-
         </div>
     </div>
 </form>
 
-    <!--Buttons-->
+<!--Buttons-->
 <div class="form-row custom-row-responsiveness">
     <div class="col-xl-2 offset-xl-8 col-md-12 custom-col-responsiveness mb-2">
         <a asp-action="ManageStudentScreening" asp-controller="StudentScreening" class="btn btn-outline-secondary full-width">Back to List</a>
@@ -109,33 +107,32 @@
     </div>
 </div>
 
-    <script>
-        $(document).ready(function () {
-            $("#btnPostForm").click(function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: "Delete Record",
-                    text: 'Are you sure you want to delete this record?',
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                    },
-                    showConfirmButton: true,
-                    confirmButtonColor: '#217093 ',
-                    confirmButtonText: 'Delete Record',
-                    showCancelButton: true,
-                    cancelButtonText: "Cancel",
-                    allowOutsideClick: false,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        loadingSpinner_Show();
-                        $("#formDeleteScreening").submit();
-                    }
-                })
-            });
+<script>
+    $(document).ready(function () {
+        $("#btnPostForm").click(function () {
+            Swal.fire({
+                icon: 'error',
+                title: "Delete Record",
+                text: 'Are you sure you want to delete this record?',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                showConfirmButton: true,
+                confirmButtonColor: '#217093 ',
+                confirmButtonText: 'Delete Record',
+                showCancelButton: true,
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    loadingSpinner_Show();
+                    $("#formDeleteScreening").submit();
+                }
+            })
         });
-    </script>
-
+    });
+</script>

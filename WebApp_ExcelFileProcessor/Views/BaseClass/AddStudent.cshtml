@@ -88,8 +88,8 @@
 
 <script>
     $(document).ready(function () {
-        $("#btnPostForm").click(function () {
 
+        $("#btnPostForm").click(function () {
             Swal.fire({
                 icon: 'question',
                 title: "Add Student",
@@ -108,11 +108,9 @@
                 allowOutsideClick: false,
                 reverseButtons: true
             }).then((result) => {
-                if (result.isConfirmed) {
+                if (result.isConfirmed) {          
 
-                    var currForm =
-
-                        loadingSpinner_Show();
+                     loadingSpinner_Show();
                     if ($('#formAddStudent').valid()) {
                         $("#formAddStudent").submit();
                     }

@@ -54,8 +54,8 @@
             var dropzone = this;
             this.on("addedfile", function (file) {
                 totalFiles++;
-                checkFileCount();                
-                this.emit("thumbnail", file, "/icons/dropzone-icon.jpg");         
+                checkFileCount();
+                this.emit("thumbnail", file, "/icons/dropzone-icon.jpg");
             });
             this.on("removedfile", function (file) {
                 totalFiles--;
@@ -100,10 +100,6 @@
             });
         }
     };
-
-  
-
-
 
     // Remove/Upload Button Functions
     function checkFileCount() {
