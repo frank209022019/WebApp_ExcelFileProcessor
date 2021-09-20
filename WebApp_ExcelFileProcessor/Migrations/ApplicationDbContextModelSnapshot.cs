@@ -853,7 +853,7 @@ namespace WebApp_ExcelFileProcessor.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ScrenningTimeStamp")
+                    b.Property<DateTime>("ScreeningTimeStamp")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("StudentId")
@@ -920,7 +920,7 @@ namespace WebApp_ExcelFileProcessor.Migrations
                     b.Property<string>("RowType")
                         .HasColumnType("nvarchar(1)");
 
-                    b.Property<DateTime?>("ScrenningTimeStamp")
+                    b.Property<DateTime?>("ScreeningTimeStamp")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("StudentId")

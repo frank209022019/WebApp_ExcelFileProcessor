@@ -1,0 +1,45 @@
+﻿@model List<SelectListItem>
+@{
+    ViewData["Title"] = "SchoolAbsenteeByDate";
+}
+
+<!--Header-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">School Absent Report</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+</div>
+
+<!-- Select options-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-xl-6 -col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label class="control-label">Start Date</label>
+            <input id="inputStartDate" class="form-control" type="datetime-local" asp-format="{0:dd/MM/yyyy HH:mm}" />
+        </div>
+    </div>
+    <div class="col-xl-6 -col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label class="control-label">End Date</label>
+            <input id="inputEndDate" class="form-control" type="datetime-local" asp-format="{0:dd/MM/yyyy HH:mm}" />
+        </div>
+    </div>
+</div>
+
+<!-- Buttons-->
+<div class="form-row custom-row-responsiveness mt-3">
+    <div class="col-xl-2 offset-xl-8 -col-md-12 custom-col-responsiveness mb-2">
+        <input type="button" id="btnClearFields" class="btn btn-outline-danger full-width" value="Reset" />
+    </div>
+    <div class="col-xl-2 -col-md-12 custom-col-responsiveness mb-2">
+        <input type="button" id="btnGenerateReport" class="btn btn-outline-primary full-width" value="Generate Report" />
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#inputStudentId').selectpicker();
+    });
+</script>

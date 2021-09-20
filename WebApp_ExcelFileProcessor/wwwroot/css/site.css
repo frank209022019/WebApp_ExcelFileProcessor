@@ -494,14 +494,12 @@ body {
  
 }
     .dt-buttons button:hover {
+        font-size: 20px !important;
     }
 
 .paginate_button {
     margin: 5px !important;
 }
-/*#table-student_ellipsis{
-    display: none !important;
-}*/
 
 .table-responsive {
     padding-bottom: 25px !important;

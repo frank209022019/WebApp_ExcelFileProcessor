@@ -59,6 +59,34 @@
     </div>
 </div>
 
+<!--Row 3-->
+<div class="form-row custom-row-responsiveness mt-5">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">Reports</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+    <div class="col-xl-4 col-md-12 custom-col-responsiveness" onclick="dashboardRedirect('schoolabsent')">
+        <div class="card text-center h-100">
+            <div class="card-block">
+                <h2 class="icon-margin-top-fix"><i class="fas fa-user-friends fa-4x icon-light-grey"></i></h2>
+            </div>
+            <div class="card-footer">
+                <h3>School Absent Report</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-12 custom-col-responsiveness" onclick="dashboardRedirect('studentabsent')">
+        <div class="card text-center h-100">
+            <div class="card-block">
+                <h2 class="icon-margin-top-fix"><i class="fa fa-user-clock fa-4x icon-light-grey"></i></h2>
+            </div>
+            <div class="card-footer">
+                <h3>Student Absent Report</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function dashboardRedirect(destination) {
         switch (destination) {
@@ -73,6 +101,12 @@
                 break;
             case 'managestudentscreening':
             window.location.href = '@Url.Action("ManageStudentScreening", "StudentScreening")';
+                break;
+            case 'schoolabsent':
+            window.location.href = '@Url.Action("SchoolAbsenteeByDate", "Report")';
+                break;
+            case 'studentabsent':
+            window.location.href = '@Url.Action("StudentAbsenteeByDate", "Report")';
             break;
         }
     }
