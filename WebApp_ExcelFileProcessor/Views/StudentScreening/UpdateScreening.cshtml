@@ -6,7 +6,7 @@
 <!--Header-->
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness mb-2">
-        <h1 class="custom-dark-blue">Delete Screening</h1>
+        <h1 class="custom-dark-blue">Update Screening</h1>
         <hr class="custom-blue-hr" />
     </div>
 </div>
@@ -90,7 +90,7 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Time Stamp</label>
-                <input asp-for="ScrenningTimeStamp" class="form-control" />
+                <input asp-for="ScrenningTimeStamp" class="form-control" required onkeydown="return false" />
                 <span asp-validation-for="ScrenningTimeStamp" class="text-danger"></span>
             </div>
         </div>

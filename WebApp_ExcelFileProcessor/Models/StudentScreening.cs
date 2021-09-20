@@ -47,6 +47,8 @@ namespace WebApp_ExcelFileProcessor.Models
         public String AnyOfTheFollowingSymptoms { get; set; }
 
         [Required(ErrorMessage = "This is a required field.")]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = false)]
         public DateTime ScrenningTimeStamp { get; set; }
 
         public Guid StudentId { get; set; }

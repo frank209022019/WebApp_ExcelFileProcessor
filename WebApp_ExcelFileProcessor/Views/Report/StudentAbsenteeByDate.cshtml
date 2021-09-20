@@ -23,13 +23,13 @@
     <div class="col-xl-4 -col-md-12 custom-col-responsiveness mb-2">
         <div class="form-group">
             <label class="control-label">Start Date</label>
-            <input id="inputStartDate" class="form-control" type="datetime-local" asp-format="{0:dd/MM/yyyy HH:mm}" />
+            <input id="inputStartDate" class="form-control" type="date" asp-format="{0:dd/MM/yyyy}" onkeydown="return false" />
         </div>
     </div>
     <div class="col-xl-4 -col-md-12 custom-col-responsiveness mb-2">
         <div class="form-group">
             <label class="control-label">End Date</label>
-            <input id="inputEndDate" class="form-control" type="datetime-local" asp-format="{0:dd/MM/yyyy HH:mm}" />
+            <input id="inputEndDate" class="form-control" type="date" asp-format="{0:dd/MM/yyyy}" onkeydown="return false" />
         </div>
     </div>
 </div>
