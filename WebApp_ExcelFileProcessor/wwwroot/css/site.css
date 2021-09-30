@@ -4,9 +4,10 @@ for details on configuring this project to bundle and minify static web assets. 
 /*Global*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 
-.no-display{
+.no-display {
     display: none !important;
 }
+
 .control-label {
     color: #217093 !important;
     font-weight: bold !important;
@@ -491,8 +492,8 @@ body {
 
 .dt-buttons {
     float: left !important;
- 
 }
+
     .dt-buttons button:hover {
         font-size: 20px !important;
     }

@@ -155,7 +155,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 Value = i.StudentId.ToString(),
                 Text = i.FirstName + " " + i.LastName
-
             }).ToList();
             return View(model);
         }
@@ -169,7 +168,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 var exisitingStudent = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
                 StudentScreening newModel = new StudentScreening()
                 {
-                    
                     QRCodeId = model.QRCodeId,
                     Temp = model.Temp,
                     GeneralSenseWellbeing = model.GeneralSenseWellbeing,
@@ -189,7 +187,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 };
                 _context.StudentScreenings.Add(newModel);
                 _context.SaveChanges();
-                
+
                 return RedirectToAction("ManageStudentScreening");
             }
             catch (Exception ex)
@@ -906,7 +904,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 return new StudentScreeningViewModel()
                 {
                     QRCodeId = student.QRCode.ToUpper(),
-                    StudentClass = student.StudentClass.DisplayName.ToUpper()      
+                    StudentClass = student.StudentClass.DisplayName.ToUpper()
                 };
             }
             catch (Exception ex)

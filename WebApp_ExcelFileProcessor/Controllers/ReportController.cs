@@ -34,9 +34,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
         public IActionResult SchoolAbsenteeByDate()
         {
             try
-            {
-                var model = _context.Students.Where(i => !i.IsDeleted).Select(i => new SelectListItem() { Value = i.StudentId.ToString(), Text = String.Format(" [{0}] {1} {2}", i.StudentClass.DisplayName, i.FirstName, i.LastName) }).ToList();
-                return View(model);
+            {              
+                return View();
             }
             catch (Exception ex)
             {
@@ -66,20 +65,21 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         [Authorize]
         [HttpGet]
-        public List<AbsenteeViewModel> GenerateSchoolAbsenteeList(String startDateString, String endDateString)
+        public List<AbsenteeViewModel> GenerateSchoolAbsenteeList(String gradeString, String startDateString, String endDateString)
         {
             try
             {
+                Int32 gradeInt = Convert.ToInt32(gradeString);
                 DateTime startDate = Convert.ToDateTime(startDateString);
                 DateTime endDate = Convert.ToDateTime(endDateString);
 
-                //  Screening list            
-                var screeningList = GetStudentScreeningForDateRange(startDate, endDate);
+                //  Screening list - filtered by grade, start date && end date           
+                var screeningList = GetStudentScreeningForDateRange(gradeInt, startDate, endDate);
                 if (screeningList.Count() <= 0)
                     throw new Exception("No student screenings found.");
 
-                //  Student list
-                var studentList = _context.Students.Where(i => !i.IsDeleted).ToList();
+                //  Student list by grade && valid
+                var studentList = _context.Students.Where(i => !i.IsDeleted && i.StudentClass.GradeInt == gradeInt).ToList();
                 if (studentList.Count() <= 0)
                     throw new Exception("No students found.");
 
@@ -90,10 +90,27 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 foreach (var item in studentList)
                 {
                     //  get screennings for student
-                    var studentScreenings = screeningList.Where(i => i.StudentId == item.StudentId).ToList();
-                    if (studentScreenings.Count() > 0)
+                    var studentScreenings = screeningList.Where(i => i.StudentId == item.StudentId && !i.IsDeleted).ToList();
+
+                   if (studentScreenings.Count() > 0)
                     {
-                        //  loop through DateRange to find absentt days (is at school some days in DateRange)
+                        /*
+                         * Loop through each day in DateRange (parameters)
+                         *      -   check if student must be at school for that day?????
+                         *          IF (true)
+                         *              -   check if student has a screening record for each day
+                         *                  IF(true)
+                         *                          -   they are present
+                         *                   ELSE
+                         *                          -   they are absent
+                         *                         
+                         *      -  ELSE
+                         *              -   do nothing.... no need for student to be at school
+                         * 
+                         * 
+                         * 
+                         * 
+                         */
                         foreach (DateTime day in EachCalendarDay(startDate, endDate))
                         {
                             var recordExists = studentScreenings.Any(i => i.ScrenningTimeStamp.Day == day.Day &&
@@ -107,18 +124,35 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 });
                         }
                     }
-                    else
-                    {
-                        //  add a new record for each day (student absent every day in the DateRange)
-                        foreach (DateTime day in EachCalendarDay(startDate, endDate))
-                        {
-                            returnList.Add(new AbsenteeViewModel()
-                            {
-                                StudentId = item.StudentId,
-                                AbsentDateTime = day
-                            });
-                        }
-                    }
+
+                    //if (studentScreenings.Count() > 0)
+                    //{
+                    //    //  loop through DateRange to find absentt days (is at school some days in DateRange)
+                    //    foreach (DateTime day in EachCalendarDay(startDate, endDate))
+                    //    {
+                    //        var recordExists = studentScreenings.Any(i => i.ScrenningTimeStamp.Day == day.Day &&
+                    //                                                                                                  i.ScrenningTimeStamp.Month == day.Month &&
+                    //                                                                                                  i.ScrenningTimeStamp.Year == day.Year);
+                    //        if (!recordExists)
+                    //            returnList.Add(new AbsenteeViewModel()
+                    //            {
+                    //                StudentId = item.StudentId,
+                    //                AbsentDateTime = day
+                    //            });
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    //  add a new record for each day (student absent every day in the DateRange)
+                    //    foreach (DateTime day in EachCalendarDay(startDate, endDate))
+                    //    {
+                    //        returnList.Add(new AbsenteeViewModel()
+                    //        {
+                    //            StudentId = item.StudentId,
+                    //            AbsentDateTime = day
+                    //        });
+                    //    }
+                    //}
                 }
 
                 return returnList;
@@ -139,15 +173,15 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 DateTime startDate = Convert.ToDateTime(startDateString);
                 DateTime endDate = Convert.ToDateTime(endDateString);
 
-                //  Screening list
-                var screeningList = GetStudentScreeningForDateRange(startDate, endDate);
-                if (screeningList.Count() <= 0)
-                    throw new Exception("No student screenings found.");
-
                 //  Student list
                 var student = _context.Students.FirstOrDefault(i => i.StudentId.ToString().ToUpper() == studentId.ToUpper() && !i.IsDeleted);
                 if (student == null)
                     throw new Exception("No student found.");
+
+                //  Screening list
+                var screeningList = GetStudentScreeningForDateRange(student.StudentClass.GradeInt, startDate, endDate);
+                if (screeningList.Count() <= 0)
+                    throw new Exception("No student screenings found.");               
 
                 //  Return list
                 List<AbsenteeViewModel> returnList = new List<AbsenteeViewModel>();
@@ -193,14 +227,14 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        private List<StudentScreening> GetStudentScreeningForDateRange(DateTime startDate, DateTime endDate)
+        private List<StudentScreening> GetStudentScreeningForDateRange(Int32 gradeInt, DateTime startDate, DateTime endDate)
         {
             try
             {
-                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && 
-                                                                                                                    (i.ScrenningTimeStamp.Year >= startDate.Year && i.ScrenningTimeStamp.Year >= endDate.Year) &&
-                                                                                                                    (i.ScrenningTimeStamp.Month >= startDate.Month && i.ScrenningTimeStamp.Month >= endDate.Month) &&
-                                                                                                                    (i.ScrenningTimeStamp.Day >= startDate.Day && i.ScrenningTimeStamp.Day >= endDate.Day)).ToList();
+                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && i.Student.StudentClass.GradeInt == gradeInt &&
+                                                                                                                    (i.ScrenningTimeStamp.Year >= startDate.Year && i.ScrenningTimeStamp.Year <= endDate.Year) &&
+                                                                                                                    (i.ScrenningTimeStamp.Month >= startDate.Month && i.ScrenningTimeStamp.Month <= endDate.Month) &&
+                                                                                                                    (i.ScrenningTimeStamp.Day >= startDate.Day && i.ScrenningTimeStamp.Day <= endDate.Day)).ToList();
                 if (returnList.Count() == 0)
                     return new List<StudentScreening>();
 

@@ -1,5 +1,4 @@
-﻿@model List<SelectListItem>
-@{
+﻿@{
     ViewData["Title"] = "SchoolAbsenteeByDate";
 }
 
@@ -13,13 +12,25 @@
 
 <!-- Select options-->
 <div class="form-row custom-row-responsiveness">
-    <div class="col-xl-6 -col-md-12 custom-col-responsiveness mb-2">
+    <div class="col-xl-2 -col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label class="control-label">Grade</label>
+            <select class="form-control" id="inputGrade" placeholder="Select a Grade" required>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-5 -col-md-12 custom-col-responsiveness mb-2">
         <div class="form-group">
             <label class="control-label">Start Date</label>
             <input id="inputStartDate" class="form-control" type="date" asp-format="{0:dd/MM/yyyy}" onkeydown="return false" />
         </div>
     </div>
-    <div class="col-xl-6 -col-md-12 custom-col-responsiveness mb-2">
+    <div class="col-xl-5 -col-md-12 custom-col-responsiveness mb-2">
         <div class="form-group">
             <label class="control-label">End Date</label>
             <input id="inputEndDate" class="form-control" type="date" asp-format="{0:dd/MM/yyyy}" onkeydown="return false" />
@@ -39,9 +50,8 @@
 
 <script>
     $(document).ready(function () {
-        $('#inputStudentId').selectpicker();
-
         $("#btnClearFields").click(function () {
+            $('#inputGrade').prop('selectedIndex', 0);
             $("#inputStartDate").val('');
             $("#inputEndDate").val('');
         });
@@ -50,6 +60,7 @@
             if (startDateHasValue() && endDateHasValue()) {
                 //  ajax to get list
                 loadingSpinner_Show();
+                var gradeValue = $('#inputGrade').find(":selected").text();
                 var startDateValue = $('#inputStartDate').val()
                 var endDateValue = $('#inputEndDate').val();
 
@@ -57,16 +68,18 @@
                         url: '@Url.Action("GenerateSchoolAbsenteeList", "Report")',
                         type: 'GET',
                     data: {
+                        gradeString: gradeValue.toString(),
                         startDateString: startDateValue.toString(),
                         endDateString: endDateValue.toString()
                     },
                     success: function (data) {
+                        console.log(data);
+                        loadingSpinner_Hide();
+
                         if (data.length == 0)
                             sweetAlertWarning("School Absent Report", "No records were found matching your parameters.");
-
-                            loadingSpinner_Hide();
-                            console.log(data);
-
+                        else
+                            sweetAlertSuccess("School Absent Report", "Records were found matching your parameters.");
                         },
                         error: function (data) {
                             loadingSpinner_Hide();
