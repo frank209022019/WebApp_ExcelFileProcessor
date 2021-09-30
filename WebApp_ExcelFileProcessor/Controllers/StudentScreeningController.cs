@@ -435,11 +435,16 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     //  GeneralSenseWellbeing
                                     if (worksheet.Cells[row, 3].Value != null)
                                     {
-                                        var cellValue = worksheet.Cells[row, 3].Value;
-                                        if (cellValue != null)
-                                            tempModel.GeneralSenseWellbeing = cellValue.ToString();
-                                        else
-                                            throw new Exception(String.Format("ROW: {0} COL: {3}", row, "StudentColor"));
+                                        tempModel.GeneralSenseWellbeing = "N/A";
+                                        //var cellValue = worksheet.Cells[row, 3].Value;
+                                        //if (cellValue != null)
+                                        //    tempModel.GeneralSenseWellbeing = cellValue.ToString();
+                                        //else
+                                        //    throw new Exception(String.Format("ROW: {0} COL: {3}", row, "StudentColor"));
+                                    }
+                                    else
+                                    {
+                                        tempModel.GeneralSenseWellbeing = "N/A";
                                     }
 
                                     //  WearingAMask
