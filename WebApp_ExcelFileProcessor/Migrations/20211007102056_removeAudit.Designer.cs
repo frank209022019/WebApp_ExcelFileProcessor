@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp_ExcelFileProcessor.Data;
 
 namespace WebApp_ExcelFileProcessor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211007102056_removeAudit")]
+    partial class removeAudit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +51,7 @@ namespace WebApp_ExcelFileProcessor.Migrations
                         new
                         {
                             Id = "ba566e0f-3d52-4967-a62c-1965b9f1e251",
-                            ConcurrencyStamp = "c3425757-c52d-422e-a042-c8a9e3a08915",
+                            ConcurrencyStamp = "94beac5b-84f7-488e-8197-ba39defc15bc",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -148,16 +150,16 @@ namespace WebApp_ExcelFileProcessor.Migrations
                         {
                             Id = "1b824f5d-01b1-411b-8e44-5b05003ef81e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "369fed18-4612-4862-8ee1-dd80a4889a9b",
+                            ConcurrencyStamp = "3c516405-8699-4301-b739-fa359489c79c",
                             Email = "admin@fileprocessor.co.za",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@FILEPROCESSOR.CO.ZA",
                             NormalizedUserName = "MYUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAENvayXYQIApa/YII8jETYQudNUSOrCS/14zTduglEdeOF5K7Gz31j6xKcwUnnruYYA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECvzTf+C0sq+UIt+HNhjoa5Tzvl1DEwjnqzUKtA8n4a7dvpP2IBXTe6+k+2KhnF2QQ==",
                             PhoneNumber = "0413743172",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "79bbc203-11ed-4d1e-af86-b5f32871a9aa",
+                            SecurityStamp = "9da82683-a0d2-49df-9496-293578b9114c",
                             TwoFactorEnabled = false,
                             UserName = "myuser"
                         });
@@ -254,43 +256,6 @@ namespace WebApp_ExcelFileProcessor.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebApp_ExcelFileProcessor.Models.Audit", b =>
-                {
-                    b.Property<Guid>("AuditId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AffectedColumns")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NewValues")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OldValues")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PrimaryKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TableName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("AuditId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Audits");
-                });
-
             modelBuilder.Entity("WebApp_ExcelFileProcessor.Models.Gender", b =>
                 {
                     b.Property<Guid>("GenderId")
@@ -317,16 +282,16 @@ namespace WebApp_ExcelFileProcessor.Migrations
                     b.HasData(
                         new
                         {
-                            GenderId = new Guid("4a1f43ef-154e-43fb-9cf0-a646e7f4bc4b"),
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 853, DateTimeKind.Local).AddTicks(5380),
+                            GenderId = new Guid("6d19436a-8eaa-4286-8c9f-4fcec45bc840"),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 173, DateTimeKind.Local).AddTicks(358),
                             GenderChar = "F",
                             GenderName = "Female",
                             IsDeleted = false
                         },
                         new
                         {
-                            GenderId = new Guid("e7ee7408-aadc-4741-8ef2-c7952d2087ec"),
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 855, DateTimeKind.Local).AddTicks(1974),
+                            GenderId = new Guid("3136d187-d796-419c-a4a7-5bcf0aff2f26"),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 173, DateTimeKind.Local).AddTicks(8609),
                             GenderChar = "M",
                             GenderName = "Male",
                             IsDeleted = false
@@ -414,315 +379,315 @@ namespace WebApp_ExcelFileProcessor.Migrations
                     b.HasData(
                         new
                         {
-                            StudentClassId = new Guid("c2b5c8bb-3046-4691-a314-b4f43b1c73dc"),
+                            StudentClassId = new Guid("1b8c7043-5ddd-4cd9-b6b2-25700e00b392"),
                             ClassChar = "A",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2863),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9161),
                             DisplayName = "8A",
                             GradeInt = 8,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("1b6114ab-ef72-4a06-affc-3b39e0c02093"),
+                            StudentClassId = new Guid("269636da-82a3-4dea-9471-064776dc0887"),
                             ClassChar = "B",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2882),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9172),
                             DisplayName = "8B",
                             GradeInt = 8,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("997371a3-01c6-4385-96a2-1a03e3f2d604"),
+                            StudentClassId = new Guid("4b4fee75-db7d-44a3-880b-541a42b45847"),
                             ClassChar = "C",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2887),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9185),
                             DisplayName = "8C",
                             GradeInt = 8,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("cf9a007e-9d09-452d-b083-dffb97c86d3a"),
+                            StudentClassId = new Guid("37a8e15c-5421-4d68-928b-16a80beebb69"),
                             ClassChar = "D",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2910),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9187),
                             DisplayName = "8D",
                             GradeInt = 8,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("3c8e1385-3805-45f2-9f99-e9ad04dfebb4"),
+                            StudentClassId = new Guid("e7024db6-c513-4eed-a7cb-a2e0f5ce6b75"),
                             ClassChar = "E",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2914),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9189),
                             DisplayName = "8E",
                             GradeInt = 8,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("1a75a9ec-bff8-44e4-b6b6-74e2d89a9571"),
+                            StudentClassId = new Guid("dcc3c21d-3233-433d-a30a-309ece47635f"),
                             ClassChar = "F",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2918),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9192),
                             DisplayName = "8F",
                             GradeInt = 8,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("a0295f16-3929-49ab-97fc-d58204de342f"),
+                            StudentClassId = new Guid("77322982-b8cd-4270-871a-015022087131"),
                             ClassChar = "G",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2921),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9194),
                             DisplayName = "8G",
                             GradeInt = 8,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("5f47ceea-2378-4d0c-819e-a74c4e8b90cc"),
+                            StudentClassId = new Guid("3c15adf8-4b68-46ac-9153-294efbf762ca"),
                             ClassChar = "A",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2924),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9196),
                             DisplayName = "9A",
                             GradeInt = 9,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("1b146c38-a3ae-417e-9862-e0274c1a534e"),
+                            StudentClassId = new Guid("feb607bd-041f-4c95-877a-6aece586bfec"),
                             ClassChar = "B",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2928),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9197),
                             DisplayName = "9B",
                             GradeInt = 9,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("e946f680-2384-42d4-8580-704343afa468"),
+                            StudentClassId = new Guid("14dd5839-8b79-433c-a31f-468dc5bde314"),
                             ClassChar = "C",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2931),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9200),
                             DisplayName = "9C",
                             GradeInt = 9,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("eff0a4ad-af50-43ad-87cc-fb97f634f66b"),
+                            StudentClassId = new Guid("95765801-96d7-43f2-9da2-711858a0d97d"),
                             ClassChar = "D",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2935),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9203),
                             DisplayName = "9D",
                             GradeInt = 9,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("43334717-5c0b-42ee-9a73-cc662af4fe15"),
+                            StudentClassId = new Guid("5d5e576d-ca28-4362-a087-57b73e67ef5e"),
                             ClassChar = "E",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2942),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9205),
                             DisplayName = "9E",
                             GradeInt = 9,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("87bdec1e-cc38-4cc1-b5ba-9df51c45dbeb"),
+                            StudentClassId = new Guid("59ab3ce0-f63c-42ad-b930-3682144111be"),
                             ClassChar = "F",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2946),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9208),
                             DisplayName = "9F",
                             GradeInt = 9,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("5a6181fb-2ff0-4a3f-82e5-ada242af2e3e"),
+                            StudentClassId = new Guid("0cfa05a8-3ecc-4b65-ae32-5ba508f38db3"),
                             ClassChar = "G",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2950),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9209),
                             DisplayName = "9G",
                             GradeInt = 9,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("1ebeaeeb-9b3f-4449-b731-3a8625292003"),
+                            StudentClassId = new Guid("95a456fc-c096-4cdf-8d56-0d296de9aa69"),
                             ClassChar = "A",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2954),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9211),
                             DisplayName = "10A",
                             GradeInt = 10,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("7df3f270-66a7-4f8a-878d-593821ca7240"),
+                            StudentClassId = new Guid("5b00e89e-72d1-4b93-b56c-a2210c3a883a"),
                             ClassChar = "B",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2959),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9213),
                             DisplayName = "10B",
                             GradeInt = 10,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("1e2050de-e0cc-41a7-a1b2-bdf31605e56e"),
+                            StudentClassId = new Guid("383d00f5-4044-43a4-844b-7285c135199f"),
                             ClassChar = "C",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2962),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9214),
                             DisplayName = "10C",
                             GradeInt = 10,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("46b82bff-0bdf-4a4a-bb96-5b0e7fd0e945"),
+                            StudentClassId = new Guid("3765d4ba-7224-40aa-b24c-632bc7eec1dc"),
                             ClassChar = "D",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2966),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9216),
                             DisplayName = "10D",
                             GradeInt = 10,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("d1dd7ad6-9d85-4e62-b77a-4f828553d34d"),
+                            StudentClassId = new Guid("99fd044f-8041-406e-8104-e228c3031b68"),
                             ClassChar = "E",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2969),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9220),
                             DisplayName = "10E",
                             GradeInt = 10,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("95b8cf60-4a41-4f02-b80d-0342ed1b61a8"),
+                            StudentClassId = new Guid("39c2b4af-d2ca-47f0-aebe-45285620255d"),
                             ClassChar = "F",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2976),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9221),
                             DisplayName = "10F",
                             GradeInt = 10,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("d8d155d9-6f8b-47fa-84fd-ea472687f331"),
+                            StudentClassId = new Guid("4ff90ecf-bdc3-40f2-889e-6980b41749d3"),
                             ClassChar = "G",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2979),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9223),
                             DisplayName = "10G",
                             GradeInt = 10,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("e46bed83-9eda-4442-9978-bfa3a7524edc"),
+                            StudentClassId = new Guid("f83199c7-d83c-4658-8c90-51ff47d651db"),
                             ClassChar = "A",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2983),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9225),
                             DisplayName = "11A",
                             GradeInt = 11,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("732eb530-c7a1-4ef7-8747-7d8c0da0ad20"),
+                            StudentClassId = new Guid("fdd0845f-ba25-4e20-8693-82ac1447de1a"),
                             ClassChar = "B",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2987),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9226),
                             DisplayName = "11B",
                             GradeInt = 11,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("d10be4b5-3f0d-473c-aa68-1db863b0db10"),
+                            StudentClassId = new Guid("eee8724c-a65d-408e-8055-28b009d809e2"),
                             ClassChar = "C",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2990),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9228),
                             DisplayName = "11C",
                             GradeInt = 11,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("3f7f6dd8-cfcf-4bee-9692-ae5f9a23405c"),
+                            StudentClassId = new Guid("304e52c3-418d-4457-b949-0db9ed58f89e"),
                             ClassChar = "D",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2995),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9231),
                             DisplayName = "11D",
                             GradeInt = 11,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("f9e1ec52-6773-40bd-b87f-85b6cc24d98c"),
+                            StudentClassId = new Guid("1d9f8f15-ab1e-4a2b-a4cf-ffdddb63714f"),
                             ClassChar = "E",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(2998),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9232),
                             DisplayName = "11E",
                             GradeInt = 11,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("ae0dc0c1-54bb-4251-89e7-6733041d3c19"),
+                            StudentClassId = new Guid("4a52c312-672f-4f8b-a9bb-93dfd2e37754"),
                             ClassChar = "F",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3002),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9236),
                             DisplayName = "11F",
                             GradeInt = 11,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("17782ef7-3adb-4af6-ad88-594c349c238b"),
+                            StudentClassId = new Guid("58429448-6d02-434e-9c5e-ec13f7a6727d"),
                             ClassChar = "G",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3010),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9238),
                             DisplayName = "11G",
                             GradeInt = 11,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("93304c37-3588-43ad-9b6b-bcd2f742f5de"),
+                            StudentClassId = new Guid("2d42d2eb-674f-4033-bed5-4dc2f1044331"),
                             ClassChar = "A",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3013),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9239),
                             DisplayName = "12A",
                             GradeInt = 12,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("a1eae9a4-0d81-4e43-b7d3-ad94573f904b"),
+                            StudentClassId = new Guid("d40b0f3e-227f-4823-8019-128f00409059"),
                             ClassChar = "B",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3017),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9241),
                             DisplayName = "12B",
                             GradeInt = 12,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("8eeb096d-1ed3-4445-b319-da9717c6b6be"),
+                            StudentClassId = new Guid("e479d001-44f8-4114-91b7-28494d9fc4ea"),
                             ClassChar = "C",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3020),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9243),
                             DisplayName = "12C",
                             GradeInt = 12,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("0daa2db2-71f7-4974-8b36-5f9c6e4c5019"),
+                            StudentClassId = new Guid("80cbc098-4daa-48de-a2ea-4b00fb06b1dc"),
                             ClassChar = "D",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3024),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9245),
                             DisplayName = "12D",
                             GradeInt = 12,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("6506d253-d139-4eab-8097-ae42223a1d0f"),
+                            StudentClassId = new Guid("b32a0ecc-9ddb-4b92-b936-1e9ea584e36e"),
                             ClassChar = "E",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3028),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9246),
                             DisplayName = "12E",
                             GradeInt = 12,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("e82d9275-cf52-4b0f-b436-d8a0596fb154"),
+                            StudentClassId = new Guid("b9f34543-b45c-4212-8239-3f6e8e57cbcd"),
                             ClassChar = "F",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3031),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9248),
                             DisplayName = "12F",
                             GradeInt = 12,
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentClassId = new Guid("a4238828-e74e-439b-87ea-aaff39275868"),
+                            StudentClassId = new Guid("a9466098-2a5a-45dc-8434-5c29fd85aad8"),
                             ClassChar = "G",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(3035),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(9252),
                             DisplayName = "12G",
                             GradeInt = 12,
                             IsDeleted = false
@@ -751,23 +716,23 @@ namespace WebApp_ExcelFileProcessor.Migrations
                     b.HasData(
                         new
                         {
-                            StudentColorId = new Guid("a8921348-1394-4c4d-af8c-a154f54673ff"),
+                            StudentColorId = new Guid("445eb412-edf6-439a-a42f-9a239bade63f"),
                             ColorName = "Gold",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 856, DateTimeKind.Local).AddTicks(9491),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(7787),
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentColorId = new Guid("0399bc49-934e-4a95-bb08-3cb55abc618c"),
+                            StudentColorId = new Guid("dcd4ffcf-02f8-44be-a9a3-ae32e1aca454"),
                             ColorName = "Scarlet",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 856, DateTimeKind.Local).AddTicks(9512),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(7800),
                             IsDeleted = false
                         },
                         new
                         {
-                            StudentColorId = new Guid("72bd4643-2421-42bd-8622-f46c94f03c1d"),
+                            StudentColorId = new Guid("a31c4f91-1af0-47ee-89fe-7630d7e971c0"),
                             ColorName = "Unassigned",
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 856, DateTimeKind.Local).AddTicks(9516),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 174, DateTimeKind.Local).AddTicks(7802),
                             IsDeleted = false
                         });
                 });
@@ -801,8 +766,8 @@ namespace WebApp_ExcelFileProcessor.Migrations
                     b.HasData(
                         new
                         {
-                            StudentGroupId = new Guid("bf92baff-c937-4380-999f-962802fe851e"),
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(5340),
+                            StudentGroupId = new Guid("fb580e6a-0a2f-4cf0-a6f5-5eb913630dac"),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 175, DateTimeKind.Local).AddTicks(1615),
                             DisplayName = "G1",
                             GroupChar = "G",
                             GroupInt = 1,
@@ -810,8 +775,8 @@ namespace WebApp_ExcelFileProcessor.Migrations
                         },
                         new
                         {
-                            StudentGroupId = new Guid("961485bd-2ae0-4095-ac7a-e989f5d51e0b"),
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(5354),
+                            StudentGroupId = new Guid("21bec561-ac0b-4fb9-bac3-81503ef37956"),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 175, DateTimeKind.Local).AddTicks(1628),
                             DisplayName = "G2",
                             GroupChar = "G",
                             GroupInt = 2,
@@ -819,8 +784,8 @@ namespace WebApp_ExcelFileProcessor.Migrations
                         },
                         new
                         {
-                            StudentGroupId = new Guid("682f07eb-b796-46e6-a598-50179a85e555"),
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(5356),
+                            StudentGroupId = new Guid("9270fde0-2b75-44c8-91cc-b1716dee4e50"),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 175, DateTimeKind.Local).AddTicks(1631),
                             DisplayName = "G3",
                             GroupChar = "G",
                             GroupInt = 3,
@@ -828,8 +793,8 @@ namespace WebApp_ExcelFileProcessor.Migrations
                         },
                         new
                         {
-                            StudentGroupId = new Guid("b5b5d4eb-9266-4955-adf2-5d547f042f4b"),
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(5358),
+                            StudentGroupId = new Guid("28d59f1c-eb6d-43aa-bf4c-05b1f9a00205"),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 175, DateTimeKind.Local).AddTicks(1633),
                             DisplayName = "G4",
                             GroupChar = "G",
                             GroupInt = 4,
@@ -837,8 +802,8 @@ namespace WebApp_ExcelFileProcessor.Migrations
                         },
                         new
                         {
-                            StudentGroupId = new Guid("c65f63c8-0213-4e95-949f-bd320121a50c"),
-                            DateCreated = new DateTime(2021, 10, 7, 12, 29, 43, 857, DateTimeKind.Local).AddTicks(5360),
+                            StudentGroupId = new Guid("74a91b56-52c9-4d97-8a72-0f5d49035215"),
+                            DateCreated = new DateTime(2021, 10, 7, 12, 20, 56, 175, DateTimeKind.Local).AddTicks(1635),
                             DisplayName = "G5",
                             GroupChar = "G",
                             GroupInt = 5,
@@ -1083,15 +1048,6 @@ namespace WebApp_ExcelFileProcessor.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WebApp_ExcelFileProcessor.Models.Audit", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("IdentityUser");
                 });
 
             modelBuilder.Entity("WebApp_ExcelFileProcessor.Models.Student", b =>
