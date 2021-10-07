@@ -474,5 +474,6 @@ namespace WebApp_ExcelFileProcessor.Data
         public DbSet<StudentTemp> StudentTemps { get; set; }
         public DbSet<StudentScreeningTemp> StudentScreeningTemps { get; set; }
         public DbSet<StudentScreening> StudentScreenings { get; set; }
+        public DbSet<Audit> Audits { get; set; }
     }
 }
