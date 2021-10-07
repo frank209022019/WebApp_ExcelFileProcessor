@@ -49,7 +49,7 @@ namespace WebApp_ExcelFileProcessor.Models
         [Required(ErrorMessage = "This is a required field.")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = false)]
-        public DateTime ScrenningTimeStamp { get; set; }
+        public DateTime ScreeningTimeStamp { get; set; }
 
         public Guid StudentId { get; set; }
         [ForeignKey("StudentId")]

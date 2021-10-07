@@ -22,7 +22,7 @@ namespace WebApp_ExcelFileProcessor.Models
         public String AdmittedSeverPneumonia { get; set; }
         public String SufferFromChronicDisease { get; set; }
         public String AnyOfTheFollowingSymptoms { get; set; }
-        public DateTime? ScrenningTimeStamp { get; set; }
+        public DateTime? ScreeningTimeStamp { get; set; }
 
         public Int32? RowNumber { get; set; }
         public Char? RowType { get; set; }

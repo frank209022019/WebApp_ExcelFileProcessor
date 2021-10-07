@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApp_ExcelFileProcessor.Migrations
 {
-    public partial class newDatabase : Migration
+    public partial class databaseInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -214,6 +214,31 @@ namespace WebApp_ExcelFileProcessor.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Audits",
+                columns: table => new
+                {
+                    AuditLogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EventType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TableName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ColumnName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OriginalValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NewValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Audits", x => x.AuditLogId);
+                    table.ForeignKey(
+                        name: "FK_Audits_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -321,7 +346,7 @@ namespace WebApp_ExcelFileProcessor.Migrations
                     AdmittedSeverPneumonia = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SufferFromChronicDisease = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AnyOfTheFollowingSymptoms = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ScrenningTimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ScreeningTimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -353,7 +378,7 @@ namespace WebApp_ExcelFileProcessor.Migrations
                     AdmittedSeverPneumonia = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SufferFromChronicDisease = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AnyOfTheFollowingSymptoms = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ScrenningTimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ScreeningTimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RowNumber = table.Column<int>(type: "int", nullable: true),
                     RowType = table.Column<string>(type: "nvarchar(1)", nullable: true),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -374,20 +399,20 @@ namespace WebApp_ExcelFileProcessor.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "ba566e0f-3d52-4967-a62c-1965b9f1e251", "9059a526-56fb-417b-8c4c-543308efaf9b", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "ba566e0f-3d52-4967-a62c-1965b9f1e251", "47fbf4e9-5b23-41ee-8181-f4fbdc44c9e0", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "1b824f5d-01b1-411b-8e44-5b05003ef81e", 0, "b4626ff7-34f3-4ce2-9791-be5cdf9e443a", "admin@fileprocessor.co.za", true, false, null, "ADMIN@FILEPROCESSOR.CO.ZA", "MYUSER", "AQAAAAEAACcQAAAAENPdbh+dqONuoPvs9DK3wR2Al79M7Dolsjele76wGZKE0z+w1RzUNsaejZd2p8Ub4w==", "0413743172", true, "7059d4d9-bdab-4c7f-ae98-6266eca090c0", false, "myuser" });
+                values: new object[] { "1b824f5d-01b1-411b-8e44-5b05003ef81e", 0, "cfee6c86-be39-45c2-9d43-c49a8541bbc9", "admin@fileprocessor.co.za", true, false, null, "ADMIN@FILEPROCESSOR.CO.ZA", "MYUSER", "AQAAAAEAACcQAAAAEKC50B723lmqm4r6CLYt4TbhChZb8i84CA1I8Oj6Ty68YONqitevU1vcDb4mdafFDg==", "0413743172", true, "f4664248-19de-4834-8f6c-5fc58f9e3495", false, "myuser" });
 
             migrationBuilder.InsertData(
                 table: "Genders",
                 columns: new[] { "GenderId", "DateCreated", "GenderChar", "GenderName", "IsDeleted" },
                 values: new object[,]
                 {
-                    { new Guid("f1311288-58a7-4c4d-9e3f-4aa5a6011183"), new DateTime(2021, 9, 17, 18, 26, 55, 69, DateTimeKind.Local).AddTicks(5133), "F", "Female", false },
-                    { new Guid("87a9ae29-4986-4e7f-abcf-7690f6fd02d0"), new DateTime(2021, 9, 17, 18, 26, 55, 70, DateTimeKind.Local).AddTicks(2260), "M", "Male", false }
+                    { new Guid("85a2e699-3e34-486d-9edc-746d291940d2"), new DateTime(2021, 10, 7, 8, 48, 51, 518, DateTimeKind.Local).AddTicks(6776), "F", "Female", false },
+                    { new Guid("82722b81-31c2-4399-9aeb-3d2fff2bb3ff"), new DateTime(2021, 10, 7, 8, 48, 51, 519, DateTimeKind.Local).AddTicks(8602), "M", "Male", false }
                 });
 
             migrationBuilder.InsertData(
@@ -395,41 +420,41 @@ namespace WebApp_ExcelFileProcessor.Migrations
                 columns: new[] { "StudentClassId", "ClassChar", "DateCreated", "DisplayName", "GradeInt", "IsDeleted" },
                 values: new object[,]
                 {
-                    { new Guid("bf311bb5-b371-4bf4-bfe6-eaead4988522"), "G", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2402), "10G", 10, false },
-                    { new Guid("ce7bc3e3-da30-4811-a82a-497936774c6e"), "A", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2404), "11A", 11, false },
-                    { new Guid("e6aaa27f-eefc-4b70-b38c-8b49d8ee9613"), "B", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2406), "11B", 11, false },
-                    { new Guid("e720f16a-e68b-4f8c-ae1a-269eb6840c46"), "C", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2408), "11C", 11, false },
-                    { new Guid("df782962-399b-4581-8e99-a579f0a12bb7"), "D", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2411), "11D", 11, false },
-                    { new Guid("85c69b91-3efd-45db-8624-becce1e6fd44"), "E", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2413), "11E", 11, false },
-                    { new Guid("8811caff-fab7-431e-9260-a5034428ab82"), "F", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2417), "11F", 11, false },
-                    { new Guid("5651210e-b87e-4ca8-860d-59e44bf7a8dd"), "A", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2420), "12A", 12, false },
-                    { new Guid("1b13e3f3-c180-4c5e-9931-c2793f3392ac"), "E", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2398), "10E", 10, false },
-                    { new Guid("8cf8eed2-f13a-4ea4-8244-3ccc39074b6e"), "B", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2422), "12B", 12, false },
-                    { new Guid("1bf4a277-bfe5-48de-b91c-d0e6382a13a3"), "C", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2424), "12C", 12, false },
-                    { new Guid("e8b2de3a-ed07-46eb-8dbf-f4c390506032"), "D", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2425), "12D", 12, false },
-                    { new Guid("bdea7654-3e26-4920-985e-f6a2c131af75"), "E", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2427), "12E", 12, false },
-                    { new Guid("69aaa886-fecf-4356-b1b4-a208a3d4f9c1"), "F", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2428), "12F", 12, false },
-                    { new Guid("002a3274-96bc-4b34-9713-ad6ec9603bb9"), "G", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2432), "12G", 12, false },
-                    { new Guid("1c1a8792-6097-4133-a3d8-a0cc6a38a855"), "G", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2418), "11G", 11, false },
-                    { new Guid("d9548917-e032-47b3-9f66-bd5c0b305aba"), "D", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2394), "10D", 10, false },
-                    { new Guid("605ce483-3978-444f-8d59-841e5e0aec56"), "F", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2400), "10F", 10, false },
-                    { new Guid("c692ae4a-dc36-42b3-ae7c-aaf5704436a8"), "B", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2390), "10B", 10, false },
-                    { new Guid("7c9dc483-6388-4848-9392-01b18d31964f"), "A", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2343), "8A", 8, false },
-                    { new Guid("8a2ae3a5-1530-4027-87ff-3585acf03ea9"), "B", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2353), "8B", 8, false },
-                    { new Guid("29387efe-6af6-491b-ae44-b72a53759f82"), "C", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2365), "8C", 8, false },
-                    { new Guid("b1b57195-9868-4e89-a7ab-9fc3855234bf"), "D", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2367), "8D", 8, false },
-                    { new Guid("9dfdf5d3-d3de-4f28-81ba-b15a516cd8ff"), "C", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2391), "10C", 10, false },
-                    { new Guid("5cd9d438-4fcb-4e21-b4cc-86bacde19c18"), "F", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2371), "8F", 8, false },
-                    { new Guid("8da29c56-9830-417c-9c69-064b96d4bfb1"), "G", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2373), "8G", 8, false },
-                    { new Guid("0cda8333-1583-4c71-bc2d-5b59236ebc46"), "A", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2374), "9A", 9, false },
-                    { new Guid("5b4d6256-4d76-4afa-8ca7-d62c3e82e358"), "E", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2369), "8E", 8, false },
-                    { new Guid("3e7fd04d-6047-4d5f-9551-d40203369d15"), "C", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2378), "9C", 9, false },
-                    { new Guid("76a7b4dc-c1bf-4a0b-a28f-de859591edd4"), "D", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2381), "9D", 9, false },
-                    { new Guid("4fc55796-7ab1-450a-ad35-31d5c228d8ce"), "E", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2383), "9E", 9, false },
-                    { new Guid("593874ab-1941-4d25-9eec-3367123895cd"), "F", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2385), "9F", 9, false },
-                    { new Guid("f108810b-0dc9-49aa-a8f8-a89c11dcea15"), "G", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2386), "9G", 9, false },
-                    { new Guid("f75c6065-8425-49d8-9608-4b83859d940d"), "A", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2388), "10A", 10, false },
-                    { new Guid("82b4fbc0-d4ea-4462-8c0d-54a45dd30b59"), "B", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(2376), "9B", 9, false }
+                    { new Guid("19336177-91e7-41d2-90d3-074e3d0cecd1"), "G", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6222), "10G", 10, false },
+                    { new Guid("9f2d1044-eea1-4608-8e8f-c6f8c82eac57"), "A", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6225), "11A", 11, false },
+                    { new Guid("8bbd47c0-12f7-4664-9be8-f37670016583"), "B", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6227), "11B", 11, false },
+                    { new Guid("fd0b21fd-5f1f-461d-bf61-570f3b0005fa"), "C", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6230), "11C", 11, false },
+                    { new Guid("fd36ae90-739c-47f8-9522-2fc358522d10"), "D", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6232), "11D", 11, false },
+                    { new Guid("9e6d2eb5-426f-487f-9928-ab5766e387fa"), "E", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6235), "11E", 11, false },
+                    { new Guid("4bf20a81-ccf9-4348-8e49-c19ac86c309f"), "F", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6240), "11F", 11, false },
+                    { new Guid("74bc138f-fd4d-45b2-aecb-5ad3482337a8"), "A", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6246), "12A", 12, false },
+                    { new Guid("3782b536-8974-4601-a717-43c507b0b920"), "E", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6217), "10E", 10, false },
+                    { new Guid("add58ffd-df3f-4242-93f1-a6b9a1a40fd9"), "B", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6249), "12B", 12, false },
+                    { new Guid("7e634387-1f46-457b-a6ba-621a197fffae"), "C", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6251), "12C", 12, false },
+                    { new Guid("43d9ea66-98a7-4a43-af8e-35b7829fa79f"), "D", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6254), "12D", 12, false },
+                    { new Guid("6170a01d-4a90-41d1-96bd-845c79b636c3"), "E", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6256), "12E", 12, false },
+                    { new Guid("83c3e60d-950c-406b-9716-83b53ad504b1"), "F", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6259), "12F", 12, false },
+                    { new Guid("1be368a0-7df4-49d0-b579-b59b0bcb40ad"), "G", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6264), "12G", 12, false },
+                    { new Guid("cdb7cb95-6de7-4188-b7eb-d4628642af55"), "G", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6243), "11G", 11, false },
+                    { new Guid("c8b16da7-2964-46f2-ac50-e6e8a5e78b20"), "D", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6212), "10D", 10, false },
+                    { new Guid("a7764eb5-6c4d-4156-b456-78c1b56eac29"), "F", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6220), "10F", 10, false },
+                    { new Guid("782aa0f9-21d4-4b08-a8fa-85f1de89289d"), "B", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6206), "10B", 10, false },
+                    { new Guid("5905826a-96bb-4575-baf6-cdf94e75b42d"), "A", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6044), "8A", 8, false },
+                    { new Guid("41299f0f-2420-4ce1-b919-bf743fe7fd41"), "B", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6068), "8B", 8, false },
+                    { new Guid("af91420c-0baa-4985-86f3-fe07ca7944e0"), "C", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6085), "8C", 8, false },
+                    { new Guid("dfee429b-c198-40af-a848-87f7378b7c49"), "D", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6089), "8D", 8, false },
+                    { new Guid("a888ed77-dc85-4350-9388-c972777ae814"), "C", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6208), "10C", 10, false },
+                    { new Guid("b95e720a-8319-4645-92a2-6dc634f74c00"), "F", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6096), "8F", 8, false },
+                    { new Guid("780a83c8-9f7a-495f-809e-1a2f8b62ca9d"), "G", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6099), "8G", 8, false },
+                    { new Guid("debbdd1e-b355-4e59-b8f0-f7c297c30315"), "A", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6102), "9A", 9, false },
+                    { new Guid("b13fbac4-0094-46a7-8297-fe3e510f81d1"), "E", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6092), "8E", 8, false },
+                    { new Guid("16d71a8b-1083-4c32-82ff-2e00945dc540"), "C", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6182), "9C", 9, false },
+                    { new Guid("c3d1ced6-060f-4de0-9931-643bc4c59bcc"), "D", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6192), "9D", 9, false },
+                    { new Guid("f43696e2-bb4e-4993-a690-53dbbd286fe5"), "E", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6195), "9E", 9, false },
+                    { new Guid("e797177b-a13d-420f-ba14-ec1de4f9b62c"), "F", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6197), "9F", 9, false },
+                    { new Guid("b23e47b2-ecc3-4859-ad29-c3746ea4e9f7"), "G", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6200), "9G", 9, false },
+                    { new Guid("85f99ee9-d1bf-4dd2-84ae-e4c1ed0d30db"), "A", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6203), "10A", 10, false },
+                    { new Guid("f67c0a73-ba5b-4cf8-b462-f58e7bf7edf4"), "B", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(6177), "9B", 9, false }
                 });
 
             migrationBuilder.InsertData(
@@ -437,9 +462,9 @@ namespace WebApp_ExcelFileProcessor.Migrations
                 columns: new[] { "StudentColorId", "ColorName", "DateCreated", "IsDeleted" },
                 values: new object[,]
                 {
-                    { new Guid("f7e67224-b161-41ed-bf08-43e0c2294033"), "Gold", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(836), false },
-                    { new Guid("5bcbc6f8-596a-49cd-b219-81d096b4d267"), "Scarlet", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(850), false },
-                    { new Guid("e1c107ae-2573-42b7-8958-66cd5c352738"), "Unassigned", new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(852), false }
+                    { new Guid("b72f6191-9fe4-4853-bbed-0e7d1f5263dd"), "Gold", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(3486), false },
+                    { new Guid("8c10abee-f732-45cc-84dc-bba03243f23e"), "Scarlet", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(3515), false },
+                    { new Guid("f5ec8f2d-b160-4170-8508-ba3b10d30e04"), "Unassigned", new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(3518), false }
                 });
 
             migrationBuilder.InsertData(
@@ -447,11 +472,11 @@ namespace WebApp_ExcelFileProcessor.Migrations
                 columns: new[] { "StudentGroupId", "DateCreated", "DisplayName", "GroupChar", "GroupInt", "IsDeleted" },
                 values: new object[,]
                 {
-                    { new Guid("f7ffcfbb-6f9f-4627-b2a2-cbb5dfe9d5cd"), new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(3707), "G4", "G", 4, false },
-                    { new Guid("851d53b4-6a9b-4776-b72d-63935db21a9c"), new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(3694), "G1", "G", 1, false },
-                    { new Guid("06d02722-609b-492a-9300-a76f8c7a9ab1"), new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(3703), "G2", "G", 2, false },
-                    { new Guid("3e27533d-43fd-454c-a6bb-de42a0bafeee"), new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(3705), "G3", "G", 3, false },
-                    { new Guid("407e350a-a541-4086-ab0d-2979ae9723ff"), new DateTime(2021, 9, 17, 18, 26, 55, 71, DateTimeKind.Local).AddTicks(3709), "G5", "G", 5, false }
+                    { new Guid("bab8f0f0-2322-4f8b-91dc-d70d44957d9a"), new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(8213), "G4", "G", 4, false },
+                    { new Guid("142e559a-188f-421b-9fec-aa0ec5b129c9"), new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(8193), "G1", "G", 1, false },
+                    { new Guid("31bc931f-42dd-4ce4-99d0-86eec0d3e6ff"), new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(8207), "G2", "G", 2, false },
+                    { new Guid("db60edee-1756-459a-8588-7a200ce1bcd6"), new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(8210), "G3", "G", 3, false },
+                    { new Guid("2eb86bd5-9f1c-474f-8559-d21de0e7311e"), new DateTime(2021, 10, 7, 8, 48, 51, 521, DateTimeKind.Local).AddTicks(8215), "G5", "G", 5, false }
                 });
 
             migrationBuilder.InsertData(
@@ -497,6 +522,11 @@ namespace WebApp_ExcelFileProcessor.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Audits_UserId",
+                table: "Audits",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_GenderId",
@@ -565,6 +595,9 @@ namespace WebApp_ExcelFileProcessor.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Audits");
 
             migrationBuilder.DropTable(
                 name: "StudentScreening");

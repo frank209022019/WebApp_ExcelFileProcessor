@@ -147,7 +147,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             StudentScreening model = new StudentScreening()
             {
-                ScrenningTimeStamp = DateTime.Now,
+                ScreeningTimeStamp = DateTime.Now,
                 IsDeleted = false,
                 DateCreated = DateTime.Now
             };
@@ -179,7 +179,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     AdmittedSeverPneumonia = model.AdmittedSeverPneumonia,
                     SufferFromChronicDisease = model.SufferFromChronicDisease,
                     AnyOfTheFollowingSymptoms = model.AnyOfTheFollowingSymptoms,
-                    ScrenningTimeStamp = model.ScrenningTimeStamp,
+                    ScreeningTimeStamp = model.ScreeningTimeStamp,
                     StudentDisplayName = exisitingStudent.FirstName + " " + exisitingStudent.LastName,
                     StudentId = exisitingStudent.StudentId,
                     IsDeleted = false,
@@ -239,7 +239,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 currModel.AdmittedSeverPneumonia = model.AdmittedSeverPneumonia;
                 currModel.SufferFromChronicDisease = model.SufferFromChronicDisease;
                 currModel.AnyOfTheFollowingSymptoms = model.AnyOfTheFollowingSymptoms;
-                currModel.ScrenningTimeStamp = model.ScrenningTimeStamp;
+                currModel.ScreeningTimeStamp = model.ScreeningTimeStamp;
                 _context.StudentScreenings.Update(currModel);
                 _context.SaveChanges();
 
@@ -525,12 +525,12 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {11}", row, "StudentColor"));
                                     }
 
-                                    //  ScrenningTimeStamp
+                                    //  ScreeningTimeStamp
                                     if (worksheet.Cells[row, 12].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 12].Value;
                                         if (cellValue != null)
-                                            tempModel.ScrenningTimeStamp = Convert.ToDateTime(cellValue.ToString());
+                                            tempModel.ScreeningTimeStamp = Convert.ToDateTime(cellValue.ToString());
                                         else
                                             throw new Exception(String.Format("ROW: {0} COL: {12}", row, "StudentColor"));
                                     }
@@ -645,14 +645,14 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                DateTime validDT = Convert.ToDateTime(model.ScrenningTimeStamp);
+                DateTime validDT = Convert.ToDateTime(model.ScreeningTimeStamp);
                 return _context.StudentScreenings.Any(i => i.QRCodeId.ToUpper() == model.QRCodeId.ToUpper()
-                                && i.ScrenningTimeStamp.Day == validDT.Day
-                                && i.ScrenningTimeStamp.Month == validDT.Month
-                                && i.ScrenningTimeStamp.Year == validDT.Year
-                                && i.ScrenningTimeStamp.Hour == validDT.Hour
-                                && i.ScrenningTimeStamp.Minute == validDT.Minute
-                                && i.ScrenningTimeStamp.Second == validDT.Second
+                                && i.ScreeningTimeStamp.Day == validDT.Day
+                                && i.ScreeningTimeStamp.Month == validDT.Month
+                                && i.ScreeningTimeStamp.Year == validDT.Year
+                                && i.ScreeningTimeStamp.Hour == validDT.Hour
+                                && i.ScreeningTimeStamp.Minute == validDT.Minute
+                                && i.ScreeningTimeStamp.Second == validDT.Second
                                 && !i.IsDeleted);
             }
             catch (Exception ex)
@@ -701,7 +701,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         AdmittedSeverPneumonia = i.QRCodeId == null ? String.Empty : i.AdmittedSeverPneumonia,
                         SufferFromChronicDisease = i.QRCodeId == null ? String.Empty : i.SufferFromChronicDisease,
                         AnyOfTheFollowingSymptoms = i.QRCodeId == null ? String.Empty : i.AnyOfTheFollowingSymptoms,
-                        ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScrenningTimeStamp.ToString(),
+                        ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScreeningTimeStamp.ToString(),
                         RowNumber = i.QRCodeId == null ? String.Empty : i.RowNumber.ToString(),
                         StudentDisplayName = i.StudentId == null ? String.Empty : GetStudentDisplayName((Guid)i.StudentId),
                         StudentClass = i.StudentId == null ? String.Empty : _context.Students.FirstOrDefault(x => x.StudentId == (Guid)i.StudentId && !x.IsDeleted).StudentClass.DisplayName
@@ -743,7 +743,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         AdmittedSeverPneumonia = i.QRCodeId == null ? String.Empty : i.AdmittedSeverPneumonia,
                         SufferFromChronicDisease = i.QRCodeId == null ? String.Empty : i.SufferFromChronicDisease,
                         AnyOfTheFollowingSymptoms = i.QRCodeId == null ? String.Empty : i.AnyOfTheFollowingSymptoms,
-                        ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScrenningTimeStamp.ToString(),
+                        ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScreeningTimeStamp.ToString(),
                         RowNumber = i.QRCodeId == null ? String.Empty : i.RowNumber.ToString(),
                         StudentDisplayName = i.StudentId == null ? String.Empty : GetStudentDisplayName((Guid)i.StudentId),
                         StudentClass = i.StudentId == null ? String.Empty : _context.Students.FirstOrDefault(x => x.StudentId == (Guid)i.StudentId && !x.IsDeleted).StudentClass.DisplayName
@@ -785,7 +785,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         AdmittedSeverPneumonia = i.QRCodeId == null ? String.Empty : i.AdmittedSeverPneumonia,
                         SufferFromChronicDisease = i.QRCodeId == null ? String.Empty : i.SufferFromChronicDisease,
                         AnyOfTheFollowingSymptoms = i.QRCodeId == null ? String.Empty : i.AnyOfTheFollowingSymptoms,
-                        ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScrenningTimeStamp.ToString(),
+                        ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScreeningTimeStamp.ToString(),
                         RowNumber = i.QRCodeId == null ? String.Empty : i.RowNumber.ToString(),
                         StudentDisplayName = i.StudentId == null ? String.Empty : GetStudentDisplayName((Guid)i.StudentId),
                         StudentClass = i.StudentId == null ? String.Empty : _context.Students.FirstOrDefault(x => x.StudentId == (Guid)i.StudentId && !x.IsDeleted).StudentClass.DisplayName
@@ -832,7 +832,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 AdmittedSeverPneumonia = item.AdmittedSeverPneumonia,
                                 SufferFromChronicDisease = item.SufferFromChronicDisease,
                                 AnyOfTheFollowingSymptoms = item.AnyOfTheFollowingSymptoms,
-                                ScrenningTimeStamp = Convert.ToDateTime(item.ScrenningTimeStamp),
+                                ScreeningTimeStamp = Convert.ToDateTime(item.ScreeningTimeStamp),
                                 StudentId = (Guid)item.StudentId,
                                 IsDeleted = false,
                                 DateCreated = DateTime.Now
@@ -879,7 +879,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     AdmittedSeverPneumonia = i.QRCodeId == null ? String.Empty : i.AdmittedSeverPneumonia,
                     SufferFromChronicDisease = i.QRCodeId == null ? String.Empty : i.SufferFromChronicDisease,
                     AnyOfTheFollowingSymptoms = i.QRCodeId == null ? String.Empty : i.AnyOfTheFollowingSymptoms,
-                    ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScrenningTimeStamp.ToString(),
+                    ScreeningTimeStamp = i.QRCodeId == null ? String.Empty : i.ScreeningTimeStamp.ToString(),
                     StudentDisplayName = i.StudentId == Guid.Empty ? String.Empty : GetStudentDisplayName((Guid)i.StudentId),
                     StudentId = i.StudentId != Guid.Empty ? String.Empty : i.StudentId.ToString(),
                     StudentClass = i.StudentId == Guid.Empty ? String.Empty : _context.Students.FirstOrDefault(x => x.StudentId == (Guid)i.StudentId && !x.IsDeleted).StudentClass.DisplayName

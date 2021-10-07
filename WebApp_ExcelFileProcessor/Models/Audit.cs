@@ -14,6 +14,9 @@ namespace WebApp_ExcelFileProcessor.Models
 
         public String EventType { get; set; }
         public String TableName { get; set; }
+
+        public String RecordIdName { get; set; }
+        public Guid RecordIdValue { get; set; }
         public String ColumnName { get; set; }
         public String OriginalValue { get; set; }
         public String NewValue { get; set; }

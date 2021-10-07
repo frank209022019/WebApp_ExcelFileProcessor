@@ -1,16 +1,32 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Security.Claims;
 using WebApp_ExcelFileProcessor.Models;
 
 namespace WebApp_ExcelFileProcessor.Data
 {
+    public interface IDescribableEntity
+    {
+        // Override this method to provide a description of the entity for audit purposes
+        string Describe();
+    }
+
     public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor)
             : base(options)
         {
+            _httpContextAccessor = httpContextAccessor;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -466,6 +482,124 @@ namespace WebApp_ExcelFileProcessor.Data
                 );
         }
 
+        // This is overridden to prevent someone from calling SaveChanges without specifying the user making the change
+        public override int SaveChanges()
+        {
+            throw new InvalidOperationException("User ID must be provided");
+        }
+
+        public int SaveChangesAudit()
+        {
+            try
+            {
+                var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                // Get all Added/Deleted/Modified entities (not Unmodified or Detached)
+                foreach (var ent in this.ChangeTracker.Entries().Where(p => p.State == EntityState.Added || p.State == EntityState.Deleted || p.State == EntityState.Modified))
+                {
+                    // For each changed record, get the audit record entries and add them
+                    foreach (Audit aud in GetAuditRecordsForChange(ent, userId))
+                    {
+                        //  Dont save audit records for when adding to temp tables
+                        if (aud.TableName != "StudentTemps" || aud.TableName != "StudentScreeningTemps")
+                            this.Audits.Add(aud);
+                    }
+                }
+                this.SaveChanges();
+
+                return base.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
+        }
+
+        #region Audit
+
+        private List<Audit> GetAuditRecordsForChange(EntityEntry dbEntry, String userId)
+        {
+            List<Audit> result = new List<Audit>();
+
+            // Get the Table() attribute, if one exists
+            TableAttribute tableAttr = dbEntry.Entity.GetType().GetCustomAttributes(typeof(TableAttribute), true).SingleOrDefault() as TableAttribute;
+            string tableName = tableAttr != null ? tableAttr.Name : dbEntry.Entity.GetType().Name;
+            // Get primary key value
+            var keyInfo = dbEntry.Entity.GetType().GetProperties().FirstOrDefault(p => p.GetCustomAttributes(typeof(KeyAttribute), false).Count() > 0);
+            var obj = dbEntry.CurrentValues.ToObject();
+            string keyName = keyInfo.Name;
+            string keyValue = keyInfo.GetValue(obj).ToString();
+
+            //Guid keyValue;
+
+
+            if (dbEntry.State == EntityState.Added)
+            {
+                foreach (var prop in dbEntry.CurrentValues.Properties.ToList())
+                {
+                    var recordId = dbEntry.CurrentValues;
+
+                    result.Add(new Audit()
+                    {
+                        DateCreated = DateTime.Now,
+                        IsDeleted = false,
+                        UserId = userId,
+                        EventType = "Create",
+                        TableName = tableName,
+                        RecordIdName = keyName,
+                        RecordIdValue = Guid.Parse(keyValue),
+                        ColumnName = prop.Name,
+                        OriginalValue = String.Empty,
+                        NewValue = (dbEntry.CurrentValues.ToObject() is IDescribableEntity) ? (dbEntry.CurrentValues.ToObject() as IDescribableEntity).Describe() : dbEntry.CurrentValues.ToObject().ToString()
+                    });
+                }
+            }
+            else if (dbEntry.State == EntityState.Deleted)
+            {
+                result.Add(new Audit()
+                {
+                    DateCreated = DateTime.Now,
+                    IsDeleted = false,
+                    UserId = userId,
+                    EventType = "Delete",
+                    TableName = tableName,
+                    RecordIdName = keyName,
+                    RecordIdValue = Guid.Parse(keyValue),
+                    ColumnName = "*ALL",
+                    OriginalValue = String.Empty,
+                    NewValue = (dbEntry.OriginalValues.ToObject() is IDescribableEntity) ? (dbEntry.OriginalValues.ToObject() as IDescribableEntity).Describe() : dbEntry.OriginalValues.ToObject().ToString()
+                });
+            }
+            else if (dbEntry.State == EntityState.Modified)
+            {
+                foreach (var prop in dbEntry.CurrentValues.Properties.ToList())
+                {
+                    if (!object.Equals(dbEntry.OriginalValues.GetValue<object>(prop), dbEntry.CurrentValues.GetValue<object>(prop)))
+                    {
+                        result.Add(new Audit()
+                        {
+                            DateCreated = DateTime.Now,
+                            IsDeleted = false,
+                            UserId = userId,
+                            EventType = "Update",
+                            TableName = tableName,
+                            RecordIdName = keyName,
+                            RecordIdValue = Guid.Parse(keyValue),
+                            ColumnName = prop.Name,
+                            OriginalValue = dbEntry.OriginalValues.GetValue<object>(prop) == null ? null : dbEntry.OriginalValues.GetValue<object>(prop).ToString(),
+                            NewValue = dbEntry.CurrentValues.GetValue<object>(prop) == null ? null : dbEntry.CurrentValues.GetValue<object>(prop).ToString()
+                        });
+                    }
+                }
+            }
+            return result;
+        }
+
+        #endregion Audit
+
+        #region DbSets
+
         public DbSet<Gender> Genders { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<StudentClass> StudentClasses { get; set; }
@@ -475,5 +609,7 @@ namespace WebApp_ExcelFileProcessor.Data
         public DbSet<StudentScreeningTemp> StudentScreeningTemps { get; set; }
         public DbSet<StudentScreening> StudentScreenings { get; set; }
         public DbSet<Audit> Audits { get; set; }
+
+        #endregion DbSets
     }
 }
