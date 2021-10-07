@@ -492,20 +492,19 @@ namespace WebApp_ExcelFileProcessor.Data
         {
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                //var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                // Get all Added/Deleted/Modified entities (not Unmodified or Detached)
-                foreach (var ent in this.ChangeTracker.Entries().Where(p => p.State == EntityState.Added || p.State == EntityState.Deleted || p.State == EntityState.Modified))
-                {
-                    // For each changed record, get the audit record entries and add them
-                    foreach (Audit aud in GetAuditRecordsForChange(ent, userId))
-                    {
-                        //  Dont save audit records for when adding to temp tables
-                        if (aud.TableName != "StudentTemps" || aud.TableName != "StudentScreeningTemps")
-                            this.Audits.Add(aud);
-                    }
-                }
-                this.SaveChanges();
+                //// Get all Added/Deleted/Modified entities (not Unmodified or Detached)
+                //foreach (var ent in this.ChangeTracker.Entries().Where(p => p.State == EntityState.Added || p.State == EntityState.Deleted || p.State == EntityState.Modified))
+                //{
+                //    // For each changed record, get the audit record entries and add them
+                //    foreach (Audit aud in GetAuditRecordsForChange(ent, userId))
+                //    {
+                //        //  Dont save audit records for when adding to temp tables
+                //        if (aud.TableName != "StudentTemps" || aud.TableName != "StudentScreeningTemps")
+                //            this.Audits.Add(aud);
+                //    }
+                //}
 
                 return base.SaveChanges();
             }

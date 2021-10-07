@@ -186,7 +186,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     DateCreated = DateTime.Now
                 };
                 _context.StudentScreenings.Add(newModel);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
 
                 return RedirectToAction("ManageStudentScreening");
             }
@@ -241,7 +241,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 currModel.AnyOfTheFollowingSymptoms = model.AnyOfTheFollowingSymptoms;
                 currModel.ScreeningTimeStamp = model.ScreeningTimeStamp;
                 _context.StudentScreenings.Update(currModel);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
 
                 return RedirectToAction("ManageStudentScreening");
             }
@@ -285,7 +285,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 var currModel = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId == model.StudentScreeningId && !i.IsDeleted);
                 currModel.IsDeleted = true;
                 _context.StudentScreenings.Update(currModel);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
 
                 return RedirectToAction("ManageStudentScreening");
             }
@@ -340,7 +340,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 if (currentTempList.Count() > 0)
                 {
                     _context.StudentScreeningTemps.RemoveRange(currentTempList);
-                    _context.SaveChanges();
+                     _context.SaveChangesAudit();
                 }
 
                 //  Lists for result view
@@ -575,17 +575,17 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 if (returnValue.NewScreeningList.Count() > 0)
                 {
                     _context.StudentScreeningTemps.AddRange(returnValue.NewScreeningList);
-                    _context.SaveChanges();
+                     _context.SaveChangesAudit();
                 }
                 if (returnValue.ExisitingScreeningList.Count() > 0)
                 {
                     _context.StudentScreeningTemps.AddRange(returnValue.ExisitingScreeningList);
-                    _context.SaveChanges();
+                     _context.SaveChangesAudit();
                 }
                 if (returnValue.ErrorScreeningList.Count() > 0)
                 {
                     _context.StudentScreeningTemps.AddRange(returnValue.ErrorScreeningList);
-                    _context.SaveChanges();
+                     _context.SaveChangesAudit();
                 }
 
                 return returnValue;
@@ -839,13 +839,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
                             });
                         }
                         _context.StudentScreenings.AddRange(studentList);
-                        _context.SaveChanges();
+                         _context.SaveChangesAudit();
                     }
                 }
 
                 //  clear temp list
                 _context.StudentScreeningTemps.RemoveRange(tempList);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
 
                 return Ok();
             }
@@ -926,7 +926,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 if (record == null)
                     return BadRequest("Error occurred while trying to delete the record");
                 _context.StudentScreeningTemps.Remove(record);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
                 return Ok();
             }
             catch (Exception ex)

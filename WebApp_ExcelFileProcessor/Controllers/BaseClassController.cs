@@ -161,7 +161,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
             try
             {
                 _context.Students.Add(model);
-                _context.SaveChanges();
+                _context.SaveChangesAudit();
 
                 return RedirectToAction("ManageBaseClass");
             }
@@ -211,7 +211,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 currModel.StudentColorId = model.StudentColorId;
                 currModel.StudentGroupId = model.StudentGroupId;
                 _context.Students.Update(currModel);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
 
                 return RedirectToAction("ManageBaseClass");
             }
@@ -249,7 +249,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 var currModel = _context.Students.SingleOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
                 currModel.IsDeleted = true;
                 _context.Students.Update(currModel);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
 
                 return RedirectToAction("ManageBaseClass");
             }
@@ -297,7 +297,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 if (currentTempList.Count() > 0)
                 {
                     _context.StudentTemps.RemoveRange(currentTempList);
-                    _context.SaveChanges();
+                     _context.SaveChangesAudit();
                 }
 
                 //  Database Lists
@@ -488,12 +488,12 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 if (returnValue.ErrorList.Count() > 0)
                 {
                     _context.StudentTemps.AddRange(returnValue.ErrorList);
-                    _context.SaveChanges();
+                     _context.SaveChangesAudit();
                 }
                 if (returnValue.SuccessList.Count() > 0)
                 {
                     _context.StudentTemps.AddRange(returnValue.SuccessList);
-                    _context.SaveChanges();
+                     _context.SaveChangesAudit();
                 }
 
                 return returnValue;
@@ -778,7 +778,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                             });
                         }
                         _context.Students.AddRange(studentList);
-                        _context.SaveChanges();
+                         _context.SaveChangesAudit();
                     }
 
                     //  update current records
@@ -799,7 +799,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 currStudent.StudentColorId = (Guid)item.StudentColorId;
                                 currStudent.StudentClassId = (Guid)item.StudentClassId;
                                 currStudent.StudentGroupId = (Guid)item.StudentGroupId;
-                                _context.SaveChanges();
+                                 _context.SaveChangesAudit();
                             }
                         }
                     }
@@ -807,7 +807,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                 //  clear temp list
                 _context.StudentTemps.RemoveRange(tempList);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
 
                 return Ok();
             }
@@ -860,7 +860,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 if (record == null)
                     return BadRequest("Error occurred while trying to delete the record");
                 _context.StudentTemps.Remove(record);
-                _context.SaveChanges();
+                 _context.SaveChangesAudit();
                 return Ok();
             }
             catch (Exception ex)
