@@ -472,6 +472,65 @@ namespace WebApp_ExcelFileProcessor.Data
                     UserId = "1b824f5d-01b1-411b-8e44-5b05003ef81e"
                 }
                 );
+            //  Module Codes
+            builder.Entity<ModuleCode>().HasData(
+                new ModuleCode
+                  {
+                      ModuleCodeId = Guid.NewGuid(),
+                      IsDeleted = false,
+                      DateCreated = DateTime.Now,
+                      ModuleCodeName = "BASE".ToUpper()
+                  },
+                new ModuleCode
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "MML".ToUpper()
+                },
+                new ModuleCode
+                  {
+                      ModuleCodeId = Guid.NewGuid(),
+                      IsDeleted = false,
+                      DateCreated = DateTime.Now,
+                      ModuleCodeName = "LHC".ToUpper()
+                  },
+                new ModuleCode
+                    {
+                        ModuleCodeId = Guid.NewGuid(),
+                        IsDeleted = false,
+                        DateCreated = DateTime.Now,
+                        ModuleCodeName = "AGCLM".ToUpper()
+                    },
+                new ModuleCode
+                      {
+                          ModuleCodeId = Guid.NewGuid(),
+                          IsDeleted = false,
+                          DateCreated = DateTime.Now,
+                          ModuleCodeName = "ABCP".ToUpper()
+                      },
+                new ModuleCode
+                        {
+                            ModuleCodeId = Guid.NewGuid(),
+                            IsDeleted = false,
+                            DateCreated = DateTime.Now,
+                            ModuleCodeName = "ENG".ToUpper()
+                        },
+                new ModuleCode
+                          {
+                              ModuleCodeId = Guid.NewGuid(),
+                              IsDeleted = false,
+                              DateCreated = DateTime.Now,
+                              ModuleCodeName = "AFR/XHO".ToUpper()
+                          },
+                new ModuleCode
+                            {
+                                ModuleCodeId = Guid.NewGuid(),
+                                IsDeleted = false,
+                                DateCreated = DateTime.Now,
+                                ModuleCodeName = "LO".ToUpper()
+                            }
+                );
         }
 
         // This is overridden to prevent someone from calling SaveChanges without specifying the user making the change
@@ -555,6 +614,8 @@ namespace WebApp_ExcelFileProcessor.Data
         public DbSet<StudentScreeningTemp> StudentScreeningTemps { get; set; }
         public DbSet<StudentScreening> StudentScreenings { get; set; }
         public DbSet<Audit> Audits { get; set; }
+        public DbSet<ModuleCode> ModuleCodes { get; set; }
+        public DbSet<GradeModuleRoster> GradeModuleRoster { get; set; }
 
         #endregion DbSets
     }

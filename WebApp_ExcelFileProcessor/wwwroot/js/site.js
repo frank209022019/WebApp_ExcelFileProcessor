@@ -199,6 +199,10 @@ function sweetAlert_CompleteStudentScreeningUpload() {
     })
 }
 
+function() {
+    var number = 1;
+}
+
 function sweetAlert_RedirectToManageStudentScreening(_title, _message) {
     Swal.fire({
         icon: 'success',
@@ -212,7 +216,7 @@ function sweetAlert_RedirectToManageStudentScreening(_title, _message) {
         },
         showConfirmButton: true,
         confirmButtonColor: '#217093 ',
-        confirmButtonText: 'Manage Base Class',
+        confirmButtonText: 'Manage Student Screening',
         allowOutsideClick: false,
         reverseButtons: true
     }).then((result) => {
