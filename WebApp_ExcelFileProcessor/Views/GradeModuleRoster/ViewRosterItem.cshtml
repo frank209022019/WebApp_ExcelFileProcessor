@@ -1,0 +1,54 @@
+﻿@model WebApp_ExcelFileProcessor.Models.GradeModuleRoster
+@{
+    ViewData["Title"] = "View Roster Item";
+}
+
+<!--Header-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">View Roster Item</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+</div>
+
+<!--Content-->
+<div class="form-row custom-row-responsiveness">
+    <input type="hidden" asp-for="GradeModuleRosterId" value="@Model.GradeModuleRosterId" />
+    <input type="hidden" asp-for="DateCreated" value="@Model.DateCreated" />
+    <input type="hidden" asp-for="IsDeleted" value="@Model.IsDeleted" />
+
+    <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label asp-for="DayOfWeek" class="control-label"></label>
+            <input asp-for="DayOfWeek" class="form-control" readonly />
+            <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+        </div>   
+        <div class="form-group">
+            <label asp-for="ModuleCode.ModuleCodeName" class="control-label"></label>
+            <input asp-for="ModuleCode.ModuleCodeName" class="form-control" readonly />
+            <span asp-validation-for="ModuleCode.ModuleCodeName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label asp-for="GradeInt" class="control-label"></label>
+            <input asp-for="GradeInt" class="form-control" readonly />
+            <span asp-validation-for="GradeInt" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+
+    <!--Buttons-->
+    <div class="form-row custom-row-responsiveness">
+        <div class="col-xl-2 offset-xl-6 col-md-12 custom-col-responsiveness mb-2">
+            <a asp-action="Index" asp-controller="GradeModuleRoster" class="btn btn-outline-secondary full-width">Back to List</a>
+        </div>
+        <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-2">
+            <a asp-action="UpdateRosterItem" asp-controller="GradeModuleRoster" asp-route-rosterItemId="@Model.GradeModuleRosterId.ToString()" class="btn btn-outline-warning full-width">Update</a>
+        </div>
+        <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-2">
+            <a asp-action="DeleteRosterItem" asp-controller="GradeModuleRoster" asp-route-rosterItemId="@Model.GradeModuleRosterId.ToString()" class="btn btn-outline-danger full-width">Delete</a>
+        </div>
+        <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-2">
+        </div>
+    </div>

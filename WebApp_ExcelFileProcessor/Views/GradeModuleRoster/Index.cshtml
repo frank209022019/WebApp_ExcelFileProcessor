@@ -1,31 +1,29 @@
-﻿@model List<Student>
+﻿@model List<GradeModuleRoster>
 @{
-    ViewData["Title"] = "Manage Base Class";
+    ViewData["Title"] = "Manage Grade Roster";
 }
+
 
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness mb-2">
-        <h1 class="custom-dark-blue">Manage Base Class</h1>
+        <h1 class="custom-dark-blue">Manage Grade Roster</h1>
         <hr class="custom-blue-hr" />
     </div>
 
     <div class="col-xl-2 offset-xl-10 col-md-12 custom-col-responsiveness mb-3">
-        <a asp-action="AddStudent" asp-controller="BaseClass" class="btn btn-outline-primary full-width">Add Student</a>
+        <a asp-action="AddRosterItem" asp-controller="GradeModuleRoster" class="btn btn-outline-primary full-width">Add Roster Item</a>
     </div>
 
     <div class="col-12 custom-col-responsiveness">
         <div class="table-responsive">
-            <table class="table table-striped full-width" id="table-student">
+            <table class="table table-striped full-width" id="table-roster">
                 <thead>
                     <tr>
-                        <th>QR Code</th>
-                        <th>Student #</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Gender</th>
-                        <th>Class</th>
-                        <th>Group</th>
-                        <th>Color</th>
+                        <th>Day Number</th>
+                        <th>Day of Week</th>
+                        <th>Grade Number</th>
+                        <th>Grade</th>
+                        <th>Module Code</th>
                         <th>Date Created</th>
                         <th class="text-center">Actions</th>
                     </tr>
@@ -34,7 +32,7 @@
                     @if (Model.Count() < 1)
                     {
                         <tr class="text-center">
-                            <td colspan="10">No records available</td>
+                            <td colspan="5">No records available</td>
                         </tr>
                     }
                 </tbody>
@@ -45,115 +43,104 @@
 
 <script>
     $(document).ready(function () {
-        var studentTable;
+        var rosterTable;
 
         loadingSpinner_Show();
 
         var tableCount = '@Model.Count()';
         if (tableCount != 0 && tableCount != '0') {
-            studentTable = loadStudentTable();
-            studentTable.buttons().container()
-                .appendTo('#table-student_filter');
+            rosterTable = loadRosterTable();
+            rosterTable.buttons().container()
+                .appendTo('#table-roster_filter');
         }
         setTimeout(function () { loadingSpinner_Hide(); }, 1500)
     });
 
-    function loadStudentTable() {
-        var table = $('#table-student').DataTable({
+    function loadRosterTable() {
+
+        var table = $('#table-roster').DataTable({
+            order: [["0", 'asc'], ["3", 'asc']],
             dom: 'Bfrtip',
             buttons: [
                 {
                     extend: 'excel',
                     orientation: 'landscape',
                     pageSize: 'A4',
-                    className: 'btn btn-success',                  
-                    exportOptions: {                      
-                        columns: [0,1, 2, 3, 4, 5, 6, 7, 8]
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
                     }
                 },
                 {
                     extend: 'pdf',
                     orientation: 'landscape',
                     pageSize: 'A4',
-                    className: 'btn btn-danger',            
+                    className: 'btn btn-danger',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        columns: [0, 1, 2, 3, 4, 5]
                     }
                 },
                 {
                     extend: 'print',
                     orientation: 'landscape',
                     className: 'btn btn-warning',
-                    pageSize: 'A4',                             
+                    pageSize: 'A4',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        columns: [0, 1, 2, 3, 4, 5]
                     }
-                }  
+                }
             ],
              ajax: {
-                url: "@Url.Action("GetStudentClassList", "BaseClass")",
+                url: "@Url.Action("GetRosterList", "GradeModuleRoster")",
                 dataSrc: ""
             },
             columns: [
                 {
-                    data: "qrCode",
+                    data: "dayNumber",
+                    visible: false
+                },
+                {
+                    data: "dayOfWeek",
                     visible: true
                 },
                 {
-                    data: "studentNr",
+                    data: "gradeNumber",
+                    visible: false
+                },
+                {
+                    data: "grade",
                     visible: true
                 },
                 {
-                    data: "firstName",
-                    visible: true
-                },
-                {
-                    data: "lastName",
-                    visible: true
-                },
-                {
-                    data: "genderGenderName",
-                    visible: true
-                },
-                {
-                    data: "studentClassdisplayName",
-                    visible: true
-                },
-                {
-                    data: "studentColorColorName",
-                    visible: true
-                },
-                {
-                    data: "studentGroupDisplayName",
+                    data: "moduleCode",
                     visible: true
                 },
                 {
                     data: "dateCreated",
                     visible: true
-                },
+                },           
                 {
-                    data: "studentId",
+                    data: "rosterItemId",
                     render: function (data) {
                         var result = "<div class='form-row text-center'>"
 
                         result += "<div class='col-xl-4 col-md-12'>";
-                        result += " <a class='btn btn-outline-secondary full-width' href='/BaseClass/ViewStudent?StudentId="+ data +"'>View</a>";
+                        result += " <a class='btn btn-outline-secondary full-width' href='/GradeModuleRoster/ViewRosterItem?rosterItemId="+ data +"'>View</a>";
                         result += "</div>";
 
                         result += "<div class='col-xl-4 col-md-12'>";
-                        result += " <a class='btn btn-outline-warning full-width' href='/BaseClass/UpdateStudent?StudentId=" + data + "'>Update</a>";
+                        result += " <a class='btn btn-outline-warning full-width' href='/GradeModuleRoster/UpdateRosterItem?rosterItemId=" + data + "'>Update</a>";
                         result += "</div>";
 
                         result += "<div class='col-xl-4 col-md-12'>";
-                        result += " <a class='btn btn-outline-danger full-width' href='/BaseClass/DeleteStudent?StudentId=" + data + "'>Delete</a>";
+                        result += " <a class='btn btn-outline-danger full-width' href='/GradeModuleRoster/DeleteRosterItem?rosterItemId=" + data + "'>Delete</a>";
                         result += "</div>";
 
                         return result;
                     }
                 }
             ]
-        });
-
+             });
         return table;
     }
 </script>

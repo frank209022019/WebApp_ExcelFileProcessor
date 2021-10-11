@@ -538,8 +538,8 @@ namespace WebApp_ExcelFileProcessor.Data
         {
             try
             {
-                var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                OnBeforeSaveChanges(userId);
+                //var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                //OnBeforeSaveChanges(userId);
                 var result = base.SaveChanges();
                 return result;
             }
@@ -548,7 +548,6 @@ namespace WebApp_ExcelFileProcessor.Data
                 return 0;
             }
         }
-
         #region Audit
 
         private void OnBeforeSaveChanges(string userId)

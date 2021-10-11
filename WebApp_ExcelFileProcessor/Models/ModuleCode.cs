@@ -14,6 +14,7 @@ namespace WebApp_ExcelFileProcessor.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ModuleCodeId { get; set; }
 
+        [Display(Name = "Module Code")]
         public String ModuleCodeName { get; set; }
     }
 }

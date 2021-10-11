@@ -1,0 +1,92 @@
+﻿@model WebApp_ExcelFileProcessor.Models.GradeModuleRoster
+
+@{
+    ViewData["Title"] = "Update Roster Item";
+}
+
+<!--Header-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-12 custom-col-responsiveness mb-2">
+        <h1 class="custom-dark-blue">Update Roster Item</h1>
+        <hr class="custom-blue-hr" />
+    </div>
+</div>
+
+<!--Content-->
+<form asp-action="UpdateRosterItem" asp-controller="GradeModuleRoster" method="post" id="formUpdateRosterItem">
+    <div class="form-row custom-row-responsiveness">
+
+        <input type="hidden" asp-for="GradeModuleRosterId" value="@Model.GradeModuleRosterId" />
+        <input type="hidden" asp-for="DateCreated" value="@Model.DateCreated" />
+        <input type="hidden" asp-for="IsDeleted" value="@Model.IsDeleted" />
+
+        <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+            <div class="form-group">
+                <label asp-for="DayOfWeek" class="control-label"></label>
+                <select asp-for="DayOfWeek" class="form-control" asp-items="Model.DayOfWeekList" required>
+                    <option value="" disabled selected hidden>Select Day of Week</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModuleCode.ModuleCodeName" class="control-label"></label>
+                <select asp-for="ModuleCodeId" class="form-control" asp-items="Model.ModuleCodeList" required>
+                    <option value="" disabled selected hidden>Select Module Code</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+            <div class="form-group">
+                <label asp-for="GradeInt" class="control-label"></label>
+                <select asp-for="GradeInt" class="form-control" asp-items="Model.GradeList" required>
+                    <option value="" disabled selected hidden>Select Color</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Buttons-->
+<div class="form-row custom-row-responsiveness">
+    <div class="col-xl-2 offset-xl-8 col-md-12 custom-col-responsiveness mb-2">
+        <a asp-action="Index" asp-controller="GradeModuleRoster" class="btn btn-outline-secondary full-width">Back to List</a>
+    </div>
+    <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-2">
+        <input type="button" value="Update" id="btnPostForm" class="btn btn-outline-primary full-width" />
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnPostForm").click(function () {
+            Swal.fire({
+                icon: 'question',
+                title: "Update Record",
+                text: 'Are you sure you want to save these changes?',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                showConfirmButton: true,
+                confirmButtonColor: '#217093 ',
+                confirmButtonText: 'Update Record',
+                showCancelButton: true,
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    loadingSpinner_Show();
+                    if ($('#formUpdateRosterItem').valid()) {
+                        $("#formUpdateRosterItem").submit();
+                    }
+                    else {
+                        loadingSpinner_Hide();
+                        sweetAlertError("Update Record", "Please ensure all fields are correct and valid.'");
+                    }
+                }
+            })
+        });
+    });
+</script>

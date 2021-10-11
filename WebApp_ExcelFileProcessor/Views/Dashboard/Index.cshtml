@@ -6,7 +6,7 @@
 <!--Row 1-->
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness mb-2">
-        <h1 class="custom-dark-blue">Base Class</h1>
+        <h1 class="custom-dark-blue">Base Class - Grade Roster</h1>
         <hr class="custom-blue-hr" />
     </div>
     <div class="col-xl-4 col-md-12 custom-col-responsiveness" onclick="dashboardRedirect('uploadbaseclass')">
@@ -26,6 +26,16 @@
             </div>
             <div class="card-footer">
                 <h3>Manage Base Class</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-12 custom-col-responsiveness" onclick="dashboardRedirect('manageroster')">
+        <div class="card text-center h-100">
+            <div class="card-block">
+                <h2 class="icon-margin-top-fix"><i class="fas fa-list-ol fa-4x icon-light-grey"></i></h2>
+            </div>
+            <div class="card-footer">
+                <h3>Manage Grade Roster</h3>
             </div>
         </div>
     </div>
@@ -91,22 +101,25 @@
     function dashboardRedirect(destination) {
         switch (destination) {
             case 'uploadbaseclass':
-            window.location.href = '@Url.Action("UploadBaseClass", "Dashboard")';
+                  window.location.href = '@Url.Action("UploadBaseClass", "Dashboard")';
             break;
-        case 'managebaseclass':
-            window.location.href = '@Url.Action("ManageBaseClass", "Dashboard")';
+           case 'managebaseclass':
+                window.location.href = '@Url.Action("ManageBaseClass", "Dashboard")';
                 break;
             case 'uploadstudentscreening':
-            window.location.href = '@Url.Action("UploadStudentScreening", "StudentScreening")';
+             window.location.href = '@Url.Action("UploadStudentScreening", "StudentScreening")';
                 break;
             case 'managestudentscreening':
-            window.location.href = '@Url.Action("ManageStudentScreening", "StudentScreening")';
+             window.location.href = '@Url.Action("ManageStudentScreening", "StudentScreening")';
                 break;
             case 'schoolabsent':
-            window.location.href = '@Url.Action("SchoolAbsenteeByDate", "Report")';
+                window.location.href = '@Url.Action("SchoolAbsenteeByDate", "Report")';
                 break;
             case 'studentabsent':
-            window.location.href = '@Url.Action("StudentAbsenteeByDate", "Report")';
+             window.location.href = '@Url.Action("StudentAbsenteeByDate", "Report")';
+                break
+            case 'manageroster':
+               window.location.href = '@Url.Action("Index", "GradeModuleRoster")';
             break;
         }
     }
