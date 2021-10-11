@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using WebApp_ExcelFileProcessor.Helpers;
 using WebApp_ExcelFileProcessor.Models;
 
@@ -475,12 +474,12 @@ namespace WebApp_ExcelFileProcessor.Data
             //  Module Codes
             builder.Entity<ModuleCode>().HasData(
                 new ModuleCode
-                  {
-                      ModuleCodeId = Guid.NewGuid(),
-                      IsDeleted = false,
-                      DateCreated = DateTime.Now,
-                      ModuleCodeName = "BASE".ToUpper()
-                  },
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "BASE".ToUpper()
+                },
                 new ModuleCode
                 {
                     ModuleCodeId = Guid.NewGuid(),
@@ -489,47 +488,47 @@ namespace WebApp_ExcelFileProcessor.Data
                     ModuleCodeName = "MML".ToUpper()
                 },
                 new ModuleCode
-                  {
-                      ModuleCodeId = Guid.NewGuid(),
-                      IsDeleted = false,
-                      DateCreated = DateTime.Now,
-                      ModuleCodeName = "LHC".ToUpper()
-                  },
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "LHC".ToUpper()
+                },
                 new ModuleCode
-                    {
-                        ModuleCodeId = Guid.NewGuid(),
-                        IsDeleted = false,
-                        DateCreated = DateTime.Now,
-                        ModuleCodeName = "AGCLM".ToUpper()
-                    },
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "AGCLM".ToUpper()
+                },
                 new ModuleCode
-                      {
-                          ModuleCodeId = Guid.NewGuid(),
-                          IsDeleted = false,
-                          DateCreated = DateTime.Now,
-                          ModuleCodeName = "ABCP".ToUpper()
-                      },
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "ABCP".ToUpper()
+                },
                 new ModuleCode
-                        {
-                            ModuleCodeId = Guid.NewGuid(),
-                            IsDeleted = false,
-                            DateCreated = DateTime.Now,
-                            ModuleCodeName = "ENG".ToUpper()
-                        },
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "ENG".ToUpper()
+                },
                 new ModuleCode
-                          {
-                              ModuleCodeId = Guid.NewGuid(),
-                              IsDeleted = false,
-                              DateCreated = DateTime.Now,
-                              ModuleCodeName = "AFR/XHO".ToUpper()
-                          },
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "AFR/XHO".ToUpper()
+                },
                 new ModuleCode
-                            {
-                                ModuleCodeId = Guid.NewGuid(),
-                                IsDeleted = false,
-                                DateCreated = DateTime.Now,
-                                ModuleCodeName = "LO".ToUpper()
-                            }
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "LO".ToUpper()
+                }
                 );
         }
 
@@ -548,6 +547,7 @@ namespace WebApp_ExcelFileProcessor.Data
                 return 0;
             }
         }
+
         #region Audit
 
         private void OnBeforeSaveChanges(string userId)

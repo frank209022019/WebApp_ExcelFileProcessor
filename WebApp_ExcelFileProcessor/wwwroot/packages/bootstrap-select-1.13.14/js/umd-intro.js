@@ -14,4 +14,3 @@
         factory(root["jQuery"]);
     }
 }(this, function (jQuery) {
-

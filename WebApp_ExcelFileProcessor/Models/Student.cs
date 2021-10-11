@@ -40,18 +40,21 @@ namespace WebApp_ExcelFileProcessor.Models
         [Display(Name = "Color")]
         [Required]
         public Guid StudentColorId { get; set; }
+
         [ForeignKey("StudentColorId")]
         public virtual StudentColor StudentColor { get; set; }
 
         [Display(Name = "Class")]
         [Required]
         public Guid StudentClassId { get; set; }
+
         [ForeignKey("StudentClassId")]
         public virtual StudentClass StudentClass { get; set; }
 
         [Display(Name = "Group")]
         [Required]
         public Guid StudentGroupId { get; set; }
+
         [ForeignKey("StudentGroupId")]
         public virtual StudentGroup StudentGroup { get; set; }
 

@@ -3,13 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebApp_ExcelFileProcessor.Models
 {
     [Table("GradeModuleRoster")]
-    public class GradeModuleRoster: ModelBase
+    public class GradeModuleRoster : ModelBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -26,8 +24,9 @@ namespace WebApp_ExcelFileProcessor.Models
         [Display(Name = "Module Code")]
         [Required]
         public Guid ModuleCodeId { get; set; }
-       [ForeignKey("ModuleCodeId")]
-       public virtual ModuleCode ModuleCode { get; set; }
+
+        [ForeignKey("ModuleCodeId")]
+        public virtual ModuleCode ModuleCode { get; set; }
 
         [NotMapped]
         public IEnumerable<SelectListItem> ModuleCodeList { get; set; }

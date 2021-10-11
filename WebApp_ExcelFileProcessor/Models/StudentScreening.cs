@@ -52,6 +52,7 @@ namespace WebApp_ExcelFileProcessor.Models
         public DateTime ScreeningTimeStamp { get; set; }
 
         public Guid StudentId { get; set; }
+
         [ForeignKey("StudentId")]
         public virtual Student Student { get; set; }
 

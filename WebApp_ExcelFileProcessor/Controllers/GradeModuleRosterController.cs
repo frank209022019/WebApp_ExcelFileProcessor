@@ -192,7 +192,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         [Authorize]
         [HttpGet]
         public List<RosterViewModel> GetRosterList()
-        {           
+        {
             try
             {
                 var rosterList = _context.GradeModuleRoster.Where(i => !i.IsDeleted).ToList();

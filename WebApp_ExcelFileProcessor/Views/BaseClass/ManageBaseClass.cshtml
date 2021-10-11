@@ -66,8 +66,8 @@
                     extend: 'excel',
                     orientation: 'landscape',
                     pageSize: 'A4',
-                    className: 'btn btn-success',                  
-                    exportOptions: {                      
+                    className: 'btn btn-success',
+                    exportOptions: {
                         columns: [0,1, 2, 3, 4, 5, 6, 7, 8]
                     }
                 },
@@ -75,7 +75,7 @@
                     extend: 'pdf',
                     orientation: 'landscape',
                     pageSize: 'A4',
-                    className: 'btn btn-danger',            
+                    className: 'btn btn-danger',
                     exportOptions: {
                         columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                     }
@@ -84,11 +84,11 @@
                     extend: 'print',
                     orientation: 'landscape',
                     className: 'btn btn-warning',
-                    pageSize: 'A4',                             
+                    pageSize: 'A4',
                     exportOptions: {
                         columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                     }
-                }  
+                }
             ],
              ajax: {
                 url: "@Url.Action("GetStudentClassList", "BaseClass")",

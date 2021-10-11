@@ -113,7 +113,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                          */
                         foreach (DateTime day in EachCalendarDay(startDate, endDate))
                         {
-
                             //   FIGURE THIS OUT
                             Boolean mustStudentBeAtSchoolToday = true;
 

@@ -13,8 +13,10 @@ namespace WebApp_ExcelFileProcessor.Models
         public Guid AuditId { get; set; }
 
         public string UserId { get; set; }
+
         [ForeignKey("UserId")]
         public virtual IdentityUser IdentityUser { get; set; }
+
         public string Type { get; set; }
         public string TableName { get; set; }
         public DateTime DateTime { get; set; }
