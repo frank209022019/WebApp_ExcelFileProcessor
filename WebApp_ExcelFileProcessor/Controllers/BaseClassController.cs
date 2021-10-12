@@ -303,6 +303,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 var studentGroupList = _context.StudentGroups.ToList();
                 var studentClassList = _context.StudentClasses.ToList();
                 var genderList = _context.Genders.ToList();
+                var moduleCodeList = _context.ModuleCodes.ToList();
 
                 //  Lists for result view
                 UploadBaseClassProcessViewModel returnValue = new UploadBaseClassProcessViewModel()
@@ -343,15 +344,29 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                                 try
                                 {
-                                    //  Get values from row/col
-                                    //Col2        Gold            StudentColor
-                                    //Col3        G1                 StudentGroup
-                                    //Col4        7                   StudentNr
-                                    //Col5       CIN500       QR Code
-                                    //Col6        Surname
-                                    //Col7        Name
-                                    //Col8        Gender
-                                    //Col9        8A              StudentClass
+                                    /*  GR (skip)
+                                     *  NR
+                                     *  QR CODE
+                                     *  SURNAME
+                                     *  NAME
+                                     *  M/F
+                                     *  CLASS
+                                     *  GROUP
+                                     *  
+                                     *  MON
+                                     *  SUBJ
+                                     *  TUE
+                                     *  SUBJ
+                                     *  WED
+                                     *  SUBJ
+                                     *  THUR
+                                     *  SUBJ
+                                     *  FRI
+                                     *  SUBJ
+                                     *  EXTRA
+                                     *  SUBJ            
+                                     */ 
+                        
 
                                     //  Check if current rows columns have null values
                                     for (int col = 2; col <= 9; col++)
