@@ -50,14 +50,7 @@
                     <option value="" disabled selected hidden>Select Gender</option>
                 </select>
                 <span asp-validation-for="Gender.GenderName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudentColor.ColorName" class="control-label"></label>
-                <select asp-for="StudentColorId" class="form-control" asp-items="Model.ColorList" required>
-                    <option value="" disabled selected hidden>Select Color</option>
-                </select>
-                <span asp-validation-for="StudentColor.ColorName" class="text-danger"></span>
-            </div>
+            </div>      
             <div class="form-group">
                 <label asp-for="StudentClass.DisplayName" class="control-label"></label>
                 <select asp-for="StudentClassId" class="form-control" asp-items="Model.ClassList" required>

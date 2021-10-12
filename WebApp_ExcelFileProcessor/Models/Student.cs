@@ -37,13 +37,6 @@ namespace WebApp_ExcelFileProcessor.Models
         [Required]
         public virtual Gender Gender { get; set; }
 
-        [Display(Name = "Color")]
-        [Required]
-        public Guid StudentColorId { get; set; }
-
-        [ForeignKey("StudentColorId")]
-        public virtual StudentColor StudentColor { get; set; }
-
         [Display(Name = "Class")]
         [Required]
         public Guid StudentClassId { get; set; }

@@ -208,7 +208,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 currModel.LastName = model.LastName;
                 currModel.GenderId = model.GenderId;
                 currModel.StudentClassId = model.StudentClassId;
-                currModel.StudentColorId = model.StudentColorId;
                 currModel.StudentGroupId = model.StudentGroupId;
                 _context.Students.Update(currModel);
                 _context.SaveChanges();
@@ -301,7 +300,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 }
 
                 //  Database Lists
-                var studentColorList = _context.StudentColors.ToList();
                 var studentGroupList = _context.StudentGroups.ToList();
                 var studentClassList = _context.StudentClasses.ToList();
                 var genderList = _context.Genders.ToList();
@@ -360,17 +358,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     {
                                         if (worksheet.Cells[row, col].Value == null)
                                             rowHasError = true;
-                                    }
-
-                                    //  StudentColor
-                                    if (worksheet.Cells[row, 2].Value != null)
-                                    {
-                                        var valueStudentColor = worksheet.Cells[row, 2].Value;
-                                        if (valueStudentColor != null)
-                                            tempModel.StudentColorId = studentColorList.SingleOrDefault(i => i.ColorName.ToUpper() == valueStudentColor.ToString().ToUpper()).StudentColorId;
-                                        else
-                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentColor"));
-                                    }
+                                    }                                   
 
                                     //  Student Group
                                     if (worksheet.Cells[row, 3].Value != null)
@@ -510,9 +498,9 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                //  D3 = nr
-                //  F3 = surname
-                //  G3  =   name
+                //  A3 = GR
+                //  B3 = NR
+                //  C3  =  QR CODE
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (var stream = new MemoryStream())
@@ -525,16 +513,16 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         int colCount = worksheet.Dimension.End.Column;
                         int rowCount = worksheet.Dimension.End.Row;
 
-                        var validateNr = worksheet.Cells["D3"].Value;
-                        if (validateNr == null || validateNr.ToString().ToLower() != "nr")
+                        var validateGr = worksheet.Cells["A3"].Value;
+                        if (validateGr == null || validateGr.ToString().ToUpper() != "GR")
                             throw new Exception("Invalid template used");
 
-                        var validateSurname = worksheet.Cells["F3"].Value;
-                        if (validateSurname == null || validateSurname.ToString().ToLower() != "surname")
+                        var validateNr = worksheet.Cells["B3"].Value;
+                        if (validateNr == null || validateNr.ToString().ToUpper() != "NR")
                             throw new Exception("Invalid template used");
 
-                        var validateName = worksheet.Cells["G3"].Value;
-                        if (validateName == null || validateName.ToString().ToLower() != "name")
+                        var validateQrCode = worksheet.Cells["C3"].Value;
+                        if (validateQrCode == null || validateQrCode.ToString().ToUpper() != "QR CODE")
                             throw new Exception("Invalid template used");
                     }
                 }
@@ -591,11 +579,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                     //  GenderId
                     if (currModel.GenderId.ToString().ToUpper() != tempModel.GenderId.ToString().ToUpper())
-                        totalUpdates++;
-
-                    //  StudentColorId
-                    if (currModel.StudentColorId.ToString().ToUpper() != tempModel.StudentColorId.ToString().ToUpper())
-                        totalUpdates++;
+                        totalUpdates++;            
 
                     //  StudentClassId
                     if (currModel.StudentClassId.ToString().ToUpper() != tempModel.StudentClassId.ToString().ToUpper())
@@ -622,8 +606,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName }).OrderByDescending(i => i.Text);
-                model.ColorList = _context.StudentColors.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentColors.ToList().Select(i => new SelectListItem { Value = i.StudentColorId.ToString(), Text = i.ColorName }).OrderByDescending(i => i.Text);
+                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName }).OrderByDescending(i => i.Text);   
                 model.ClassList = _context.StudentClasses.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentClasses.ToList().Select(i => new SelectListItem { Value = i.StudentClassId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
                 model.GroupList = _context.StudentGroups.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentGroups.ToList().Select(i => new SelectListItem { Value = i.StudentGroupId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
                 return model;
@@ -658,8 +641,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
                         LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                         GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
-                        StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
-                        StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
+                        StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),           
                         StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString()
                     }).ToList();
                 }
@@ -695,7 +677,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                         GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
                         StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
-                        StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
                         StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString()
                     }).ToList();
                 }
@@ -731,7 +712,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                         GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
                         StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
-                        StudentColorColorName = i.StudentColorId == null ? String.Empty : i.StudentColor.ColorName.ToString(),
                         StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString()
                     }).ToList();
                 }
@@ -770,7 +750,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 LastName = item.LastName,
                                 FirstName = item.FirstName,
                                 GenderId = (Guid)item.GenderId,
-                                StudentColorId = (Guid)item.StudentColorId,
                                 StudentClassId = (Guid)item.StudentClassId,
                                 StudentGroupId = (Guid)item.StudentGroupId,
                                 IsDeleted = false,
@@ -796,7 +775,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 currStudent.LastName = item.LastName;
                                 currStudent.FirstName = item.FirstName;
                                 currStudent.GenderId = (Guid)item.GenderId;
-                                currStudent.StudentColorId = (Guid)item.StudentColorId;
                                 currStudent.StudentClassId = (Guid)item.StudentClassId;
                                 currStudent.StudentGroupId = (Guid)item.StudentGroupId;
                                 _context.SaveChanges();
@@ -836,7 +814,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                     GenderGenderName = i.GenderId == Guid.Empty ? String.Empty : i.Gender.GenderName.ToString(),
                     StudentClassdisplayName = i.StudentClassId == Guid.Empty ? String.Empty : i.StudentClass.DisplayName.ToString(),
-                    StudentColorColorName = i.StudentColorId == Guid.Empty ? String.Empty : i.StudentColor.ColorName.ToString(),
                     StudentGroupDisplayName = i.StudentGroupId == Guid.Empty ? String.Empty : i.StudentGroup.DisplayName.ToString(),
                     DateCreated = i.DateCreated.ToShortDateString()
                 }).ToList();

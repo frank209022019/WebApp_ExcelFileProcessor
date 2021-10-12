@@ -21,11 +21,6 @@ namespace WebApp_ExcelFileProcessor.Models
         [ForeignKey("GenderId")]
         public virtual Gender Gender { get; set; }
 
-        public Guid? StudentColorId { get; set; }
-
-        [ForeignKey("StudentColorId")]
-        public virtual StudentColor StudentColor { get; set; }
-
         public Guid? StudentClassId { get; set; }
 
         [ForeignKey("StudentClassId")]

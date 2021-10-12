@@ -48,31 +48,7 @@ namespace WebApp_ExcelFileProcessor.Data
                     IsDeleted = false,
                     DateCreated = DateTime.Now
                 }
-            );
-            //  Student Color
-            builder.Entity<StudentColor>().HasData(
-                new StudentColor
-                {
-                    StudentColorId = Guid.NewGuid(),
-                    ColorName = "Gold",
-                    IsDeleted = false,
-                    DateCreated = DateTime.Now
-                },
-                new StudentColor
-                {
-                    StudentColorId = Guid.NewGuid(),
-                    ColorName = "Scarlet",
-                    IsDeleted = false,
-                    DateCreated = DateTime.Now
-                },
-                new StudentColor
-                {
-                    StudentColorId = Guid.NewGuid(),
-                    ColorName = "Unassigned",
-                    IsDeleted = false,
-                    DateCreated = DateTime.Now
-                }
-               );
+            );    
             //  Student Class
             builder.Entity<StudentClass>().HasData(
                 new StudentClass
@@ -614,7 +590,6 @@ namespace WebApp_ExcelFileProcessor.Data
         public DbSet<Gender> Genders { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<StudentClass> StudentClasses { get; set; }
-        public DbSet<StudentColor> StudentColors { get; set; }
         public DbSet<StudentGroup> StudentGroups { get; set; }
         public DbSet<StudentTemp> StudentTemps { get; set; }
         public DbSet<StudentScreeningTemp> StudentScreeningTemps { get; set; }
