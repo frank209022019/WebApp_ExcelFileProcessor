@@ -3,6 +3,19 @@
     ViewData["Title"] = "Upload Base Class Result";
 }
 
+<style>
+
+    .modal {
+        margin: 0 auto !important;
+        padding: 0 0 0 0 !important;
+    }
+
+    .modal-title {
+        color: #217093 !important;
+        font-size: 1.5rem !important;
+    }
+</style>
+
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness mb-2">
         <h1 class="custom-dark-blue">Upload Base Class Result</h1>
@@ -117,6 +130,10 @@
     </div>
 </div>
 
+<!-- Module modal -->
+<partial name="_StudentTempModulePartialView" />
+
+
 <script>
 
     $(document).ready(function () {
@@ -188,6 +205,27 @@
             })
         });
 
+        $('#table-create').on('click', '.js-modal', function (data) {
+            var button = $(this);
+            var studTempId = button.attr("data-student-id");
+
+            $.ajax({
+                url: "@Url.Action("GetStudentTempModuleViewModel", "BaseClass")",
+                type: 'GET',
+                data: { studentTempId: studTempId },
+                success: function (data) {
+                    if (data != null) {
+                        //  populate fields
+                        setModalValues(data);
+                        $('#moduleModal').modal('toggle');
+                    }
+                },
+                error: function () {
+                   sweetAlertError("View Module Details", "An error occurred while trying to view module details.")
+                }
+            });
+        });
+
         $('#table-update').on('click', '.js-delete', function (data) {
             var button = $(this);
           Swal.fire({
@@ -235,6 +273,27 @@
                 }
             })
 
+        });
+
+        $('#table-update').on('click', '.js-modal', function (data) {
+            var button = $(this);
+            var studTempId = button.attr("data-student-id");
+
+               $.ajax({
+                url: "@Url.Action("GetStudentTempModuleViewModel", "BaseClass")",
+                type: 'GET',
+                data: { studentTempId: studTempId },
+                success: function (data) {
+                    if (data != null) {
+                        //  populate fields
+                        setModalValues(data);
+                        $('#moduleModal').modal('toggle');
+                    }
+                },
+                error: function () {
+                   sweetAlertError("View Module Details", "An error occurred while trying to view module details.")
+                }
+            });
         });
     });
 
@@ -302,7 +361,7 @@
                 {
                     data: "studentClassdisplayName",
                     visible: true
-                },             
+                },
                 {
                     data: "studentGroupDisplayName",
                     visible: true
@@ -311,7 +370,8 @@
                     data: "studentTempId",
                     render: function (data) {
                         var result = "<div class='row text-center'>"
-                        result += "<div class='col-12'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove Action</button></div>";
+                        result += "<div class='col-6'><button class='btn btn-outline-secondary js-modal control-full-width' data-student-id=" + data + ">View Module</button></div>";
+                        result += "<div class='col-6'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove Action</button></div>";
                         result += "</div>";
                         return result;
                     }
@@ -385,7 +445,7 @@
                 {
                     data: "studentClassdisplayName",
                     visible: true
-                },          
+                },
                 {
                     data: "studentGroupDisplayName",
                     visible: true
@@ -394,7 +454,8 @@
                     data: "studentTempId",
                     render: function (data) {
                         var result = "<div class='row text-center'>"
-                        result += "<div class='col-12'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove Action</button></div>";
+                        result += "<div class='col-6'><button class='btn btn-outline-secondary js-modal control-full-width' data-student-id=" + data + ">View Modules</button></div>";
+                        result += "<div class='col-6'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove Action</button></div>";
                         result += "</div>";
                         return result;
                     }
@@ -468,7 +529,7 @@
                 {
                     data: "studentClassdisplayName",
                     visible: true
-                },      
+                },
                 {
                    data: "studentGroupDisplayName",
                    visible: true
@@ -481,5 +542,43 @@
     function setNewTab() {
         loadingSpinner_Show();
         setTimeout(function () { loadingSpinner_Hide() }, 800);
+    }
+
+    function setModalValues(validObj) {
+
+        var monCode = $('#txtMonCode');
+        var monSub = $('#txtMonString');
+        var tuesCode = $('#txtTuesCode');
+        var tuesSub = $('#txtTuesString');
+        var wedCode = $('#txtWedCode');
+        var wedSub = $('#txtWedString');
+        var thurCode = $('#txtThurCode');
+        var thurSub = $('#txtThurString');
+        var friCode = $('#txtFriCode');
+        var friSub = $('#txtFriString');
+        var ext1Code = $('#txtExt1Code');
+        var ext1Sub = $('#txtExt1String');
+        var ext2Code = $('#txtExt2Code');
+        var ext2Sub = $('#txtExt2String');
+        var ext3Code = $('#txtExt3Code');
+        var ext3Sub = $('#txtExt3String');
+
+
+        monCode.val(validObj.mondayModuleCode);
+        monSub.val(validObj.mondaySubjectString);
+        tuesCode.val(validObj.tuesdayModuleCode);
+        tuesSub.val(validObj.tuesdaySubjectString);
+        wedCode.val(validObj.wednesdayModuleCode);
+        wedSub.val(validObj.wednesdaySubjectString);
+        thurCode.val(validObj.thursdayModuleCode);
+        thurSub.val(validObj.thursdaySubjectString);
+        friCode.val(validObj.fridayModuleCode);
+        friSub.val(validObj.fridaySubjectString);
+        ext1Code.val(validObj.extra01ModuleCode);
+        ext1Sub.val(validObj.extra01SubjectString);
+        ext2Code.val(validObj.extra02ModuleCode);
+        ext2Sub.val(validObj.extra02SubjectString);
+        ext3Code.val(validObj.extra03ModuleCode);
+        ext3Sub.val(validObj.extra03SubjectString);
     }
 </script>

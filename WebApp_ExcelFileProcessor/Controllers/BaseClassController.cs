@@ -352,7 +352,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                      *  M/F
                                      *  CLASS
                                      *  GROUP
-                                     *  
+                                     *
                                      *  MON
                                      *  SUBJ
                                      *  TUE
@@ -364,9 +364,9 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                      *  FRI
                                      *  SUBJ
                                      *  EXTRA1
-                                     *  SUBJExtra1           
+                                     *  SUBJExtra1
                                       *  EXTRA2
-                                     *  SUBJExtra2   
+                                     *  SUBJExtra2
                                     *  EXTRA3
                                      *  SUBJExtra3
                                      */
@@ -390,7 +390,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                         rowHasError = true;
                                     if (worksheet.Cells[row, 17].Value == null)
                                         rowHasError = true;
-
 
                                     //  Grade String
                                     if (worksheet.Cells[row, 1].Value != null)
@@ -632,7 +631,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.Extra3SubjString = String.Empty;
                                     }
 
-
                                     //  Determine if row is create, update or error
                                     if (!rowHasError)
                                     {
@@ -743,7 +741,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         private Boolean CheckIfStudentExisits(StudentTemp tempModel)
         {
             try
-            {             
+            {
                 return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.LastName.ToUpper() == tempModel.LastName.ToUpper() && !i.IsDeleted);
             }
             catch (Exception ex)
@@ -781,7 +779,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                     //  GenderId
                     if (currModel.GenderId.ToString().ToUpper() != tempModel.GenderId.ToString().ToUpper())
-                        totalUpdates++;            
+                        totalUpdates++;
 
                     //  StudentClassId
                     if (currModel.StudentClassId.ToString().ToUpper() != tempModel.StudentClassId.ToString().ToUpper())
@@ -824,7 +822,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     //  Extra01
                     //  Extra02
                     //  Extra03
-
                 }
 
                 if (totalUpdates > 0)
@@ -843,7 +840,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName }).OrderByDescending(i => i.Text);   
+                model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName }).OrderByDescending(i => i.Text);
                 model.ClassList = _context.StudentClasses.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentClasses.ToList().Select(i => new SelectListItem { Value = i.StudentClassId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
                 model.GroupList = _context.StudentGroups.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentGroups.ToList().Select(i => new SelectListItem { Value = i.StudentGroupId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
                 model.ModuleList = _context.ModuleCodes.ToList().Count() < 0 ? new List<SelectListItem>() : _context.ModuleCodes.ToList().Select(i => new SelectListItem { Value = i.ModuleCodeId.ToString(), Text = i.ModuleCodeName }).OrderByDescending(i => i.Text);
@@ -879,7 +876,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         FirstName = i.FirstName == null ? String.Empty : i.FirstName.ToString(),
                         LastName = i.LastName == null ? String.Empty : i.LastName.ToString(),
                         GenderGenderName = i.GenderId == null ? String.Empty : i.Gender.GenderName.ToString(),
-                        StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),           
+                        StudentClassdisplayName = i.StudentClassId == null ? String.Empty : i.StudentClass.DisplayName.ToString(),
                         StudentGroupDisplayName = i.StudentGroupId == null ? String.Empty : i.StudentGroup.DisplayName.ToString()
                     }).ToList();
                 }
@@ -1091,48 +1088,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                var record = _context.StudentTemps.FirstOrDefault(i => !i.IsDeleted && i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());
-                return new StudentModuleViewModel()
-                {
-                    MondayModuleCode = record.MondayModuleCodeId == null? String.Empty : record.MondayModuleCode.ModuleCodeName,
-                    MondaySubjectString = record.MondaySubjString,
+                var record = _context.StudentTemps.FirstOrDefault(i => !i.IsDeleted && i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());    
 
-                    TuesdayModuleCode = record.TuesdayModuleCodeId == null ? String.Empty : record.TuesdayModuleCode.ModuleCodeName,
-                    TuesdaySubjectString = record.TuesdaySubjString,
-
-                    WednesdayModuleCode = record.WednesdayModuleCodeId == null ? String.Empty : record.WednesdayModuleCode.ModuleCodeName,
-                    WednesdaySubjectString = record.WednesdaySubjString,
-
-                    ThursdayModuleCode = record.ThursdayModuleCodeId == null ? String.Empty : record.ThursdayModuleCode.ModuleCodeName,
-                    ThursdaySubjectString = record.ThursdaySubjString,
-
-                    FridayModuleCode = record.FridayModuleCodeId == null ? String.Empty : record.FridayModuleCode.ModuleCodeName,
-                    FridaySubjectString = record.FridaySubjString,
-
-                    Extra01ModuleCode = record.Extra1ModuleCodeId == null ? String.Empty : record.Extra2ModuleCode.ModuleCodeName,
-                    Extra01SubjectString = record.Extra1SubjString,
-
-                    Extra02ModuleCode = record.Extra2ModuleCodeId == null ? String.Empty : record.Extra3ModuleCode.ModuleCodeName,
-                    Extra02SubjectString = record.Extra2SubjString,
-
-                    Extra03ModuleCode = record.Extra3ModuleCodeId == null ? String.Empty : record.MondayModuleCode.ModuleCodeName,
-                    Extra03SubjectString = record.Extra3SubjString,
-                };
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return new StudentModuleViewModel();
-            }
-        }
-
-        [Authorize]
-        [HttpGet]
-        public StudentModuleViewModel GetStudentModuleViewModel(String studentId)
-        {
-            try
-            {
-                var record = _context.Students.FirstOrDefault(i => !i.IsDeleted && i.StudentId.ToString().ToUpper() == studentId.ToUpper());
                 return new StudentModuleViewModel()
                 {
                     MondayModuleCode = record.MondayModuleCodeId == null ? String.Empty : record.MondayModuleCode.ModuleCodeName,
@@ -1150,13 +1107,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     FridayModuleCode = record.FridayModuleCodeId == null ? String.Empty : record.FridayModuleCode.ModuleCodeName,
                     FridaySubjectString = record.FridaySubjString,
 
-                    Extra01ModuleCode = record.Extra1ModuleCodeId == null ? String.Empty : record.Extra2ModuleCode.ModuleCodeName,
+                    Extra01ModuleCode = !record.Extra1ModuleCodeId.HasValue ? String.Empty : record.Extra1ModuleCode.ModuleCodeName,
                     Extra01SubjectString = record.Extra1SubjString,
 
-                    Extra02ModuleCode = record.Extra2ModuleCodeId == null ? String.Empty : record.Extra3ModuleCode.ModuleCodeName,
+                    Extra02ModuleCode = !record.Extra2ModuleCodeId.HasValue ? String.Empty : record.Extra2ModuleCode.ModuleCodeName,
                     Extra02SubjectString = record.Extra2SubjString,
 
-                    Extra03ModuleCode = record.Extra3ModuleCodeId == null ? String.Empty : record.MondayModuleCode.ModuleCodeName,
+                    Extra03ModuleCode = !record.Extra3ModuleCodeId.HasValue ? String.Empty : record.Extra3ModuleCode.ModuleCodeName,
                     Extra03SubjectString = record.Extra3SubjString,
                 };
             }
