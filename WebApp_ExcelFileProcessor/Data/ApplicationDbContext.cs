@@ -528,6 +528,13 @@ namespace WebApp_ExcelFileProcessor.Data
                     IsDeleted = false,
                     DateCreated = DateTime.Now,
                     ModuleCodeName = "LO".ToUpper()
+                },
+                new ModuleCode
+                {
+                    ModuleCodeId = Guid.NewGuid(),
+                    IsDeleted = false,
+                    DateCreated = DateTime.Now,
+                    ModuleCodeName = "EXAM".ToUpper()
                 }
                 );
         }

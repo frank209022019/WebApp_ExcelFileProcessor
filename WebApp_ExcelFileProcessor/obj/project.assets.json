@@ -10010,27 +10010,28 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Frank\\.nuget\\packages\\": {},
+    "C:\\Users\\S4\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\Offline Packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Frank\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj",
+      "projectUniqueName": "C:\\Users\\S4\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj",
       "projectName": "WebApp_ExcelFileProcessor",
-      "projectPath": "C:\\Users\\Frank\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj",
-      "packagesPath": "C:\\Users\\Frank\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Frank\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\obj\\",
+      "projectPath": "C:\\Users\\S4\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor.csproj",
+      "packagesPath": "C:\\Users\\S4\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\S4\\Documents\\GitHub\\WebApp_ExcelFileProcessor\\WebApp_ExcelFileProcessor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\Offline Packages",
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\Frank\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\S4\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.1.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
@@ -10039,6 +10040,7 @@
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\DevExpress 21.1\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
