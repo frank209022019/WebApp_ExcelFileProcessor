@@ -114,7 +114,7 @@
         $("#btnPostForm").click(function () {
             Swal.fire({
                 icon: 'question',
-                title: "Add Screening",
+                title: "Add Record",
                 text: 'Are you sure you want to save these changes?',
                 showClass: {
                     popup: 'animate__animated animate__fadeInDown'
@@ -138,7 +138,7 @@
                     }
                     else {
                         loadingSpinner_Hide();
-                        sweetAlertError("Add Screening", "Please ensure all fields are correct and valid.'");
+                        sweetAlertError("Add Record", "Please ensure all fields are correct and valid.'");
                     }
                 }
             })

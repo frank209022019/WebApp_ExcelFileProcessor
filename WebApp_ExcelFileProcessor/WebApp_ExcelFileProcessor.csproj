@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\packages\datatables\Other\**" />
+    <Content Remove="wwwroot\packages\datatables\Other\**" />
+    <EmbeddedResource Remove="wwwroot\packages\datatables\Other\**" />
+    <None Remove="wwwroot\packages\datatables\Other\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\icons\dropzone-icon-new.jpg" />
   </ItemGroup>
 
@@ -31,10 +38,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\packages\datatables\Other\" />
   </ItemGroup>
 
 </Project>
