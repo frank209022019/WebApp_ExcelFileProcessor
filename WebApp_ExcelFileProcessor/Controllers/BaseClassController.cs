@@ -331,7 +331,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         //  Loop through rows
                         if (rowCount > 0)
                         {
-                            for (int row = 6; row <= rowCount; row++)
+                            for (int row = 4; row <= rowCount; row++)
                             {
                                 //  StudentTemp
                                 Boolean rowHasError = false;
@@ -344,7 +344,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                                 try
                                 {
-                                    /*  GR (skip)
+                                    /*  GR (wont be used)
                                      *  NR
                                      *  QR CODE
                                      *  SURNAME
@@ -363,32 +363,49 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                      *  SUBJ
                                      *  FRI
                                      *  SUBJ
-                                     *  EXTRA
-                                     *  SUBJ            
-                                     */ 
-                        
+                                     *  EXTRA1
+                                     *  SUBJExtra1           
+                                      *  EXTRA2
+                                     *  SUBJExtra2   
+                                    *  EXTRA3
+                                     *  SUBJExtra3
+                                     */
 
                                     //  Check if current rows columns have null values
-                                    for (int col = 2; col <= 9; col++)
+                                    //  Student Information Compulsory
+                                    for (int col = 1; col <= 8; col++)
                                     {
                                         if (worksheet.Cells[row, col].Value == null)
                                             rowHasError = true;
-                                    }                                   
+                                    }
 
-                                    //  Student Group
-                                    if (worksheet.Cells[row, 3].Value != null)
+                                    //  Monday-Friday Module Code
+                                    if (worksheet.Cells[row, 9].Value == null)
+                                        rowHasError = true;
+                                    if (worksheet.Cells[row, 11].Value == null)
+                                        rowHasError = true;
+                                    if (worksheet.Cells[row, 13].Value == null)
+                                        rowHasError = true;
+                                    if (worksheet.Cells[row, 15].Value == null)
+                                        rowHasError = true;
+                                    if (worksheet.Cells[row, 17].Value == null)
+                                        rowHasError = true;
+
+
+                                    //  Grade String
+                                    if (worksheet.Cells[row, 1].Value != null)
                                     {
-                                        var valueStudentGroup = worksheet.Cells[row, 3].Value;
-                                        if (valueStudentGroup != null)
-                                            tempModel.StudentGroupId = studentGroupList.SingleOrDefault(i => i.DisplayName.ToUpper() == valueStudentGroup.ToString().ToUpper()).StudentGroupId;
+                                        var gradeString = worksheet.Cells[row, 1].Value;
+                                        if (gradeString != null)
+                                            tempModel.GradeString = Convert.ToString(gradeString).ToUpper();
                                         else
-                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentGroup"));
+                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "GradeString"));
                                     }
 
                                     //  Student Nr
-                                    if (worksheet.Cells[row, 4].Value != null)
+                                    if (worksheet.Cells[row, 2].Value != null)
                                     {
-                                        var valueStudentNr = worksheet.Cells[row, 4].Value;
+                                        var valueStudentNr = worksheet.Cells[row, 2].Value;
                                         if (valueStudentNr != null)
                                             tempModel.StudentNr = Convert.ToInt32(valueStudentNr);
                                         else
@@ -396,19 +413,19 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     }
 
                                     //  QR Code
-                                    if (worksheet.Cells[row, 5].Value != null)
+                                    if (worksheet.Cells[row, 3].Value != null)
                                     {
-                                        var valueQRCode = worksheet.Cells[row, 5].Value;
+                                        var valueQRCode = worksheet.Cells[row, 3].Value;
                                         if (valueQRCode != null)
                                             tempModel.QRCode = valueQRCode.ToString().ToUpper();
                                         else
-                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "QR"));
+                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "QRCode"));
                                     }
 
                                     //  Last Name
-                                    if (worksheet.Cells[row, 6].Value != null)
+                                    if (worksheet.Cells[row, 4].Value != null)
                                     {
-                                        var valueLastName = worksheet.Cells[row, 6].Value;
+                                        var valueLastName = worksheet.Cells[row, 4].Value;
                                         if (valueLastName != null)
                                             tempModel.LastName = valueLastName.ToString().ToUpper();
                                         else
@@ -416,9 +433,9 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     }
 
                                     //  First Name
-                                    if (worksheet.Cells[row, 7].Value != null)
+                                    if (worksheet.Cells[row, 5].Value != null)
                                     {
-                                        var valueFirstName = worksheet.Cells[row, 7].Value;
+                                        var valueFirstName = worksheet.Cells[row, 5].Value;
                                         if (valueFirstName != null)
                                             tempModel.FirstName = valueFirstName.ToString().ToUpper();
                                         else
@@ -426,9 +443,9 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     }
 
                                     //  Gender
-                                    if (worksheet.Cells[row, 8].Value != null)
+                                    if (worksheet.Cells[row, 6].Value != null)
                                     {
-                                        var valueGender = worksheet.Cells[row, 8].Value;
+                                        var valueGender = worksheet.Cells[row, 6].Value;
                                         if (valueGender != null)
                                             tempModel.GenderId = genderList.FirstOrDefault(i => i.GenderChar.ToString().ToUpper() == valueGender.ToString().ToUpper()).GenderId;
                                         else
@@ -436,14 +453,185 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     }
 
                                     //  Student Class
-                                    if (worksheet.Cells[row, 9].Value != null)
+                                    if (worksheet.Cells[row, 7].Value != null)
                                     {
-                                        var valueStudentClass = worksheet.Cells[row, 9].Value;
+                                        var valueStudentClass = worksheet.Cells[row, 7].Value;
                                         if (valueStudentClass != null)
                                             tempModel.StudentClassId = studentClassList.FirstOrDefault(i => i.DisplayName.ToUpper() == valueStudentClass.ToString().ToUpper()).StudentClassId;
                                         else
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentClass"));
                                     }
+
+                                    //  Student Group
+                                    if (worksheet.Cells[row, 8].Value != null)
+                                    {
+                                        var valueStudentGroup = worksheet.Cells[row, 8].Value;
+                                        if (valueStudentGroup != null)
+                                            tempModel.StudentGroupId = studentGroupList.SingleOrDefault(i => i.DisplayName.ToUpper() == valueStudentGroup.ToString().ToUpper()).StudentGroupId;
+                                        else
+                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentGroup"));
+                                    }
+
+                                    //  Monday Module Code
+                                    if (worksheet.Cells[row, 9].Value != null)
+                                    {
+                                        var moduleCode = worksheet.Cells[row, 9].Value;
+                                        if (moduleCode != null)
+                                            tempModel.MondayModuleCodeId = moduleCodeList.SingleOrDefault(i => i.ModuleCodeName.ToUpper() == moduleCode.ToString().ToUpper()).ModuleCodeId;
+                                        else
+                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "MondayModuleCodeId"));
+                                    }
+
+                                    //  Monday Subject String
+                                    if (worksheet.Cells[row, 10].Value != null)
+                                    {
+                                        var subjectString = worksheet.Cells[row, 10].Value;
+                                        if (subjectString != null)
+                                            tempModel.MondaySubjString = Convert.ToString(subjectString).ToUpper();
+                                        else
+                                            tempModel.MondaySubjString = String.Empty;
+                                    }
+
+                                    //  Tuesday Module Code
+                                    if (worksheet.Cells[row, 11].Value != null)
+                                    {
+                                        var moduleCode = worksheet.Cells[row, 11].Value;
+                                        if (moduleCode != null)
+                                            tempModel.TuesdayModuleCodeId = moduleCodeList.SingleOrDefault(i => i.ModuleCodeName.ToUpper() == moduleCode.ToString().ToUpper()).ModuleCodeId;
+                                        else
+                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "TuesdayModuleCodeId"));
+                                    }
+
+                                    //  Tuesday Subject String
+                                    if (worksheet.Cells[row, 12].Value != null)
+                                    {
+                                        var subjectString = worksheet.Cells[row, 12].Value;
+                                        if (subjectString != null)
+                                            tempModel.TuesdaySubjString = Convert.ToString(subjectString).ToUpper();
+                                        else
+                                            tempModel.TuesdaySubjString = String.Empty;
+                                    }
+
+                                    //  Wednesday Module Code
+                                    if (worksheet.Cells[row, 13].Value != null)
+                                    {
+                                        var moduleCode = worksheet.Cells[row, 13].Value;
+                                        if (moduleCode != null)
+                                            tempModel.WednesdayModuleCodeId = moduleCodeList.SingleOrDefault(i => i.ModuleCodeName.ToUpper() == moduleCode.ToString().ToUpper()).ModuleCodeId;
+                                        else
+                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "WednesdayModuleCodeId"));
+                                    }
+
+                                    //  Wednesday Subject String
+                                    if (worksheet.Cells[row, 14].Value != null)
+                                    {
+                                        var subjectString = worksheet.Cells[row, 14].Value;
+                                        if (subjectString != null)
+                                            tempModel.WednesdaySubjString = Convert.ToString(subjectString).ToUpper();
+                                        else
+                                            tempModel.WednesdaySubjString = String.Empty;
+                                    }
+
+                                    //  Thursday Module Code
+                                    if (worksheet.Cells[row, 15].Value != null)
+                                    {
+                                        var moduleCode = worksheet.Cells[row, 15].Value;
+                                        if (moduleCode != null)
+                                            tempModel.ThursdayModuleCodeId = moduleCodeList.SingleOrDefault(i => i.ModuleCodeName.ToUpper() == moduleCode.ToString().ToUpper()).ModuleCodeId;
+                                        else
+                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "ThursdayModuleCodeId"));
+                                    }
+
+                                    //  Thursday Subject String
+                                    if (worksheet.Cells[row, 16].Value != null)
+                                    {
+                                        var subjectString = worksheet.Cells[row, 16].Value;
+                                        if (subjectString != null)
+                                            tempModel.ThursdaySubjString = Convert.ToString(subjectString).ToUpper();
+                                        else
+                                            tempModel.ThursdaySubjString = String.Empty;
+                                    }
+
+                                    //  Friday Module Code
+                                    if (worksheet.Cells[row, 17].Value != null)
+                                    {
+                                        var moduleCode = worksheet.Cells[row, 17].Value;
+                                        if (moduleCode != null)
+                                            tempModel.FridayModuleCodeId = moduleCodeList.SingleOrDefault(i => i.ModuleCodeName.ToUpper() == moduleCode.ToString().ToUpper()).ModuleCodeId;
+                                        else
+                                            throw new Exception(String.Format("ROW: {0} COL: {1}", row, "FridayModuleCodeId"));
+                                    }
+
+                                    //  Friday Subject String
+                                    if (worksheet.Cells[row, 18].Value != null)
+                                    {
+                                        var subjectString = worksheet.Cells[row, 18].Value;
+                                        if (subjectString != null)
+                                            tempModel.FridaySubjString = Convert.ToString(subjectString).ToUpper();
+                                        else
+                                            tempModel.FridaySubjString = String.Empty;
+                                    }
+
+                                    //  Extra01 Module Code
+                                    if (worksheet.Cells[row, 19].Value != null)
+                                    {
+                                        var moduleCode = worksheet.Cells[row, 19].Value;
+                                        if (moduleCode != null)
+                                            tempModel.Extra1ModuleCodeId = moduleCodeList.SingleOrDefault(i => i.ModuleCodeName.ToUpper() == moduleCode.ToString().ToUpper()).ModuleCodeId;
+                                        else
+                                            tempModel.Extra1ModuleCodeId = null;
+                                    }
+
+                                    //  Extra01 Subject String
+                                    if (worksheet.Cells[row, 20].Value != null)
+                                    {
+                                        var subjectString = worksheet.Cells[row, 20].Value;
+                                        if (subjectString != null)
+                                            tempModel.Extra1SubjString = Convert.ToString(subjectString).ToUpper();
+                                        else
+                                            tempModel.Extra1SubjString = String.Empty;
+                                    }
+
+                                    //  Extra02 Module Code
+                                    if (worksheet.Cells[row, 21].Value != null)
+                                    {
+                                        var moduleCode = worksheet.Cells[row, 21].Value;
+                                        if (moduleCode != null)
+                                            tempModel.Extra2ModuleCodeId = moduleCodeList.SingleOrDefault(i => i.ModuleCodeName.ToUpper() == moduleCode.ToString().ToUpper()).ModuleCodeId;
+                                        else
+                                            tempModel.Extra2ModuleCodeId = null;
+                                    }
+
+                                    //  Extra02 Subject String
+                                    if (worksheet.Cells[row, 22].Value != null)
+                                    {
+                                        var subjectString = worksheet.Cells[row, 22].Value;
+                                        if (subjectString != null)
+                                            tempModel.Extra2SubjString = Convert.ToString(subjectString).ToUpper();
+                                        else
+                                            tempModel.Extra2SubjString = String.Empty;
+                                    }
+
+                                    //  Extra03 Module Code
+                                    if (worksheet.Cells[row, 23].Value != null)
+                                    {
+                                        var moduleCode = worksheet.Cells[row, 23].Value;
+                                        if (moduleCode != null)
+                                            tempModel.Extra3ModuleCodeId = moduleCodeList.SingleOrDefault(i => i.ModuleCodeName.ToUpper() == moduleCode.ToString().ToUpper()).ModuleCodeId;
+                                        else
+                                            tempModel.Extra3ModuleCodeId = null;
+                                    }
+
+                                    //  Extra03 Subject String
+                                    if (worksheet.Cells[row, 24].Value != null)
+                                    {
+                                        var subjectString = worksheet.Cells[row, 24].Value;
+                                        if (subjectString != null)
+                                            tempModel.Extra3SubjString = Convert.ToString(subjectString).ToUpper();
+                                        else
+                                            tempModel.Extra3SubjString = String.Empty;
+                                    }
+
 
                                     //  Determine if row is create, update or error
                                     if (!rowHasError)
@@ -475,6 +663,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 }
                                 catch
                                 {
+                                    //  add row to a error list (try-catch per row)
                                     tempModel.RowType = 'E';
                                     returnValue.ErrorList.Add(tempModel);
                                 }
@@ -554,10 +743,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
         private Boolean CheckIfStudentExisits(StudentTemp tempModel)
         {
             try
-            {
-                //return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.FirstName.ToUpper() == tempModel.FirstName.ToUpper()
-                //                                                                    && i.LastName.ToUpper() == tempModel.LastName.ToUpper());
-                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && !i.IsDeleted);
+            {             
+                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.LastName.ToUpper() == tempModel.LastName.ToUpper() && !i.IsDeleted);
             }
             catch (Exception ex)
             {
@@ -603,6 +790,41 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     //  StudentGroupId
                     if (currModel.StudentGroupId.ToString().ToUpper() != tempModel.StudentGroupId.ToString().ToUpper())
                         totalUpdates++;
+
+                    //  Monday
+                    if (currModel.MondayModuleCodeId.ToString().ToUpper() != tempModel.MondayModuleCodeId.ToString().ToUpper())
+                        totalUpdates++;
+                    if (currModel.MondaySubjString.ToString().ToUpper() != tempModel.MondaySubjString.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  Tuesday
+                    if (currModel.TuesdayModuleCodeId.ToString().ToUpper() != tempModel.TuesdayModuleCodeId.ToString().ToUpper())
+                        totalUpdates++;
+                    if (currModel.TuesdaySubjString.ToString().ToUpper() != tempModel.TuesdaySubjString.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  Wednesday
+                    if (currModel.WednesdayModuleCodeId.ToString().ToUpper() != tempModel.WednesdayModuleCodeId.ToString().ToUpper())
+                        totalUpdates++;
+                    if (currModel.WednesdaySubjString.ToString().ToUpper() != tempModel.WednesdaySubjString.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  Thursday
+                    if (currModel.ThursdayModuleCodeId.ToString().ToUpper() != tempModel.ThursdayModuleCodeId.ToString().ToUpper())
+                        totalUpdates++;
+                    if (currModel.ThursdaySubjString.ToString().ToUpper() != tempModel.ThursdaySubjString.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  Friday
+                    if (currModel.FridayModuleCodeId.ToString().ToUpper() != tempModel.FridayModuleCodeId.ToString().ToUpper())
+                        totalUpdates++;
+                    if (currModel.FridaySubjString.ToString().ToUpper() != tempModel.FridaySubjString.ToString().ToUpper())
+                        totalUpdates++;
+
+                    //  Extra01
+                    //  Extra02
+                    //  Extra03
+
                 }
 
                 if (totalUpdates > 0)
@@ -624,13 +846,14 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 model.GenderList = _context.Genders.ToList().Count() < 0 ? new List<SelectListItem>() : _context.Genders.ToList().Select(i => new SelectListItem { Value = i.GenderId.ToString(), Text = i.GenderName }).OrderByDescending(i => i.Text);   
                 model.ClassList = _context.StudentClasses.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentClasses.ToList().Select(i => new SelectListItem { Value = i.StudentClassId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
                 model.GroupList = _context.StudentGroups.ToList().Count() < 0 ? new List<SelectListItem>() : _context.StudentGroups.ToList().Select(i => new SelectListItem { Value = i.StudentGroupId.ToString(), Text = i.DisplayName }).OrderByDescending(i => i.Text);
+                model.ModuleList = _context.ModuleCodes.ToList().Count() < 0 ? new List<SelectListItem>() : _context.ModuleCodes.ToList().Select(i => new SelectListItem { Value = i.ModuleCodeId.ToString(), Text = i.ModuleCodeName }).OrderByDescending(i => i.Text);
                 return model;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 model.GenderList = new List<SelectListItem>();
-                model.ColorList = new List<SelectListItem>();
+                model.ModuleList = new List<SelectListItem>();
                 model.ClassList = new List<SelectListItem>();
                 model.GroupList = new List<SelectListItem>();
                 return model;
@@ -859,6 +1082,88 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 _logger.LogError(ex.Message);
                 return BadRequest("Error occurred while trying to delete the record");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public StudentModuleViewModel GetStudentTempModuleViewModel(String studentTempId)
+        {
+            try
+            {
+                var record = _context.StudentTemps.FirstOrDefault(i => !i.IsDeleted && i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());
+                return new StudentModuleViewModel()
+                {
+                    MondayModuleCode = record.MondayModuleCodeId == null? String.Empty : record.MondayModuleCode.ModuleCodeName,
+                    MondaySubjectString = record.MondaySubjString,
+
+                    TuesdayModuleCode = record.TuesdayModuleCodeId == null ? String.Empty : record.TuesdayModuleCode.ModuleCodeName,
+                    TuesdaySubjectString = record.TuesdaySubjString,
+
+                    WednesdayModuleCode = record.WednesdayModuleCodeId == null ? String.Empty : record.WednesdayModuleCode.ModuleCodeName,
+                    WednesdaySubjectString = record.WednesdaySubjString,
+
+                    ThursdayModuleCode = record.ThursdayModuleCodeId == null ? String.Empty : record.ThursdayModuleCode.ModuleCodeName,
+                    ThursdaySubjectString = record.ThursdaySubjString,
+
+                    FridayModuleCode = record.FridayModuleCodeId == null ? String.Empty : record.FridayModuleCode.ModuleCodeName,
+                    FridaySubjectString = record.FridaySubjString,
+
+                    Extra01ModuleCode = record.Extra1ModuleCodeId == null ? String.Empty : record.Extra2ModuleCode.ModuleCodeName,
+                    Extra01SubjectString = record.Extra1SubjString,
+
+                    Extra02ModuleCode = record.Extra2ModuleCodeId == null ? String.Empty : record.Extra3ModuleCode.ModuleCodeName,
+                    Extra02SubjectString = record.Extra2SubjString,
+
+                    Extra03ModuleCode = record.Extra3ModuleCodeId == null ? String.Empty : record.MondayModuleCode.ModuleCodeName,
+                    Extra03SubjectString = record.Extra3SubjString,
+                };
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new StudentModuleViewModel();
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public StudentModuleViewModel GetStudentModuleViewModel(String studentId)
+        {
+            try
+            {
+                var record = _context.Students.FirstOrDefault(i => !i.IsDeleted && i.StudentId.ToString().ToUpper() == studentId.ToUpper());
+                return new StudentModuleViewModel()
+                {
+                    MondayModuleCode = record.MondayModuleCodeId == null ? String.Empty : record.MondayModuleCode.ModuleCodeName,
+                    MondaySubjectString = record.MondaySubjString,
+
+                    TuesdayModuleCode = record.TuesdayModuleCodeId == null ? String.Empty : record.TuesdayModuleCode.ModuleCodeName,
+                    TuesdaySubjectString = record.TuesdaySubjString,
+
+                    WednesdayModuleCode = record.WednesdayModuleCodeId == null ? String.Empty : record.WednesdayModuleCode.ModuleCodeName,
+                    WednesdaySubjectString = record.WednesdaySubjString,
+
+                    ThursdayModuleCode = record.ThursdayModuleCodeId == null ? String.Empty : record.ThursdayModuleCode.ModuleCodeName,
+                    ThursdaySubjectString = record.ThursdaySubjString,
+
+                    FridayModuleCode = record.FridayModuleCodeId == null ? String.Empty : record.FridayModuleCode.ModuleCodeName,
+                    FridaySubjectString = record.FridaySubjString,
+
+                    Extra01ModuleCode = record.Extra1ModuleCodeId == null ? String.Empty : record.Extra2ModuleCode.ModuleCodeName,
+                    Extra01SubjectString = record.Extra1SubjString,
+
+                    Extra02ModuleCode = record.Extra2ModuleCodeId == null ? String.Empty : record.Extra3ModuleCode.ModuleCodeName,
+                    Extra02SubjectString = record.Extra2SubjString,
+
+                    Extra03ModuleCode = record.Extra3ModuleCodeId == null ? String.Empty : record.MondayModuleCode.ModuleCodeName,
+                    Extra03SubjectString = record.Extra3SubjString,
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new StudentModuleViewModel();
             }
         }
 

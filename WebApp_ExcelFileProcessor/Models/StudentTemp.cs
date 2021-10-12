@@ -10,7 +10,7 @@ namespace WebApp_ExcelFileProcessor.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid StudentTempId { get; set; }
-
+        public String GradeString { get; set; }
         public Int32? StudentNr { get; set; }
         public String QRCode { get; set; }
         public String LastName { get; set; }
@@ -66,12 +66,26 @@ namespace WebApp_ExcelFileProcessor.Models
 
         public String FridaySubjString { get; set; }
 
-        public Guid? ExtraModuleCodeId { get; set; }
+        public Guid? Extra1ModuleCodeId { get; set; }
 
-        [ForeignKey("ExtraModuleCodeId")]
-        public virtual ModuleCode ExtraModuleCode { get; set; }
+        [ForeignKey("Extra1ModuleCodeId")]
+        public virtual ModuleCode Extra1ModuleCode { get; set; }
 
-        public String ExtraSubjString { get; set; }
+        public String Extra1SubjString { get; set; }
+
+        public Guid? Extra2ModuleCodeId { get; set; }
+
+        [ForeignKey("Extra2ModuleCodeId")]
+        public virtual ModuleCode Extra2ModuleCode { get; set; }
+
+        public String Extra2SubjString { get; set; }
+
+        public Guid? Extra3ModuleCodeId { get; set; }
+
+        [ForeignKey("Extra3ModuleCodeId")]
+        public virtual ModuleCode Extra3ModuleCode { get; set; }
+
+        public String Extra3SubjString { get; set; }
 
         public Int32? RowNumber { get; set; }
         public Char? RowType { get; set; }

@@ -12,7 +12,6 @@ namespace WebApp_ExcelFileProcessor.ViewModels
         public String LastName { get; set; }
         public String GenderGenderName { get; set; }
         public String StudentClassdisplayName { get; set; }
-        public String StudentColorColorName { get; set; }
         public String StudentGroupDisplayName { get; set; }
     }
 }
