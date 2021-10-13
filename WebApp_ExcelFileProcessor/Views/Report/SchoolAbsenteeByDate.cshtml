@@ -49,13 +49,9 @@
 </div>
 
 <script>
-
-</script>
-  $(document).ready(function () {
-
-})
-<script>
     $(document).ready(function () {
+        getMinMaxDateForDatePickers();
+
         $("#btnClearFields").click(function () {
             $('#inputGrade').prop('selectedIndex', 0);
             $("#inputStartDate").val('');
@@ -78,7 +74,7 @@
                         startDateString: startDateValue.toString(),
                         endDateString: endDateValue.toString()
                     },
-                    success: function (data) {                     
+                    success: function (data) {
                         loadingSpinner_Hide();
 
                         if (data.length == 0)
@@ -97,6 +93,57 @@
             }
         });
     });
+  function getMinMaxDateForDatePickers() {
+        loadingSpinner_Show();
+
+        $.ajax({
+            url: '@Url.Action("GetMinMaxDateRange", "Report")',
+            type: 'GET',
+            success: function (data) {
+                setMinMaxDateForDatePickers(data);
+                loadingSpinner_Hide();
+           },
+            error: function (data) {
+                loadingSpinner_Hide();
+                sweetAlertError("Student Absent Report", "Your request could not be processed.");
+            }
+        });
+    }
+
+    function setMinMaxDateForDatePickers(data) {
+        //  minDateTime (yyyy-mm-dd)
+        //  maxDateTime (yyyy-mm-dd)
+        var minDateArr = data.minDateTime.substring(0, 10).split('-');
+        var maxDateArr = data.maxDateTime.substring(0, 10).split('-');
+
+        var setMinDate = new Date(minDateArr[0], minDateArr[1] - 1, minDateArr[2]);
+        var setMaxDate = new Date(maxDateArr[0], maxDateArr[1] - 1, maxDateArr[2]);
+
+        $("#inputStartDate").attr({
+            "min": formatDate(setMinDate),
+            "max": formatDate(setMaxDate),
+        });
+
+        $("#inputEndDate").attr({
+            "min": formatDate(setMinDate),
+            "max": formatDate(setMaxDate),
+        });
+    }
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        console.log([year, month, day].join('-'));
+        return [year, month, day].join('-');
+    }
 
     function startDateHasValue() {
         var datetimeval = $("#inputStartDate").val();
@@ -105,6 +152,7 @@
         else
             return true;
     }
+
     function endDateHasValue() {
         var datetimeval = $("#inputEndDate").val();
         if (datetimeval == '' || datetimeval == null)

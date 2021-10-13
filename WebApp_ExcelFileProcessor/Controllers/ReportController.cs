@@ -289,6 +289,30 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        public DateRangeViewModel GetMinMaxDateRange()
+        {
+            try
+            {
+                var screeningList = _context.StudentScreenings.Where(i => !i.IsDeleted).ToList();
+                if (screeningList.Count() == 0)
+                    throw new Exception("No student screening records found.");
+
+                DateRangeViewModel model = new DateRangeViewModel()
+                {
+                    MinDateTime = screeningList.Select(i => i.ScreeningTimeStamp).Min(),
+                    MaxDateTime = screeningList.Select(i => i.ScreeningTimeStamp).Max()
+                };
+                return model;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new DateRangeViewModel() { MinDateTime = DateTime.Now, MaxDateTime = DateTime.Now };
+            }
+        }
+
         #endregion Utilities
     }
 }
