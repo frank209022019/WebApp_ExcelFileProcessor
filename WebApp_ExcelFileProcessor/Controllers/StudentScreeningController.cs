@@ -399,8 +399,12 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     //  Check if current rows columns have null values
                                     for (int col = 1; col <= 12; col++)
                                     {
-                                        if (worksheet.Cells[row, col].Value == null)
-                                            rowHasError = true;
+                                        //  skip over general sense of wellbeing
+                                        if(col != 3)
+                                        {
+                                            if (worksheet.Cells[row, col].Value == null)
+                                                rowHasError = true;
+                                        }                                      
                                     }
 
                                     //  QRCodeId
@@ -618,15 +622,15 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         int rowCount = worksheet.Dimension.End.Row;
 
                         var validateNr = worksheet.Cells[1, 1].Value;
-                        if (validateNr == null || validateNr.ToString().ToLower() != "id")
+                        if (validateNr == null || validateNr.ToString().ToUpper() != "ID")
                             throw new Exception("Invalid template used");
 
                         var validateSurname = worksheet.Cells[1, 2].Value;
-                        if (validateSurname == null || validateSurname.ToString().ToLower() != "temp")
+                        if (validateSurname == null || validateSurname.ToString().ToUpper() != "TEMP")
                             throw new Exception("Invalid template used");
 
                         var validateName = worksheet.Cells[1, 3].Value;
-                        if (validateName == null || validateName.ToString().ToLower() != "general sense of wellbeing?")
+                        if (validateName == null || validateName.ToString().ToUpper() != "GENERAL SENSE OF WELLBEING?")
                             throw new Exception("Invalid template used");
                     }
                 }

@@ -64,6 +64,7 @@
 
     function loadStudentTable() {
         var table = $('#table-student').DataTable({
+            "order": [[2, "asc"], [7, "asc"]],
             dom: 'Bfrtip',
             buttons: [
                 {

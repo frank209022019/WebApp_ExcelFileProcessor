@@ -69,98 +69,69 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                Int32 gradeInt = Convert.ToInt32(gradeString);
-                DateTime startDate = Convert.ToDateTime(startDateString);
-                DateTime endDate = Convert.ToDateTime(endDateString);
+                var studentScreeningsList = GetGradeScreenings(Convert.ToInt32(gradeString), Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString));
+                if (studentScreeningsList.Count() <= 0)
+                    throw new Exception("No student screening records found.");
 
-                //  Screening list - filtered by grade, start date && end date
-                var screeningList = GetStudentScreeningForDateRange(gradeInt, startDate, endDate);
-                if (screeningList.Count() <= 0)
-                    throw new Exception("No student screenings found.");
-
-                //  Student list by grade && valid
-                var studentList = _context.Students.Where(i => !i.IsDeleted && i.StudentClass.GradeInt == gradeInt).ToList();
-                if (studentList.Count() <= 0)
-                    throw new Exception("No students found.");
-
-                //  Return list
                 List<AbsenteeViewModel> returnList = new List<AbsenteeViewModel>();
 
-                //  Process for absentee records
-                foreach (var item in studentList)
+                if (studentScreeningsList.Count() > 0)
                 {
-                    //  get screennings for student
-                    var studentScreenings = screeningList.Where(i => i.StudentId == item.StudentId && !i.IsDeleted).ToList();
+                    var studentList = _context.Students.Where(i => !i.IsDeleted && i.StudentClass.GradeInt == Convert.ToInt32(gradeString)).ToList();
+                    var moduleRosterList = _context.GradeModuleRoster.Where(i => !i.IsDeleted && i.GradeInt == Convert.ToInt32(gradeString)).ToList();
 
-                    if (studentScreenings.Count() > 0)
+                    //  Studens IN/NOT IN studentScreeningsList
+                    var studentsInScreeningList = studentList.Where(p => studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
+                    var studentsNotInScreeningList = studentList.Where(p => !studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
+
+                    //   go through each student (studentsNotInScreeningList) : either absent or dont need to be at school
+                    if (studentsNotInScreeningList.Count() > 0)
                     {
-                        /*
-                         * Loop through each day in DateRange (parameters)
-                         *      -   check if student must be at school for that day?????
-                         *          IF (true)
-                         *              -   check if student has a screening record for each day
-                         *                  IF(true)
-                         *                          -   they are present
-                         *                   ELSE
-                         *                          -   they are absent
-                         *
-                         *      -  ELSE
-                         *              -   do nothing.... no need for student to be at school
-                         *
-                         *
-                         *
-                         *
-                         */
-                        foreach (DateTime day in EachCalendarDay(startDate, endDate))
+                        foreach (var stud in studentsNotInScreeningList)
                         {
-                            //   FIGURE THIS OUT
-                            Boolean mustStudentBeAtSchoolToday = true;
-
-                            if (mustStudentBeAtSchoolToday)
+                            foreach (DateTime day in EachCalendarDay(Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString)))
                             {
-                                Boolean recordExists = studentScreenings.Any(i => i.ScreeningTimeStamp.Day == day.Day &&
-                                                                                                                                    i.ScreeningTimeStamp.Month == day.Month &&
-                                                                                                                                    i.ScreeningTimeStamp.Year == day.Year);
-                                if (!recordExists)
-                                    returnList.Add(new AbsenteeViewModel()
+                                if (!CheckIfStudentHasScreeningForDateTime(day, studentScreeningsList, stud.StudentId))
+                                {
+                                    switch (day.DayOfWeek)
                                     {
-                                        StudentId = item.StudentId,
-                                        AbsentDateTime = day
-                                    });
+                                        case DayOfWeek.Monday:
+                                            Guid mondayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Monday).ModuleCodeId;
+                                            if (mondayModuleCodeId == stud.MondayModuleCodeId)
+                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                            break;
+
+                                        case DayOfWeek.Tuesday:
+                                            Guid tuesdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Tuesday).ModuleCodeId;
+                                            if (tuesdayModuleCodeId == stud.TuesdayModuleCodeId)
+                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                            break;
+
+                                        case DayOfWeek.Wednesday:
+                                            Guid wednesdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Wednesday).ModuleCodeId;
+                                            if (wednesdayModuleCodeId == stud.WednesdayModuleCodeId)
+                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                            break;
+
+                                        case DayOfWeek.Thursday:
+                                            Guid thursdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Thursday).ModuleCodeId;
+                                            if (thursdayModuleCodeId == stud.ThursdayModuleCodeId)
+                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                            break;
+
+                                        case DayOfWeek.Friday:
+                                            Guid fridayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Friday).ModuleCodeId;
+                                            if (fridayModuleCodeId == stud.FridayModuleCodeId)
+                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                            break;
+                                    }
+                                }
+
+                                   
                             }
                         }
                     }
-
-                    //if (studentScreenings.Count() > 0)
-                    //{
-                    //    //  loop through DateRange to find absentt days (is at school some days in DateRange)
-                    //    foreach (DateTime day in EachCalendarDay(startDate, endDate))
-                    //    {
-                    //        var recordExists = studentScreenings.Any(i => i.ScreeningTimeStamp.Day == day.Day &&
-                    //                                                                                                  i.ScreeningTimeStamp.Month == day.Month &&
-                    //                                                                                                  i.ScreeningTimeStamp.Year == day.Year);
-                    //        if (!recordExists)
-                    //            returnList.Add(new AbsenteeViewModel()
-                    //            {
-                    //                StudentId = item.StudentId,
-                    //                AbsentDateTime = day
-                    //            });
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    //  add a new record for each day (student absent every day in the DateRange)
-                    //    foreach (DateTime day in EachCalendarDay(startDate, endDate))
-                    //    {
-                    //        returnList.Add(new AbsenteeViewModel()
-                    //        {
-                    //            StudentId = item.StudentId,
-                    //            AbsentDateTime = day
-                    //        });
-                    //    }
-                    //}
                 }
-
                 return returnList;
             }
             catch (Exception ex)
@@ -176,51 +147,55 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                DateTime startDate = Convert.ToDateTime(startDateString);
-                DateTime endDate = Convert.ToDateTime(endDateString);
+                var currentStudent = _context.Students.FirstOrDefault(i => !i.IsDeleted && i.StudentId == Guid.Parse(studentId));
+                var studentScreenings = GetStudentScreenings(Guid.Parse(studentId), Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString));
+                if (studentScreenings.Count() <= 0)
+                    throw new Exception("No student screening records found.");
 
-                //  Student list
-                var student = _context.Students.FirstOrDefault(i => i.StudentId.ToString().ToUpper() == studentId.ToUpper() && !i.IsDeleted);
-                if (student == null)
-                    throw new Exception("No student found.");
-
-                //  Screening list
-                var screeningList = GetStudentScreeningForDateRange(student.StudentClass.GradeInt, startDate, endDate);
-                if (screeningList.Count() <= 0)
-                    throw new Exception("No student screenings found.");
-
-                //  Return list
                 List<AbsenteeViewModel> returnList = new List<AbsenteeViewModel>();
 
-                //  Process for absentee records
-                var studentScreenings = screeningList.Where(i => i.StudentId == student.StudentId).ToList();
                 if (studentScreenings.Count() > 0)
                 {
-                    //  loop through DateRange to find absentt days (is at school some days in DateRange)
-                    foreach (DateTime day in EachCalendarDay(startDate, endDate))
+                    var moduleRosterList = _context.GradeModuleRoster.Where(i => !i.IsDeleted && i.GradeInt == Convert.ToInt32(currentStudent.StudentClass.GradeInt)).ToList();
+
+                    foreach (DateTime day in EachCalendarDay(Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString)))
                     {
-                        //  check in studentScreenings if record exists for day in DateRange
-                        var recordExists = studentScreenings.Any(i => i.ScreeningTimeStamp.Day == day.Day &&
-                                                                                                                     i.ScreeningTimeStamp.Month == day.Month &&
-                                                                                                                     i.ScreeningTimeStamp.Year == day.Year);
-                        if (!recordExists)
-                            returnList.Add(new AbsenteeViewModel()
-                            {
-                                StudentId = student.StudentId,
-                                AbsentDateTime = day
-                            });
-                    }
-                }
-                else
-                {
-                    //  add a new record for each day (student absent every day in the DateRange)
-                    foreach (DateTime day in EachCalendarDay(startDate, endDate))
-                    {
-                        returnList.Add(new AbsenteeViewModel()
+                        //  check if no screening record exists for the student on this day
+                        if (!CheckIfStudentHasScreeningForDateTime(day, studentScreenings, currentStudent.StudentId))
                         {
-                            StudentId = student.StudentId,
-                            AbsentDateTime = day
-                        });
+                            switch (day.DayOfWeek)
+                            {
+                                case DayOfWeek.Monday:
+                                    Guid mondayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Monday).ModuleCodeId;
+                                    if (mondayModuleCodeId == currentStudent.MondayModuleCodeId)
+                                        returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = currentStudent.StudentId });
+                                    break;
+
+                                case DayOfWeek.Tuesday:
+                                    Guid tuesdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Tuesday).ModuleCodeId;
+                                    if (tuesdayModuleCodeId == currentStudent.TuesdayModuleCodeId)
+                                        returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = currentStudent.StudentId });
+                                    break;
+
+                                case DayOfWeek.Wednesday:
+                                    Guid wednesdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Wednesday).ModuleCodeId;
+                                    if (wednesdayModuleCodeId == currentStudent.WednesdayModuleCodeId)
+                                        returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = currentStudent.StudentId });
+                                    break;
+
+                                case DayOfWeek.Thursday:
+                                    Guid thursdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Thursday).ModuleCodeId;
+                                    if (thursdayModuleCodeId == currentStudent.ThursdayModuleCodeId)
+                                        returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = currentStudent.StudentId });
+                                    break;
+
+                                case DayOfWeek.Friday:
+                                    Guid fridayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Friday).ModuleCodeId;
+                                    if (fridayModuleCodeId == currentStudent.FridayModuleCodeId)
+                                        returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = currentStudent.StudentId });
+                                    break;
+                            }
+                        }
                     }
                 }
 
@@ -233,7 +208,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        private List<StudentScreening> GetStudentScreeningForDateRange(Int32 gradeInt, DateTime startDate, DateTime endDate)
+        [Authorize]
+        private List<StudentScreening> GetGradeScreenings(Int32 gradeInt, DateTime startDate, DateTime endDate)
         {
             try
             {
@@ -253,12 +229,35 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
+        [Authorize]
+        private List<StudentScreening> GetStudentScreenings(Guid studentId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && i.StudentId == studentId &&
+                                                                                                                    (i.ScreeningTimeStamp.Year >= startDate.Year && i.ScreeningTimeStamp.Year <= endDate.Year) &&
+                                                                                                                    (i.ScreeningTimeStamp.Month >= startDate.Month && i.ScreeningTimeStamp.Month <= endDate.Month) &&
+                                                                                                                    (i.ScreeningTimeStamp.Day >= startDate.Day && i.ScreeningTimeStamp.Day <= endDate.Day)).ToList();
+                if (returnList.Count() == 0)
+                    return new List<StudentScreening>();
+
+                return returnList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new List<StudentScreening>();
+            }
+        }
+
+        [Authorize]
         private IEnumerable<DateTime> EachCalendarDay(DateTime startDate, DateTime endDate)
         {
             for (var date = startDate.Date; date.Date <= endDate.Date; date = date.AddDays(1)) yield
             return date;
         }
 
+        [Authorize]
         private String GenerateStudentFullNameWithClass(Student student)
         {
             try
@@ -269,6 +268,24 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 _logger.LogError(ex.Message);
                 return String.Empty;
+            }
+        }
+
+        [Authorize]
+        private Boolean CheckIfStudentHasScreeningForDateTime(DateTime dtOne, List<StudentScreening> studScreenList, Guid studentId)
+        {
+            try
+            {
+                return studScreenList.Any(i => !i.IsDeleted && 
+                                                                            i.ScreeningTimeStamp.Year == dtOne.Year && 
+                                                                            i.ScreeningTimeStamp.Month == dtOne.Month && 
+                                                                            i.ScreeningTimeStamp.Day == dtOne.Day && 
+                                                                            i.StudentId == studentId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
             }
         }
 

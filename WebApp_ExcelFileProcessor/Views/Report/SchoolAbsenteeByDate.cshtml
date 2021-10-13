@@ -49,6 +49,12 @@
 </div>
 
 <script>
+
+</script>
+  $(document).ready(function () {
+
+})
+<script>
     $(document).ready(function () {
         $("#btnClearFields").click(function () {
             $('#inputGrade').prop('selectedIndex', 0);
@@ -72,8 +78,7 @@
                         startDateString: startDateValue.toString(),
                         endDateString: endDateValue.toString()
                     },
-                    success: function (data) {
-                        console.log(data);
+                    success: function (data) {                     
                         loadingSpinner_Hide();
 
                         if (data.length == 0)
