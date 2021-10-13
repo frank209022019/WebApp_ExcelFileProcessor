@@ -133,7 +133,6 @@
 <!-- Module modal -->
 <partial name="_StudentTempModulePartialView" />
 
-
 <script>
 
     $(document).ready(function () {
@@ -206,6 +205,7 @@
         });
 
         $('#table-create').on('click', '.js-modal', function (data) {
+            loadingSpinner_Show();
             var button = $(this);
             var studTempId = button.attr("data-student-id");
 
@@ -214,6 +214,7 @@
                 type: 'GET',
                 data: { studentTempId: studTempId },
                 success: function (data) {
+                    loadingSpinner_Hide()
                     if (data != null) {
                         //  populate fields
                         setModalValues(data);
@@ -221,6 +222,7 @@
                     }
                 },
                 error: function () {
+                    loadingSpinner_Hide()
                    sweetAlertError("View Module Details", "An error occurred while trying to view module details.")
                 }
             });
@@ -276,6 +278,7 @@
         });
 
         $('#table-update').on('click', '.js-modal', function (data) {
+            loadingSpinner_Show();
             var button = $(this);
             var studTempId = button.attr("data-student-id");
 
@@ -283,14 +286,16 @@
                 url: "@Url.Action("GetStudentTempModuleViewModel", "BaseClass")",
                 type: 'GET',
                 data: { studentTempId: studTempId },
-                success: function (data) {
-                    if (data != null) {
-                        //  populate fields
-                        setModalValues(data);
-                        $('#moduleModal').modal('toggle');
-                    }
+                   success: function (data) {
+                       loadingSpinner_Hide()
+                        if (data != null) {
+                            //  populate fields
+                            setModalValues(data);
+                            $('#moduleModal').modal('toggle');
+                        }
                 },
-                error: function () {
+                   error: function () {
+                       loadingSpinner_Hide()
                    sweetAlertError("View Module Details", "An error occurred while trying to view module details.")
                 }
             });
@@ -370,8 +375,8 @@
                     data: "studentTempId",
                     render: function (data) {
                         var result = "<div class='row text-center'>"
-                        result += "<div class='col-6'><button class='btn btn-outline-secondary js-modal control-full-width' data-student-id=" + data + ">View Module</button></div>";
-                        result += "<div class='col-6'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove Action</button></div>";
+                        result += "<div class='col-6'><button class='btn btn-outline-secondary js-modal control-full-width' data-student-id=" + data + ">Modules</button></div>";
+                        result += "<div class='col-6'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove</button></div>";
                         result += "</div>";
                         return result;
                     }
@@ -454,8 +459,8 @@
                     data: "studentTempId",
                     render: function (data) {
                         var result = "<div class='row text-center'>"
-                        result += "<div class='col-6'><button class='btn btn-outline-secondary js-modal control-full-width' data-student-id=" + data + ">View Modules</button></div>";
-                        result += "<div class='col-6'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove Action</button></div>";
+                        result += "<div class='col-6'><button class='btn btn-outline-secondary js-modal control-full-width' data-student-id=" + data + ">Modules</button></div>";
+                        result += "<div class='col-6'><button class='btn btn-outline-danger js-delete control-full-width' data-student-id=" + data + ">Remove</button></div>";
                         result += "</div>";
                         return result;
                     }
@@ -562,7 +567,6 @@
         var ext2Sub = $('#txtExt2String');
         var ext3Code = $('#txtExt3Code');
         var ext3Sub = $('#txtExt3String');
-
 
         monCode.val(validObj.mondayModuleCode);
         monSub.val(validObj.mondaySubjectString);

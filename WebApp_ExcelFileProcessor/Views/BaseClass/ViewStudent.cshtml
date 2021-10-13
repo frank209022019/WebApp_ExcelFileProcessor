@@ -4,6 +4,9 @@
     ViewData["Title"] = "View Student";
 }
 
+<style>
+</style>
+
 <!--Header-->
 <div class="form-row custom-row-responsiveness">
     <div class="col-12 custom-col-responsiveness mb-2">
@@ -12,49 +15,160 @@
     </div>
 </div>
 
-<!--Content-->
-<div class="form-row custom-row-responsiveness">
-    <input type="hidden" asp-for="StudentId" value="@Model.StudentId" />
-    <input type="hidden" asp-for="DateCreated" value="@Model.DateCreated" />
-    <input type="hidden" asp-for="IsDeleted" value="@Model.IsDeleted" />
+<!--Tab Header-->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#student-nav" role="tab">Student Information</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#module-nav" role="tab">Module Information</a>
+    </li>
+</ul>
 
-    <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
-        <div class="form-group">
-            <label asp-for="StudentNr" class="control-label"></label>
-            <input asp-for="StudentNr" class="form-control" readonly />
-            <span asp-validation-for="StudentNr" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="QRCode" class="control-label"></label>
-            <input asp-for="QRCode" class="form-control" readonly />
-            <span asp-validation-for="QRCode" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="FirstName" class="control-label"></label>
-            <input asp-for="FirstName" class="form-control" readonly />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="QRCode" class="control-label"></label>
-            <input asp-for="QRCode" class="form-control" readonly />
-            <span asp-validation-for="QRCode" class="text-danger"></span>
+<div class="tab-content mt-1">
+    <div role="tabpanel" class="tab-pane active" id="student-nav">
+        <!--Student Information Tab--->
+        <div class="form-row custom-row-responsiveness">
+            <input type="hidden" asp-for="StudentId" value="@Model.StudentId" />
+            <input type="hidden" asp-for="DateCreated" value="@Model.DateCreated" />
+            <input type="hidden" asp-for="IsDeleted" value="@Model.IsDeleted" />
+
+            <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+                <div class="form-group">
+                    <label asp-for="StudentNr" class="control-label"></label>
+                    <input asp-for="StudentNr" class="form-control" readonly />
+                    <span asp-validation-for="StudentNr" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="QRCode" class="control-label"></label>
+                    <input asp-for="QRCode" class="form-control" readonly />
+                    <span asp-validation-for="QRCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" readonly />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="QRCode" class="control-label"></label>
+                    <input asp-for="QRCode" class="form-control" readonly />
+                    <span asp-validation-for="QRCode" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
+                <div class="form-group">
+                    <label asp-for="Gender.GenderName" class="control-label"></label>
+                    <input asp-for="Gender.GenderName" class="form-control" readonly />
+                    <span asp-validation-for="Gender.GenderName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StudentClass.DisplayName" class="control-label"></label>
+                    <input asp-for="StudentClass.DisplayName" class="form-control" readonly />
+                    <span asp-validation-for="StudentClass.DisplayName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StudentGroup.DisplayName" class="control-label"></label>
+                    <input asp-for="StudentGroup.DisplayName" class="form-control" readonly />
+                    <span asp-validation-for="StudentGroup.DisplayName" class="text-danger"></span>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">
-        <div class="form-group">
-            <label asp-for="Gender.GenderName" class="control-label"></label>
-            <input asp-for="Gender.GenderName" class="form-control" readonly />
-            <span asp-validation-for="Gender.GenderName" class="text-danger"></span>
-        </div>     
-        <div class="form-group">
-            <label asp-for="StudentClass.DisplayName" class="control-label"></label>
-            <input asp-for="StudentClass.DisplayName" class="form-control" readonly />
-            <span asp-validation-for="StudentClass.DisplayName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="StudentGroup.DisplayName" class="control-label"></label>
-            <input asp-for="StudentGroup.DisplayName" class="form-control" readonly />
-            <span asp-validation-for="StudentGroup.DisplayName" class="text-danger"></span>
+    <div role="tabpanel" class="tab-pane" id="module-nav">
+        <!--Module Information Tab-->
+        <div class="form-row custom-row-responsiveness">
+
+            <!--Weekdays-->
+            <div class="col-xl-3 col-md-12 custom-col-responsiveness mb-2">
+                <div class="form-group">
+                    <label asp-for="MondayModuleCodeId" class="control-label"></label>
+                    <input asp-for="MondayModuleCode.ModuleCodeName" class="form-control" readonly />
+                    <span asp-validation-for="MondayModuleCode.ModuleCodeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TuesdayModuleCodeId" class="control-label"></label>
+                    <input asp-for="TuesdayModuleCode.ModuleCodeName" class="form-control" readonly />
+                    <span asp-validation-for="TuesdayModuleCode.ModuleCodeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WednesdayModuleCodeId" class="control-label"></label>
+                    <input asp-for="WednesdayModuleCode.ModuleCodeName" class="form-control" readonly />
+                    <span asp-validation-for="WednesdayModuleCode.ModuleCodeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ThursdayModuleCodeId" class="control-label"></label>
+                    <input asp-for="ThursdayModuleCode.ModuleCodeName" class="form-control" readonly />
+                    <span asp-validation-for="ThursdayModuleCode.ModuleCodeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FridayModuleCodeId" class="control-label"></label>
+                    <input asp-for="FridayModuleCode.ModuleCodeName" class="form-control" readonly />
+                    <span asp-validation-for="FridayModuleCode.ModuleCodeName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-12 custom-col-responsiveness mb-2">
+                <div class="form-group">
+                    <label asp-for="MondaySubjString" class="control-label"></label>
+                    <input asp-for="MondaySubjString" class="form-control" readonly />
+                    <span asp-validation-for="MondaySubjString" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TuesdaySubjString" class="control-label"></label>
+                    <input asp-for="TuesdaySubjString" class="form-control" readonly />
+                    <span asp-validation-for="TuesdaySubjString" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WednesdaySubjString" class="control-label"></label>
+                    <input asp-for="WednesdaySubjString" class="form-control" readonly />
+                    <span asp-validation-for="WednesdaySubjString" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ThursdaySubjString" class="control-label"></label>
+                    <input asp-for="ThursdaySubjString" class="form-control" readonly />
+                    <span asp-validation-for="ThursdaySubjString" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FridaySubjString" class="control-label"></label>
+                    <input asp-for="FridaySubjString" class="form-control" readonly />
+                    <span asp-validation-for="FridaySubjString" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!--Extra-->
+            <div class="col-xl-3 col-md-12 custom-col-responsiveness mb-2">
+                <div class="form-group">
+                    <label asp-for="Extra1ModuleCodeId" class="control-label"></label>
+                    <input asp-for="Extra1ModuleCode.ModuleCodeName" class="form-control" readonly />
+                    <span asp-validation-for="Extra1ModuleCode.ModuleCodeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Extra2ModuleCodeId" class="control-label"></label>
+                    <input asp-for="Extra2ModuleCode.ModuleCodeName" class="form-control" readonly />
+                    <span asp-validation-for="Extra2ModuleCode.ModuleCodeName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Extra3ModuleCodeId" class="control-label"></label>
+                    <input asp-for="Extra3ModuleCode.ModuleCodeName" class="form-control" readonly />
+                    <span asp-validation-for="Extra3ModuleCode.ModuleCodeName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-12 custom-col-responsiveness mb-2">
+                <div class="form-group">
+                    <label asp-for="Extra1SubjString" class="control-label"></label>
+                    <input asp-for="Extra1SubjString" class="form-control" readonly />
+                    <span asp-validation-for="Extra1SubjString" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Extra2SubjString" class="control-label"></label>
+                    <input asp-for="Extra2SubjString" class="form-control" readonly />
+                    <span asp-validation-for="Extra2SubjString" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Extra3SubjString" class="control-label"></label>
+                    <input asp-for="Extra3SubjString" class="form-control" readonly />
+                    <span asp-validation-for="Extra3SubjString" class="text-danger"></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

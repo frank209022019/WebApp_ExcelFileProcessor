@@ -51,60 +51,76 @@ namespace WebApp_ExcelFileProcessor.Models
         [ForeignKey("StudentGroupId")]
         public virtual StudentGroup StudentGroup { get; set; }
 
+        [Display(Name = "Monday Module Code")]
         public Guid? MondayModuleCodeId { get; set; }
 
         [ForeignKey("MondayModuleCodeId")]
         public virtual ModuleCode MondayModuleCode { get; set; }
 
+        [Display(Name = "Monday Subject")]
         public String MondaySubjString { get; set; }
 
+        [Display(Name = "Tuesday Module Code")]
         public Guid? TuesdayModuleCodeId { get; set; }
 
         [ForeignKey("TuesdayModuleCodeId")]
         public virtual ModuleCode TuesdayModuleCode { get; set; }
 
+        [Display(Name = "Tuesday Subject")]
         public String TuesdaySubjString { get; set; }
 
+        [Display(Name = "Wednesday Module Code")]
         public Guid? WednesdayModuleCodeId { get; set; }
 
         [ForeignKey("WednesdayModuleCodeId")]
         public virtual ModuleCode WednesdayModuleCode { get; set; }
 
+        [Display(Name = "Wedneday Subject")]
         public String WednesdaySubjString { get; set; }
 
+        [Display(Name = "Thursday Module Code")]
         public Guid? ThursdayModuleCodeId { get; set; }
 
         [ForeignKey("ThursdayModuleCodeId")]
         public virtual ModuleCode ThursdayModuleCode { get; set; }
 
+        [Display(Name = "Thursday Subject")]
         public String ThursdaySubjString { get; set; }
 
+        [Display(Name = "Friday Module Code")]
         public Guid? FridayModuleCodeId { get; set; }
 
         [ForeignKey("FridayModuleCodeId")]
         public virtual ModuleCode FridayModuleCode { get; set; }
 
+        [Display(Name = "Friday Subject")]
         public String FridaySubjString { get; set; }
 
+        [Display(Name = "Extra 1 Module Code")]
         public Guid? Extra1ModuleCodeId { get; set; }
 
         [ForeignKey("Extra1ModuleCodeId")]
         public virtual ModuleCode Extra1ModuleCode { get; set; }
 
+        [Display(Name = "Extra 1 Subject")]
         public String Extra1SubjString { get; set; }
 
+        [Display(Name = "Extra 2 Module Code")]
         public Guid? Extra2ModuleCodeId { get; set; }
 
         [ForeignKey("Extra2ModuleCodeId")]
         public virtual ModuleCode Extra2ModuleCode { get; set; }
 
+        [Display(Name = "Extra 2 Subject")]
         public String Extra2SubjString { get; set; }
 
+        [Display(Name = "Extra 3 Module Code")]
         public Guid? Extra3ModuleCodeId { get; set; }
 
         [ForeignKey("Extra3ModuleCodeId")]
         public virtual ModuleCode Extra3ModuleCode { get; set; }
 
+        [Display(Name = "Extra 3 Subject")]
         public String Extra3SubjString { get; set; }
 
         [NotMapped]

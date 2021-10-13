@@ -209,6 +209,22 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 currModel.GenderId = model.GenderId;
                 currModel.StudentClassId = model.StudentClassId;
                 currModel.StudentGroupId = model.StudentGroupId;
+                currModel.MondayModuleCodeId = model.MondayModuleCodeId;
+                currModel.MondaySubjString = model.MondaySubjString;
+                currModel.TuesdayModuleCodeId = model.TuesdayModuleCodeId;
+                currModel.TuesdaySubjString = model.TuesdaySubjString;
+                currModel.WednesdayModuleCodeId = model.WednesdayModuleCodeId;
+                currModel.WednesdaySubjString = model.WednesdaySubjString;
+                currModel.ThursdayModuleCodeId = model.ThursdayModuleCodeId;
+                currModel.ThursdaySubjString = model.ThursdaySubjString;
+                currModel.FridayModuleCodeId = model.FridayModuleCodeId;
+                currModel.FridaySubjString = model.FridaySubjString;
+                currModel.Extra1ModuleCodeId = model.Extra1ModuleCodeId;
+                currModel.Extra1SubjString = model.Extra1SubjString;
+                currModel.Extra2ModuleCodeId = model.Extra2ModuleCodeId;
+                currModel.Extra2SubjString = model.Extra2SubjString;
+                currModel.Extra3ModuleCodeId = model.Extra3ModuleCodeId;
+                currModel.Extra3SubjString = model.Extra3SubjString;
                 _context.Students.Update(currModel);
                 _context.SaveChanges();
 
@@ -266,9 +282,14 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 var model = _context.Students.SingleOrDefault(i => i.StudentId.ToString().ToUpper() == StudentId.ToUpper());
                 if (model != null)
+                {
+                    model = UpdateStudentWithLists(model);
                     return View(model);
+                }
                 else
+                {
                     return View(new Student() { });
+                }
             }
             catch (Exception ex)
             {
@@ -742,7 +763,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && i.LastName.ToUpper() == tempModel.LastName.ToUpper() && !i.IsDeleted);
+                return _context.Students.Any(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && !i.IsDeleted);
             }
             catch (Exception ex)
             {
@@ -790,38 +811,52 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         totalUpdates++;
 
                     //  Monday
-                    if (currModel.MondayModuleCodeId.ToString().ToUpper() != tempModel.MondayModuleCodeId.ToString().ToUpper())
+                    if (!CompareGuid(currModel.MondayModuleCodeId, tempModel.MondayModuleCodeId))
                         totalUpdates++;
-                    if (currModel.MondaySubjString.ToString().ToUpper() != tempModel.MondaySubjString.ToString().ToUpper())
+                    if (!CompareString(currModel.MondaySubjString, tempModel.MondaySubjString))
                         totalUpdates++;
 
                     //  Tuesday
-                    if (currModel.TuesdayModuleCodeId.ToString().ToUpper() != tempModel.TuesdayModuleCodeId.ToString().ToUpper())
+                    if (!CompareGuid(currModel.TuesdayModuleCodeId, tempModel.TuesdayModuleCodeId))
                         totalUpdates++;
-                    if (currModel.TuesdaySubjString.ToString().ToUpper() != tempModel.TuesdaySubjString.ToString().ToUpper())
+                    if (!CompareString(currModel.TuesdaySubjString, tempModel.TuesdaySubjString))
                         totalUpdates++;
 
                     //  Wednesday
-                    if (currModel.WednesdayModuleCodeId.ToString().ToUpper() != tempModel.WednesdayModuleCodeId.ToString().ToUpper())
+                    if (!CompareGuid(currModel.WednesdayModuleCodeId, tempModel.WednesdayModuleCodeId))
                         totalUpdates++;
-                    if (currModel.WednesdaySubjString.ToString().ToUpper() != tempModel.WednesdaySubjString.ToString().ToUpper())
+                    if (!CompareString(currModel.WednesdaySubjString, tempModel.WednesdaySubjString))
                         totalUpdates++;
 
                     //  Thursday
-                    if (currModel.ThursdayModuleCodeId.ToString().ToUpper() != tempModel.ThursdayModuleCodeId.ToString().ToUpper())
+                    if (!CompareGuid(currModel.ThursdayModuleCodeId, tempModel.ThursdayModuleCodeId))
                         totalUpdates++;
-                    if (currModel.ThursdaySubjString.ToString().ToUpper() != tempModel.ThursdaySubjString.ToString().ToUpper())
+                    if (!CompareString(currModel.ThursdaySubjString, tempModel.ThursdaySubjString))
                         totalUpdates++;
 
                     //  Friday
-                    if (currModel.FridayModuleCodeId.ToString().ToUpper() != tempModel.FridayModuleCodeId.ToString().ToUpper())
+                    if (!CompareGuid(currModel.FridayModuleCodeId, tempModel.FridayModuleCodeId))
                         totalUpdates++;
-                    if (currModel.FridaySubjString.ToString().ToUpper() != tempModel.FridaySubjString.ToString().ToUpper())
+                    if (!CompareString(currModel.FridaySubjString, tempModel.FridaySubjString))
                         totalUpdates++;
 
                     //  Extra01
+                    if (!CompareGuid(currModel.Extra1ModuleCodeId, tempModel.Extra1ModuleCodeId))
+                        totalUpdates++;
+                    if (!CompareString(currModel.Extra1SubjString, tempModel.Extra1SubjString))
+                        totalUpdates++;
+
                     //  Extra02
+                    if (!CompareGuid(currModel.Extra2ModuleCodeId, tempModel.Extra2ModuleCodeId))
+                        totalUpdates++;
+                    if (!CompareString(currModel.Extra2SubjString, tempModel.Extra2SubjString))
+                        totalUpdates++;
+
                     //  Extra03
+                    if (!CompareGuid(currModel.Extra3ModuleCodeId, tempModel.Extra3ModuleCodeId))
+                        totalUpdates++;
+                    if (!CompareString(currModel.Extra3SubjString, tempModel.Extra3SubjString))
+                        totalUpdates++;
                 }
 
                 if (totalUpdates > 0)
@@ -988,7 +1023,23 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 StudentClassId = (Guid)item.StudentClassId,
                                 StudentGroupId = (Guid)item.StudentGroupId,
                                 IsDeleted = false,
-                                DateCreated = DateTime.Now
+                                DateCreated = DateTime.Now,
+                                MondayModuleCodeId = item.MondayModuleCodeId,
+                                MondaySubjString = item.MondaySubjString,
+                                TuesdayModuleCodeId = item.TuesdayModuleCodeId,
+                                TuesdaySubjString = item.TuesdaySubjString,
+                                WednesdayModuleCodeId = item.WednesdayModuleCodeId,
+                                WednesdaySubjString = item.WednesdaySubjString,
+                                ThursdayModuleCodeId = item.ThursdayModuleCodeId,
+                                ThursdaySubjString = item.ThursdaySubjString,
+                                FridayModuleCodeId = item.FridayModuleCodeId,
+                                FridaySubjString = item.FridaySubjString,
+                                Extra1ModuleCodeId = item.Extra1ModuleCodeId,
+                                Extra1SubjString = item.Extra1SubjString,
+                                Extra2ModuleCodeId = item.Extra2ModuleCodeId,
+                                Extra2SubjString = item.Extra2SubjString,
+                                Extra3ModuleCodeId = item.Extra3ModuleCodeId,
+                                Extra3SubjString = item.Extra3SubjString
                             });
                         }
                         _context.Students.AddRange(studentList);
@@ -1012,6 +1063,22 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                 currStudent.GenderId = (Guid)item.GenderId;
                                 currStudent.StudentClassId = (Guid)item.StudentClassId;
                                 currStudent.StudentGroupId = (Guid)item.StudentGroupId;
+                                currStudent.MondayModuleCodeId = item.MondayModuleCodeId;
+                                currStudent.MondaySubjString = item.MondaySubjString;
+                                currStudent.TuesdayModuleCodeId = item.TuesdayModuleCodeId;
+                                currStudent.TuesdaySubjString = item.TuesdaySubjString;
+                                currStudent.WednesdayModuleCodeId = item.WednesdayModuleCodeId;
+                                currStudent.WednesdaySubjString = item.WednesdaySubjString;
+                                currStudent.ThursdayModuleCodeId = item.ThursdayModuleCodeId;
+                                currStudent.ThursdaySubjString = item.ThursdaySubjString;
+                                currStudent.FridayModuleCodeId = item.FridayModuleCodeId;
+                                currStudent.FridaySubjString = item.FridaySubjString;
+                                currStudent.Extra1ModuleCodeId = item.Extra1ModuleCodeId;
+                                currStudent.Extra1SubjString = item.Extra1SubjString;
+                                currStudent.Extra2ModuleCodeId = item.Extra2ModuleCodeId;
+                                currStudent.Extra2SubjString = item.Extra2SubjString;
+                                currStudent.Extra3ModuleCodeId = item.Extra3ModuleCodeId;
+                                currStudent.Extra3SubjString = item.Extra3SubjString;
                                 _context.SaveChanges();
                             }
                         }
@@ -1088,7 +1155,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                var record = _context.StudentTemps.FirstOrDefault(i => !i.IsDeleted && i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());    
+                var record = _context.StudentTemps.FirstOrDefault(i => !i.IsDeleted && i.StudentTempId.ToString().ToUpper() == studentTempId.ToUpper());
 
                 return new StudentModuleViewModel()
                 {
@@ -1121,6 +1188,53 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 _logger.LogError(ex.Message);
                 return new StudentModuleViewModel();
+            }
+        }
+
+        [Authorize]
+        private Boolean CompareGuid(Guid? guidOne, Guid? guidTwo)
+        {
+            //  check if equal (true) : not equal (false)
+            try
+            {
+                if (guidOne == null && guidTwo != null)
+                    return false;
+                if (guidOne != null && guidTwo == null)
+                    return false;
+                if (guidOne == null && guidTwo == null)
+                    return true;
+                if (guidOne.ToString().ToUpper() == guidTwo.ToString().ToUpper())
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
+            }
+        }
+
+        private Boolean CompareString(String stringOne, String stringTwo)
+        {
+            //  check if equal (true) : not equal (false)
+            try
+            {
+                if (stringOne == null && stringTwo != null)
+                    return false;
+                if (stringOne != null && stringTwo == null)
+                    return false;
+                if (stringOne == null && stringTwo == null)
+                    return true;
+                if (stringOne.ToString().ToUpper() == stringTwo.ToString().ToUpper())
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
             }
         }
 
