@@ -125,9 +125,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                                 returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
                                             break;
                                     }
-                                }
-
-                                   
+                                }                                   
                             }
                         }
                     }

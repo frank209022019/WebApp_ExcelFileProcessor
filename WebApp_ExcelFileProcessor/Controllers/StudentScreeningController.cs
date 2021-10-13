@@ -417,11 +417,15 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentColor"));
 
                                         //  Get StudentId for record
-                                        var getStudentId = _context.Students.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCodeId.ToUpper() && !i.IsDeleted).StudentId;
-                                        if (getStudentId == Guid.Empty)
+                                        var getStudentId = _context.Students.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCodeId.ToUpper() && !i.IsDeleted);
+
+                                        if(getStudentId == null )
+                                            throw new Exception("Student does not exist in database");
+
+                                        if (getStudentId.StudentId == Guid.Empty)
                                             rowHasError = true;
                                         else
-                                            tempModel.StudentId = getStudentId;
+                                            tempModel.StudentId = getStudentId.StudentId;
                                     }
 
                                     //  Temp
