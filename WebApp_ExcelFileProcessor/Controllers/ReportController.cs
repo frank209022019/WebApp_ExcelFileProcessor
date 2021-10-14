@@ -362,7 +362,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         wsSheet1.Cells[row, 1].Value = item.AbsentDateTime.ToString("dd-MM-yyyy");
                         wsSheet1.Cells[row, 2].Value = temp.QRCode;
                         wsSheet1.Cells[row, 3].Value = temp.FirstName;
-                        wsSheet1.Cells[row, 3].Value = temp.LastName;
+                        wsSheet1.Cells[row, 4].Value = temp.LastName;
                         wsSheet1.Cells[row, 5].Value = temp.StudentClass.DisplayName;
                         wsSheet1.Cells[row, 6].Value = temp.StudentGroup.DisplayName;   
                         row++;
@@ -426,6 +426,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
             //  Column names
             ws.Cells[1, 1, 1, 6].Style.Font.Bold = true;
+            ws.Cells[2, 1, 2, 6].Style.Font.Bold = true;
             ws.Cells["A2"].Value = "Absent Date";
             ws.Cells["B2"].Value = "QR Code";
             ws.Cells["C2"].Value = "First Name";
@@ -446,6 +447,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
             //  Column names
             ws.Cells[1, 1, 1, 6].Style.Font.Bold = true;
+            ws.Cells[2, 1, 2, 6].Style.Font.Bold = true;
             ws.Cells["A2"].Value = "QR Code";
             ws.Cells["B2"].Value = "First Name";
             ws.Cells["C2"].Value = "Last Name";
@@ -460,16 +462,24 @@ namespace WebApp_ExcelFileProcessor.Controllers
         [HttpGet]
         public ActionResult ExportAbsenteeReport(String fileGuid)
         {
-            if (TempData[fileGuid] != null)
+           try
             {
-                var fileRecord = _context.ExcelDownloads.FirstOrDefault(i => i.ExcelDownloadId == Guid.Parse(fileGuid));
-                fileRecord.IsDeleted = true;
-                _context.SaveChanges();
+                if (fileGuid != null && fileGuid != String.Empty)
+                {
+                    var fileRecord = _context.ExcelDownloads.FirstOrDefault(i => i.ExcelDownloadId == Guid.Parse(fileGuid));
+                    fileRecord.IsDeleted = true;
+                    _context.SaveChanges();
 
-                return File(fileRecord.FileByteArray, "application/vnd.ms-excel", fileRecord.FileName);
+                    return File(fileRecord.FileByteArray, "application/vnd.ms-excel", fileRecord.FileName);
+                }
+                else
+                {
+                    throw new Exception("Invalid report parameter used.");
+                }
             }
-            else
+            catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest("Could not download report");
             }
         }

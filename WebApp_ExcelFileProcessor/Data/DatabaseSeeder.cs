@@ -14,10 +14,10 @@ namespace WebApp_ExcelFileProcessor.Data
         public static void SeedData(ApplicationDbContext context)
         {
             _context = context;
+            SeedUserData();
             SeedGenders();
             SeedClasses();
             SeedGroups();
-            SeedUserData();
             SeedModuleCodes();
             SeedModuleRoster();
             _context.SaveChanges();
