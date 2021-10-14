@@ -400,11 +400,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     for (int col = 1; col <= 12; col++)
                                     {
                                         //  skip over general sense of wellbeing
-                                        if(col != 3)
+                                        if (col != 3)
                                         {
                                             if (worksheet.Cells[row, col].Value == null)
                                                 rowHasError = true;
-                                        }                                      
+                                        }
                                     }
 
                                     //  QRCodeId
@@ -419,7 +419,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                         //  Get StudentId for record
                                         var getStudentId = _context.Students.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCodeId.ToUpper() && !i.IsDeleted);
 
-                                        if(getStudentId == null )
+                                        if (getStudentId == null)
                                             throw new Exception("Student does not exist in database");
 
                                         if (getStudentId.StudentId == Guid.Empty)

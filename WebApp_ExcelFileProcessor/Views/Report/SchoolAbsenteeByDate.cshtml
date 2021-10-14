@@ -110,7 +110,7 @@
                         if (data == null)
                             sweetAlertWarning("School Absent Report", "No records were found matching your parameters.");
                         else
-                            window.location.href = '/Report/ExportAbsenteeReport?fileGuid=' + data.toString();                        
+                            window.location.href = '/Report/ExportAbsenteeReport?fileGuid=' + data.toString();
                         },
                         error: function (data) {
                             loadingSpinner_Hide();

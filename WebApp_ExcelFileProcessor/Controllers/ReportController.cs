@@ -85,7 +85,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                 if (studentScreeningsList.Count() > 0)
                 {
-                    var studentList = _context.Students.Where(i => !i.IsDeleted && 
+                    var studentList = _context.Students.Where(i => !i.IsDeleted &&
                                                                                                         i.StudentClass.DisplayName.ToUpper() == gradeClass.ToUpper() &&
                                                                                                         i.StudentGroup.DisplayName.ToUpper() == groupValue.ToUpper()).ToList();
                     var moduleRosterList = _context.GradeModuleRoster.Where(i => !i.IsDeleted && i.GradeInt == Convert.ToInt32(gradeString)).ToList();
@@ -135,19 +135,18 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                                 returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
                                             break;
                                     }
-                                }                                   
+                                }
                             }
                         }
                     }
                 }
                 //  Generate report - can be downloaded
-                String reportGeneratedString= GenerateExcelReport(returnList, Convert.ToDateTime(startDateString).ToString("dd-MM-yyyy"), Convert.ToDateTime(endDateString).ToString("dd-MM-yyyy"));
+                String reportGeneratedString = GenerateExcelReport(returnList, Convert.ToDateTime(startDateString).ToString("dd-MM-yyyy"), Convert.ToDateTime(endDateString).ToString("dd-MM-yyyy"));
 
                 if (reportGeneratedString == null)
                     throw new Exception("Error occurred while genereating report.");
 
                 return reportGeneratedString;
-             
             }
             catch (Exception ex)
             {
@@ -233,7 +232,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && 
+                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted &&
                                                                                                                     i.Student.StudentClass.DisplayName.ToUpper() == gradeClass.ToUpper() &&
                                                                                                                     i.Student.StudentGroup.DisplayName.ToUpper() == groupName.ToUpper() &&
                                                                                                                     (i.ScreeningTimeStamp.Year >= startDate.Year && i.ScreeningTimeStamp.Year <= endDate.Year) &&
@@ -300,10 +299,10 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                return studScreenList.Any(i => !i.IsDeleted && 
-                                                                            i.ScreeningTimeStamp.Year == dtOne.Year && 
-                                                                            i.ScreeningTimeStamp.Month == dtOne.Month && 
-                                                                            i.ScreeningTimeStamp.Day == dtOne.Day && 
+                return studScreenList.Any(i => !i.IsDeleted &&
+                                                                            i.ScreeningTimeStamp.Year == dtOne.Year &&
+                                                                            i.ScreeningTimeStamp.Month == dtOne.Month &&
+                                                                            i.ScreeningTimeStamp.Day == dtOne.Day &&
                                                                             i.StudentId == studentId);
             }
             catch (Exception ex)
@@ -330,7 +329,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 };
                 return model;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return new DateRangeViewModel() { MinDateTime = DateTime.Now, MaxDateTime = DateTime.Now };
@@ -356,7 +355,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     ExcelWorksheet wsSheet1 = package.Workbook.Worksheets.Add("Absent Records");
                     wsSheet1 = BuildAbsentHeaders(wsSheet1, startDate, endDate);
                     Int32 row = 3;
-                    foreach(var item in absentList)
+                    foreach (var item in absentList)
                     {
                         var temp = studentList.FirstOrDefault(x => x.StudentId == item.StudentId);
                         wsSheet1.Cells[row, 1].Value = item.AbsentDateTime.ToString("dd-MM-yyyy");
@@ -364,11 +363,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         wsSheet1.Cells[row, 3].Value = temp.FirstName;
                         wsSheet1.Cells[row, 4].Value = temp.LastName;
                         wsSheet1.Cells[row, 5].Value = temp.StudentClass.DisplayName;
-                        wsSheet1.Cells[row, 6].Value = temp.StudentGroup.DisplayName;   
+                        wsSheet1.Cells[row, 6].Value = temp.StudentGroup.DisplayName;
                         row++;
-                    }               
+                    }
 
-                    //  Summary Worksheet                  
+                    //  Summary Worksheet
                     ExcelWorksheet wsSheet2 = package.Workbook.Worksheets.Add("Absent Summary");
                     wsSheet2 = BuildAbsentSummaryHeaders(wsSheet2, startDate, endDate);
                     row = 3;
@@ -462,7 +461,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         [HttpGet]
         public ActionResult ExportAbsenteeReport(String fileGuid)
         {
-           try
+            try
             {
                 if (fileGuid != null && fileGuid != String.Empty)
                 {
@@ -477,7 +476,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     throw new Exception("Invalid report parameter used.");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return BadRequest("Could not download report");
