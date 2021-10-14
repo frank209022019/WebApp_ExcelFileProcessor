@@ -73,12 +73,12 @@
                                 endDateString: endDateValue.toString()
                             },
                             success: function (data) {
-                                loadingSpinner_Hide();
+                                loadingSpinner_Hide();  
 
-                                if (data.length == 0)
+                                if (data == null)
                                     sweetAlertWarning("Student Absent Report", "No records were found matching your parameters.");
                                 else
-                                    sweetAlertSuccess("Student Absent Report", "Records were found matching your parameters.");
+                                    window.location.href = '/Report/ExportAbsenteeReport?fileGuid=' + data.toString();
                                 },
                                 error: function (data) {
                                     loadingSpinner_Hide();

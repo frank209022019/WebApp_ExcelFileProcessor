@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using WebApp_ExcelFileProcessor.Data;
 using WebApp_ExcelFileProcessor.Models;
@@ -19,13 +23,15 @@ namespace WebApp_ExcelFileProcessor.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
+        private IHostEnvironment _hostEnvironment;
 
-        public ReportController(ILogger<ReportController> logger, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public ReportController(ILogger<ReportController> logger, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ApplicationDbContext context, IHostEnvironment hostEnvironment)
         {
             _logger = logger;
             _signInManager = signInManager;
             _userManager = userManager;
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
         #region Views
@@ -65,11 +71,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         [Authorize]
         [HttpGet]
-        public List<AbsenteeViewModel> GenerateSchoolAbsenteeList(String gradeString, String startDateString, String endDateString)
+        public String GenerateSchoolAbsenteeList(String gradeString, String classString, String groupValue, String startDateString, String endDateString)
         {
             try
             {
-                var studentScreeningsList = GetGradeScreenings(Convert.ToInt32(gradeString), Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString));
+                String gradeClass = String.Format("{0}{1}", gradeString, classString);
+
+                var studentScreeningsList = GetGradeScreenings(gradeClass.ToUpper(), groupValue.ToUpper(), Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString));
                 if (studentScreeningsList.Count() <= 0)
                     throw new Exception("No student screening records found.");
 
@@ -77,7 +85,9 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                 if (studentScreeningsList.Count() > 0)
                 {
-                    var studentList = _context.Students.Where(i => !i.IsDeleted && i.StudentClass.GradeInt == Convert.ToInt32(gradeString)).ToList();
+                    var studentList = _context.Students.Where(i => !i.IsDeleted && 
+                                                                                                        i.StudentClass.DisplayName.ToUpper() == gradeClass.ToUpper() &&
+                                                                                                        i.StudentGroup.DisplayName.ToUpper() == groupValue.ToUpper()).ToList();
                     var moduleRosterList = _context.GradeModuleRoster.Where(i => !i.IsDeleted && i.GradeInt == Convert.ToInt32(gradeString)).ToList();
 
                     //  Studens IN/NOT IN studentScreeningsList
@@ -130,23 +140,30 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         }
                     }
                 }
-                return returnList;
+                //  Generate report - can be downloaded
+                String reportGeneratedString= GenerateExcelReport(returnList, Convert.ToDateTime(startDateString).ToString("dd-MM-yyyy"), Convert.ToDateTime(endDateString).ToString("dd-MM-yyyy"));
+
+                if (reportGeneratedString == null)
+                    throw new Exception("Error occurred while genereating report.");
+
+                return reportGeneratedString;
+             
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new List<AbsenteeViewModel>();
+                return null;
             }
         }
 
         [Authorize]
         [HttpGet]
-        public List<AbsenteeViewModel> GenerateStudentAbsenteeList(String studentId, String startDateString, String endDateString)
+        public String GenerateStudentAbsenteeList(String studentId, String startDateString, String endDateString)
         {
             try
             {
                 var currentStudent = _context.Students.FirstOrDefault(i => !i.IsDeleted && i.StudentId == Guid.Parse(studentId));
-                var studentScreenings = GetStudentScreenings(Guid.Parse(studentId), Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString));
+                var studentScreenings = GetStudentScreenings(currentStudent, Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString));
                 if (studentScreenings.Count() <= 0)
                     throw new Exception("No student screening records found.");
 
@@ -196,22 +213,29 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         }
                     }
                 }
+                //  Generate report - can be downloaded
+                String reportGeneratedString = GenerateExcelReport(returnList, Convert.ToDateTime(startDateString).ToString("dd-MM-yyyy"), Convert.ToDateTime(endDateString).ToString("dd-MM-yyyy"));
 
-                return returnList;
+                if (reportGeneratedString == null)
+                    throw new Exception("Error occurred while genereating report.");
+
+                return reportGeneratedString;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new List<AbsenteeViewModel>();
+                return null;
             }
         }
 
         [Authorize]
-        private List<StudentScreening> GetGradeScreenings(Int32 gradeInt, DateTime startDate, DateTime endDate)
+        private List<StudentScreening> GetGradeScreenings(String gradeClass, String groupName, DateTime startDate, DateTime endDate)
         {
             try
             {
-                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && i.Student.StudentClass.GradeInt == gradeInt &&
+                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && 
+                                                                                                                    i.Student.StudentClass.DisplayName.ToUpper() == gradeClass.ToUpper() &&
+                                                                                                                    i.Student.StudentGroup.DisplayName.ToUpper() == groupName.ToUpper() &&
                                                                                                                     (i.ScreeningTimeStamp.Year >= startDate.Year && i.ScreeningTimeStamp.Year <= endDate.Year) &&
                                                                                                                     (i.ScreeningTimeStamp.Month >= startDate.Month && i.ScreeningTimeStamp.Month <= endDate.Month) &&
                                                                                                                     (i.ScreeningTimeStamp.Day >= startDate.Day && i.ScreeningTimeStamp.Day <= endDate.Day)).ToList();
@@ -228,11 +252,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
         }
 
         [Authorize]
-        private List<StudentScreening> GetStudentScreenings(Guid studentId, DateTime startDate, DateTime endDate)
+        private List<StudentScreening> GetStudentScreenings(Student student, DateTime startDate, DateTime endDate)
         {
             try
             {
-                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && i.StudentId == studentId &&
+                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted &&
+                                                                                                                    i.Student.StudentClass.DisplayName.ToUpper() == student.StudentClass.DisplayName.ToUpper() &&
+                                                                                                                    i.Student.StudentGroup.DisplayName.ToUpper() == student.StudentGroup.DisplayName.ToUpper() &&
                                                                                                                     (i.ScreeningTimeStamp.Year >= startDate.Year && i.ScreeningTimeStamp.Year <= endDate.Year) &&
                                                                                                                     (i.ScreeningTimeStamp.Month >= startDate.Month && i.ScreeningTimeStamp.Month <= endDate.Month) &&
                                                                                                                     (i.ScreeningTimeStamp.Day >= startDate.Day && i.ScreeningTimeStamp.Day <= endDate.Day)).ToList();
@@ -308,6 +334,143 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 _logger.LogError(ex.Message);
                 return new DateRangeViewModel() { MinDateTime = DateTime.Now, MaxDateTime = DateTime.Now };
+            }
+        }
+
+        [Authorize]
+        private String GenerateExcelReport(List<AbsenteeViewModel> absentList, String startDate, String endDate)
+        {
+            try
+            {
+                List<Student> studentList = _context.Students.Where(i => !i.IsDeleted).ToList();
+                List<Guid> distinctStudentIdList = absentList.Select(i => i.StudentId).Distinct().ToList();
+                ExcelDownload model;
+
+                //  New file name
+                String fileName = String.Format("AbsenteeReport {0} - {1} - {2}.xlsx", startDate, endDate, Guid.NewGuid().ToString());
+
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                using (ExcelPackage package = new ExcelPackage())
+                {
+                    //  Overview Worksheet
+                    ExcelWorksheet wsSheet1 = package.Workbook.Worksheets.Add("Absent Records");
+                    wsSheet1 = BuildAbsentHeaders(wsSheet1, startDate, endDate);
+                    Int32 row = 3;
+                    foreach(var item in absentList)
+                    {
+                        var temp = studentList.FirstOrDefault(x => x.StudentId == item.StudentId);
+                        wsSheet1.Cells[row, 1].Value = item.AbsentDateTime.ToString("dd-MM-yyyy");
+                        wsSheet1.Cells[row, 2].Value = temp.QRCode;
+                        wsSheet1.Cells[row, 3].Value = temp.FirstName;
+                        wsSheet1.Cells[row, 3].Value = temp.LastName;
+                        wsSheet1.Cells[row, 5].Value = temp.StudentClass.DisplayName;
+                        wsSheet1.Cells[row, 6].Value = temp.StudentGroup.DisplayName;   
+                        row++;
+                    }               
+
+                    //  Summary Worksheet                  
+                    ExcelWorksheet wsSheet2 = package.Workbook.Worksheets.Add("Absent Summary");
+                    wsSheet2 = BuildAbsentSummaryHeaders(wsSheet2, startDate, endDate);
+                    row = 3;
+                    foreach (var item in distinctStudentIdList)
+                    {
+                        var temp = studentList.FirstOrDefault(x => x.StudentId == item);
+                        wsSheet2.Cells[row, 1].Value = temp.QRCode;
+                        wsSheet2.Cells[row, 2].Value = temp.FirstName;
+                        wsSheet2.Cells[row, 3].Value = temp.LastName;
+                        wsSheet2.Cells[row, 4].Value = temp.StudentClass.DisplayName;
+                        wsSheet2.Cells[row, 5].Value = temp.StudentGroup.DisplayName;
+                        wsSheet2.Cells[row, 6].Value = absentList.Where(i => i.StudentId == temp.StudentId).Count();
+                        row++;
+                    }
+
+                    //  Worksheet settings
+                    wsSheet1.Protection.IsProtected = false;
+                    wsSheet1.Protection.AllowSelectLockedCells = false;
+                    wsSheet2.Protection.IsProtected = false;
+                    wsSheet2.Protection.AllowSelectLockedCells = false;
+
+                    //  Save to database
+                    model = new ExcelDownload()
+                    {
+                        DateCreated = DateTime.Now,
+                        IsDeleted = false,
+                        FileName = fileName
+                    };
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        package.SaveAs(memoryStream);
+                        memoryStream.Position = 0;
+                        model.FileByteArray = memoryStream.ToArray();
+                    }
+                    _context.ExcelDownloads.Add(model);
+                    _context.SaveChanges();
+                }
+                return model.ExcelDownloadId.ToString();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+        }
+
+        [Authorize]
+        private ExcelWorksheet BuildAbsentHeaders(ExcelWorksheet ws, String startDate, String endDate)
+        {
+            //  Header
+            ws.Cells["A1:F1"].Merge = true;
+            ws.Cells["A1:F1"].Style.Font.Bold = true;
+            ws.Cells["A1:F1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            ws.Cells["A1"].Value = String.Format("Absent Records {0} - {1}", startDate, endDate);
+
+            //  Column names
+            ws.Cells[1, 1, 1, 6].Style.Font.Bold = true;
+            ws.Cells["A2"].Value = "Absent Date";
+            ws.Cells["B2"].Value = "QR Code";
+            ws.Cells["C2"].Value = "First Name";
+            ws.Cells["D2"].Value = "Last Name";
+            ws.Cells["E2"].Value = "Grade/Class";
+            ws.Cells["F2"].Value = "Group";
+            return ws;
+        }
+
+        [Authorize]
+        private ExcelWorksheet BuildAbsentSummaryHeaders(ExcelWorksheet ws, String startDate, String endDate)
+        {
+            //  Header
+            ws.Cells["A1:F1"].Merge = true;
+            ws.Cells["A1:F1"].Style.Font.Bold = true;
+            ws.Cells["A1:F1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            ws.Cells["A1"].Value = String.Format("Absent Summary {0} - {1}", startDate, endDate);
+
+            //  Column names
+            ws.Cells[1, 1, 1, 6].Style.Font.Bold = true;
+            ws.Cells["A2"].Value = "QR Code";
+            ws.Cells["B2"].Value = "First Name";
+            ws.Cells["C2"].Value = "Last Name";
+            ws.Cells["D2"].Value = "Grade/Class";
+            ws.Cells["E2"].Value = "Group";
+            ws.Cells["F2"].Value = "Total Absent Days";
+
+            return ws;
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult ExportAbsenteeReport(String fileGuid)
+        {
+            if (TempData[fileGuid] != null)
+            {
+                var fileRecord = _context.ExcelDownloads.FirstOrDefault(i => i.ExcelDownloadId == Guid.Parse(fileGuid));
+                fileRecord.IsDeleted = true;
+                _context.SaveChanges();
+
+                return File(fileRecord.FileByteArray, "application/vnd.ms-excel", fileRecord.FileName);
+            }
+            else
+            {
+                return BadRequest("Could not download report");
             }
         }
 

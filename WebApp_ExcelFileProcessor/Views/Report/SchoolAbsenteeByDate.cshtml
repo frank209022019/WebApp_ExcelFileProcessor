@@ -24,13 +24,37 @@
             </select>
         </div>
     </div>
-    <div class="col-xl-5 -col-md-12 custom-col-responsiveness mb-2">
+    <div class="col-xl-2 -col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label class="control-label">Class</label>
+            <select class="form-control" id="inputClass" placeholder="Select a Class" required>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-2 -col-md-12 custom-col-responsiveness mb-2">
+        <div class="form-group">
+            <label class="control-label">Group</label>
+            <select class="form-control" id="inputGroup" placeholder="Select a Group" required>
+                <option value="G1">G1</option>
+                <option value="G2">G2</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-xl-3 -col-md-12 custom-col-responsiveness mb-2">
         <div class="form-group">
             <label class="control-label">Start Date</label>
             <input id="inputStartDate" class="form-control" type="date" asp-format="{0:dd/MM/yyyy}" onkeydown="return false" />
         </div>
     </div>
-    <div class="col-xl-5 -col-md-12 custom-col-responsiveness mb-2">
+    <div class="col-xl-3 -col-md-12 custom-col-responsiveness mb-2">
         <div class="form-group">
             <label class="control-label">End Date</label>
             <input id="inputEndDate" class="form-control" type="date" asp-format="{0:dd/MM/yyyy}" onkeydown="return false" />
@@ -54,6 +78,8 @@
 
         $("#btnClearFields").click(function () {
             $('#inputGrade').prop('selectedIndex', 0);
+            $('#inputClass').prop('selectedIndex', 0);
+            $('#inputGroup').prop('selectedIndex', 0);
             $("#inputStartDate").val('');
             $("#inputEndDate").val('');
         });
@@ -63,6 +89,8 @@
                 //  ajax to get list
                 loadingSpinner_Show();
                 var gradeValue = $('#inputGrade').find(":selected").text();
+                var classValue = $('#inputClass').find(":selected").text();
+                var groupValue = $('#inputGroup').find(":selected").text();
                 var startDateValue = $('#inputStartDate').val()
                 var endDateValue = $('#inputEndDate').val();
 
@@ -71,16 +99,17 @@
                         type: 'GET',
                     data: {
                         gradeString: gradeValue.toString(),
+                        classString: classValue.toString(),
+                        groupValue: groupValue.toString(),
                         startDateString: startDateValue.toString(),
                         endDateString: endDateValue.toString()
                     },
                     success: function (data) {
                         loadingSpinner_Hide();
-
-                        if (data.length == 0)
+                        if (data == null)
                             sweetAlertWarning("School Absent Report", "No records were found matching your parameters.");
                         else
-                            sweetAlertSuccess("School Absent Report", "Records were found matching your parameters.");
+                            window.location.href = '/Report/ExportAbsenteeReport?fileGuid=' + data.toString();                        
                         },
                         error: function (data) {
                             loadingSpinner_Hide();
