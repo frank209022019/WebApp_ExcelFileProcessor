@@ -121,20 +121,27 @@
             else {
                 sweetAlertError("School Absent Report", "Ensure all fields have a valid input.");
             }
-        });
+        });     
     });
+
+   
+
   function getMinMaxDateForDatePickers() {
-        loadingSpinner_Show();
+      //loadingSpinner_Show();
+
+      var gradeValue = $('#inputGrade').find(":selected").text();
+      var classValue = $('#inputClass').find(":selected").text();
+      var groupValue = $('#inputGroup').find(":selected").text();
 
         $.ajax({
-            url: '@Url.Action("GetMinMaxDateRange", "Report")',
-            type: 'GET',
+            url: '@Url.Action("GetMinMaxDateRange", "Report")',            
+            type: 'GET',          
             success: function (data) {
                 setMinMaxDateForDatePickers(data);
-                loadingSpinner_Hide();
+                //loadingSpinner_Hide();
            },
             error: function (data) {
-                loadingSpinner_Hide();
+                //loadingSpinner_Hide();
                 sweetAlertError("Student Absent Report", "Your request could not be processed.");
             }
         });
