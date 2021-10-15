@@ -54,6 +54,19 @@ a {
         border-color: #217093;
     }
 
+.btn-outline-danger {
+    color: #dc3545 !important;
+    background-color: #fff !important;
+    border-color: #dc3545 !important;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545 !important;
+        color: #fff !important;
+        border-color: #dc3545 !important;
+    }
+
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
     background-color: #1b6ec2;

@@ -9,7 +9,11 @@
         <hr class="custom-blue-hr" />
     </div>
 
-    <div class="col-xl-2 offset-xl-10 col-md-12 custom-col-responsiveness mb-3">
+    <div class="col-xl-2 offset-xl-8 col-md-12 custom-col-responsiveness mb-3">
+        <a class="btn btn-outline-danger full-width" onclick="deleteAllScreenings()">Delete All Screenings</a>
+    </div>
+
+    <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-3">
         <a asp-action="AddScreening" asp-controller="StudentScreening" class="btn btn-outline-primary full-width">Add Screening</a>
     </div>
 
@@ -181,4 +185,44 @@
 
         return table;
     }
+
+    function deleteAllScreenings() {
+        Swal.fire({
+            icon: 'warning',
+            title: "Delete All Records",
+            text: 'Are you sure you want to save these changes?',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            },
+            showConfirmButton: true,
+            confirmButtonColor: '#217093 ',
+            confirmButtonText: 'Delete All',
+            showCancelButton: true,
+            cancelButtonText: "Cancel",
+            allowOutsideClick: false,
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                   $.ajax({
+                    url: '@Url.Action("DeleteAllStudentScreening", "StudentScreening")',
+                     type: "POST",
+                       success: function (result) {
+                           loadingSpinner_Hide();
+                           location.reload();
+                       },
+                       error: function (data) {
+                           loadingSpinner_Hide();
+                           location.reload();
+                       }
+                });
+
+                loadingSpinner_Show();
+            }
+        })
+    }
+
 </script>

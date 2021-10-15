@@ -944,6 +944,24 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteAllStudentScreening()
+        {
+            try
+            {
+                var list = _context.StudentScreenings.ToList();
+                _context.StudentScreenings.RemoveRange(list);
+                _context.SaveChanges();
+
+                return RedirectToAction("ManageStudentScreening");
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("ManageStudentScreening");
+            }
+        }
+
         #endregion Utilities
     }
 }

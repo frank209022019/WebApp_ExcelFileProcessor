@@ -141,8 +141,6 @@
     }
 
     function setMinMaxDateForDatePickers(data) {
-        //  minDateTime (yyyy-mm-dd)
-        //  maxDateTime (yyyy-mm-dd)
         var minDateArr = data.minDateTime.substring(0, 10).split('-');
         var maxDateArr = data.maxDateTime.substring(0, 10).split('-');
 
@@ -152,11 +150,13 @@
         $("#inputStartDate").attr({
             "min": formatDate(setMinDate),
             "max": formatDate(setMaxDate),
+            "value": formatDate(setMinDate),
         });
 
         $("#inputEndDate").attr({
             "min": formatDate(setMinDate),
             "max": formatDate(setMaxDate),
+            "value": formatDate(setMaxDate),
         });
     }
 
@@ -171,7 +171,6 @@
         if (day.length < 2)
             day = '0' + day;
 
-        console.log([year, month, day].join('-'));
         return [year, month, day].join('-');
     }
 
