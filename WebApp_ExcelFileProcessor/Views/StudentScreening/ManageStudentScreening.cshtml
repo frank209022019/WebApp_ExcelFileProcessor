@@ -55,9 +55,7 @@
 <script>
     $(document).ready(function () {
     var studentTable;
-
           loadingSpinner_Show();
-
         var tableCount = '@Model.Count()';
         if (tableCount != 0 && tableCount != '0') {
             studentTable = loadStudentTable();

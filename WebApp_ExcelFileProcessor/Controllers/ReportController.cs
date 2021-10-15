@@ -91,50 +91,58 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     var moduleRosterList = _context.GradeModuleRoster.Where(i => !i.IsDeleted && i.GradeInt == Convert.ToInt32(gradeString)).ToList();
 
                     //  Studens IN/NOT IN studentScreeningsList
-                    var studentsInScreeningList = studentList.Where(p => studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
-                    var studentsNotInScreeningList = studentList.Where(p => !studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
+                    //var studentsInScreeningList = studentList.Where(p => studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
+                    //var studentsNotInScreeningList = studentList.Where(p => !studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
 
                     //   go through each student (studentsNotInScreeningList) : either absent or dont need to be at school
-                    if (studentsNotInScreeningList.Count() > 0)
+                    foreach (DateTime day in EachCalendarDay(Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString)))
                     {
-                        foreach (var stud in studentsNotInScreeningList)
+                        //  STUDENTS IN - ALREADY HAVE SCREENING - PRESENT AT SCHOOL
+                        //var studentsInScreeningList = studentList.Where(p => studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
+
+                        //  STUDENTS NOT IN - ABSENT OR NO NEED TO BE AT SCHOOL
+                        var studentsNotInScreeningList = studentList.Where(p => !studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted &&
+                                                                                                                                                                                                p2.ScreeningTimeStamp.Year == day.Year &&
+                                                                                                                                                                                                p2.ScreeningTimeStamp.Month == day.Month &&
+                                                                                                                                                                                                p2.ScreeningTimeStamp.Day == day.Day)).ToList();
+
+                        if(studentsNotInScreeningList.Count() > 0)
                         {
-                            foreach (DateTime day in EachCalendarDay(Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString)))
+                            foreach (var item in studentsNotInScreeningList)
                             {
-                                if (!CheckIfStudentHasScreeningForDateTime(day, studentScreeningsList, stud.StudentId))
+                                var stud = studentList.FirstOrDefault(i => !i.IsDeleted && i.StudentId == item.StudentId);
+
+                                switch (day.DayOfWeek)
                                 {
-                                    switch (day.DayOfWeek)
-                                    {
-                                        case DayOfWeek.Monday:
-                                            Guid mondayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Monday).ModuleCodeId;
-                                            if (mondayModuleCodeId == stud.MondayModuleCodeId)
-                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
-                                            break;
+                                    case DayOfWeek.Monday:
+                                        Guid mondayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Monday).ModuleCodeId;
+                                        if (mondayModuleCodeId == stud.MondayModuleCodeId)
+                                            returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                        break;
 
-                                        case DayOfWeek.Tuesday:
-                                            Guid tuesdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Tuesday).ModuleCodeId;
-                                            if (tuesdayModuleCodeId == stud.TuesdayModuleCodeId)
-                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
-                                            break;
+                                    case DayOfWeek.Tuesday:
+                                        Guid tuesdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Tuesday).ModuleCodeId;
+                                        if (tuesdayModuleCodeId == stud.TuesdayModuleCodeId)
+                                            returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                        break;
 
-                                        case DayOfWeek.Wednesday:
-                                            Guid wednesdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Wednesday).ModuleCodeId;
-                                            if (wednesdayModuleCodeId == stud.WednesdayModuleCodeId)
-                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
-                                            break;
+                                    case DayOfWeek.Wednesday:
+                                        Guid wednesdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Wednesday).ModuleCodeId;
+                                        if (wednesdayModuleCodeId == stud.WednesdayModuleCodeId)
+                                            returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                        break;
 
-                                        case DayOfWeek.Thursday:
-                                            Guid thursdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Thursday).ModuleCodeId;
-                                            if (thursdayModuleCodeId == stud.ThursdayModuleCodeId)
-                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
-                                            break;
+                                    case DayOfWeek.Thursday:
+                                        Guid thursdayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Thursday).ModuleCodeId;
+                                        if (thursdayModuleCodeId == stud.ThursdayModuleCodeId)
+                                            returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                        break;
 
-                                        case DayOfWeek.Friday:
-                                            Guid fridayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Friday).ModuleCodeId;
-                                            if (fridayModuleCodeId == stud.FridayModuleCodeId)
-                                                returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
-                                            break;
-                                    }
+                                    case DayOfWeek.Friday:
+                                        Guid fridayModuleCodeId = moduleRosterList.FirstOrDefault(i => i.DayOfWeek == DayOfWeek.Friday).ModuleCodeId;
+                                        if (fridayModuleCodeId == stud.FridayModuleCodeId)
+                                            returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
+                                        break;
                                 }
                             }
                         }
@@ -163,6 +171,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
             {
                 var currentStudent = _context.Students.FirstOrDefault(i => !i.IsDeleted && i.StudentId == Guid.Parse(studentId));
                 var studentScreenings = GetStudentScreenings(currentStudent, Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString));
+
                 if (studentScreenings.Count() <= 0)
                     throw new Exception("No student screening records found.");
 
