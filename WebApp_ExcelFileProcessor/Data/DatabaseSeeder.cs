@@ -16,9 +16,9 @@ namespace WebApp_ExcelFileProcessor.Data
             _context = context;
             SeedUserData();
             SeedGenders();
+            SeedModuleCodes();
             SeedClasses();
             SeedGroups();
-            SeedModuleCodes();
             SeedModuleRoster();
             _context.SaveChanges();
         }
