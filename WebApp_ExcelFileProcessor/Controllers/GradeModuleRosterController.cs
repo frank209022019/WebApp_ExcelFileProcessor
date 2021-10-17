@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -12,7 +11,6 @@ using WebApp_ExcelFileProcessor.ViewModels;
 
 namespace WebApp_ExcelFileProcessor.Controllers
 {
-    [Authorize]
     public class GradeModuleRosterController : Controller
     {
         private readonly ILogger<GradeModuleRosterController> _logger;
@@ -30,7 +28,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         #region Views
 
-        [Authorize]
         public IActionResult Index()
         {
             try
@@ -47,7 +44,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult AddRosterItem()
         {
             GradeModuleRoster model = new GradeModuleRoster()
@@ -59,7 +55,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             return View(model);
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult AddRosterItem(GradeModuleRoster model)
         {
@@ -80,7 +75,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult UpdateRosterItem(String rosterItemId)
         {
             try
@@ -103,7 +97,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult UpdateRosterItem(GradeModuleRoster model)
         {
@@ -129,7 +122,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult DeleteRosterItem(String rosterItemId)
         {
             try
@@ -147,7 +139,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult DeleteRosterItem(GradeModuleRoster model)
         {
@@ -167,7 +158,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult ViewRosterItem(String rosterItemId)
         {
             try
@@ -189,7 +179,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         #region Utilities
 
-        [Authorize]
         [HttpGet]
         public List<RosterViewModel> GetRosterList()
         {

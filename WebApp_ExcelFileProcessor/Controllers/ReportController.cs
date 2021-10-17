@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +15,6 @@ using WebApp_ExcelFileProcessor.ViewModels;
 
 namespace WebApp_ExcelFileProcessor.Controllers
 {
-    [Authorize]
     public class ReportController : Controller
     {
         private readonly ILogger<ReportController> _logger;
@@ -36,7 +34,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         #region Views
 
-        [Authorize]
         public IActionResult SchoolAbsenteeByDate()
         {
             try
@@ -50,7 +47,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult StudentAbsenteeByDate()
         {
             try
@@ -69,7 +65,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         #region Utilities
 
-        [Authorize]
         [HttpGet]
         public String GenerateSchoolAbsenteeList(String gradeString, String classString, String groupValue, String startDateString, String endDateString)
         {
@@ -103,7 +98,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                             foreach (DateTime day in EachCalendarDay(Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString)))
                             {
                                 //  Check if student has record for datetime
-                                if(StudentHasRecordForDateTime(day, studentScreeningsList, stud.StudentId) == false)
+                                if (StudentHasRecordForDateTime(day, studentScreeningsList, stud.StudentId) == false)
                                 {
                                     switch (day.DayOfWeek)
                                     {
@@ -137,7 +132,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                                 returnList.Add(new AbsenteeViewModel() { AbsentDateTime = day, StudentId = stud.StudentId });
                                             break;
                                     }
-                                }                           
+                                }
                             }
                         }
                     }
@@ -157,7 +152,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public String GenerateStudentAbsenteeList(String studentId, String startDateString, String endDateString)
         {
@@ -230,7 +224,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private List<StudentScreening> GetGradeScreenings(String gradeClass, String groupName, DateTime startDate, DateTime endDate)
         {
             try
@@ -253,7 +246,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private List<StudentScreening> GetStudentScreenings(Student student, DateTime startDate, DateTime endDate)
         {
             try
@@ -276,14 +268,12 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private IEnumerable<DateTime> EachCalendarDay(DateTime startDate, DateTime endDate)
         {
             for (var date = startDate.Date; date.Date <= endDate.Date; date = date.AddDays(1)) yield
             return date;
         }
 
-        [Authorize]
         private String GenerateStudentFullNameWithClass(Student student)
         {
             try
@@ -297,7 +287,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private Boolean StudentHasRecordForDateTime(DateTime dateTime, List<StudentScreening> studScreenList, Guid studentId)
         {
             try
@@ -325,7 +314,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public DateRangeViewModel GetMinMaxDateRange()
         {
@@ -349,7 +337,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private String GenerateExcelReport(List<AbsenteeViewModel> absentList, String startDate, String endDate)
         {
             try
@@ -427,7 +414,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private ExcelWorksheet BuildAbsentHeaders(ExcelWorksheet ws, String startDate, String endDate)
         {
             //  Header
@@ -448,7 +434,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             return ws;
         }
 
-        [Authorize]
         private ExcelWorksheet BuildAbsentSummaryHeaders(ExcelWorksheet ws, String startDate, String endDate)
         {
             //  Header
@@ -470,7 +455,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             return ws;
         }
 
-        [Authorize]
         [HttpGet]
         public ActionResult ExportAbsenteeReport(String fileGuid)
         {

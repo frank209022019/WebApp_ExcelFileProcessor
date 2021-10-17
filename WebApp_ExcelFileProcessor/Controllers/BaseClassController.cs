@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,7 +15,6 @@ using WebApp_ExcelFileProcessor.ViewModels;
 
 namespace WebApp_ExcelFileProcessor.Controllers
 {
-    [Authorize]
     public class BaseClassController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -34,13 +32,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         #region Views
 
-        [Authorize]
         public IActionResult UploadBaseClass()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UploadBaseClass(List<IFormFile> files)
         {
@@ -81,7 +77,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult UploadBaseClassResult()
         {
             try
@@ -124,7 +119,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult ManageBaseClass()
         {
             try
@@ -142,7 +136,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult AddStudent()
         {
             Student model = new Student()
@@ -154,7 +147,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             return View(model);
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult AddStudent(Student model)
         {
@@ -172,7 +164,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult UpdateStudent(String StudentId)
         {
             try
@@ -195,7 +186,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult UpdateStudent(Student model)
         {
@@ -237,7 +227,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult DeleteStudent(String StudentId)
         {
             try
@@ -255,7 +244,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult DeleteStudent(Student model)
         {
@@ -275,7 +263,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult ViewStudent(String StudentId)
         {
             try
@@ -302,7 +289,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         #region Utilities
 
-        [Authorize]
         private async Task<UploadBaseClassProcessViewModel> ProcessBaseClassUploadFile(IFormFile file)
         {
             try
@@ -716,7 +702,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private async Task<Boolean> ValidateFileTemplate(IFormFile file)
         {
             try
@@ -758,7 +743,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private Boolean CheckIfStudentExisits(StudentTemp tempModel)
         {
             try
@@ -772,7 +756,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private Boolean CheckIfStudentNeedsUpdate(StudentTemp tempModel)
         {
             try
@@ -870,7 +853,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private Student UpdateStudentWithLists(Student model)
         {
             try
@@ -892,7 +874,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public List<StudentTempViewModel> GetCreateStudentList()
         {
@@ -927,7 +908,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public List<StudentTempViewModel> GetUpdateStudentList()
         {
@@ -962,7 +942,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public List<StudentTempViewModel> GetRowErrorStudentList()
         {
@@ -997,7 +976,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult CompleteProcessBaseStudentUpload()
         {
@@ -1098,7 +1076,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public List<StudentViewModel> GetStudentClassList()
         {
@@ -1127,7 +1104,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpDelete]
         public IActionResult DeleteStudentTempRecord(String studentTempId)
         {
@@ -1149,7 +1125,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public StudentModuleViewModel GetStudentTempModuleViewModel(String studentTempId)
         {
@@ -1191,7 +1166,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private Boolean CompareGuid(Guid? guidOne, Guid? guidTwo)
         {
             //  check if equal (true) : not equal (false)

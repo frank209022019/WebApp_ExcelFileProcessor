@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Topshelf;
-using WebApp_ExcelFileProcessor.Data;
 
 namespace WebApp_ExcelFileProcessor
 {
@@ -10,7 +7,7 @@ namespace WebApp_ExcelFileProcessor
     {
         public static void Main(string[] args)
         {
-            //var host = CreateHostBuilder(args).Build();  
+            //var host = CreateHostBuilder(args).Build();
             //using (var scope = host.Services.CreateScope())
             //{
             //    var context = scope.ServiceProvider.GetService<ApplicationDbContext>();

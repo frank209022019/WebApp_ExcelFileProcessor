@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -8,7 +7,6 @@ using WebApp_ExcelFileProcessor.ViewModels;
 
 namespace WebApp_ExcelFileProcessor.Controllers
 {
-    [Authorize]
     public class DashboardController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -24,7 +22,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             _context = context;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             DashboardViewModel model = new DashboardViewModel();
@@ -34,19 +31,16 @@ namespace WebApp_ExcelFileProcessor.Controllers
             return View(model);
         }
 
-        [Authorize]
         public IActionResult UploadBaseClass()
         {
             return RedirectToAction("UploadBaseClass", "BaseClass");
         }
 
-        [Authorize]
         public IActionResult ManageBaseClass()
         {
             return RedirectToAction("ManageBaseClass", "BaseClass");
         }
 
-        [Authorize]
         public IActionResult Signout()
         {
             _signInManager.SignOutAsync();

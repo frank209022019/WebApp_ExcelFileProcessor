@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,7 +15,6 @@ using WebApp_ExcelFileProcessor.ViewModels;
 
 namespace WebApp_ExcelFileProcessor.Controllers
 {
-    [Authorize]
     public class StudentScreeningController : Controller
     {
         private readonly ILogger<StudentScreeningController> _logger;
@@ -34,13 +32,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         #region Views
 
-        [Authorize]
         public IActionResult UploadStudentScreening()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> UploadStudentScreening(List<IFormFile> files)
         {
@@ -82,7 +78,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult ManageStudentScreening()
         {
             try
@@ -100,7 +95,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult UploadStudentScreeningResult()
         {
             try
@@ -142,7 +136,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult AddScreening()
         {
             StudentScreening model = new StudentScreening()
@@ -159,7 +152,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             return View(model);
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult AddScreening(StudentScreening model)
         {
@@ -197,7 +189,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult UpdateScreening(String ScreeningId)
         {
             try
@@ -221,7 +212,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult UpdateScreening(StudentScreening model)
         {
@@ -252,7 +242,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult DeleteScreening(String ScreeningId)
         {
             try
@@ -276,7 +265,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult DeleteScreening(StudentScreening model)
         {
@@ -296,7 +284,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         public IActionResult ViewScreening(String ScreeningId)
         {
             try
@@ -325,7 +312,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         #region Utilities
 
-        [Authorize]
         private async Task<UploadStudentScreenProcessViewModel> ProcessStudentScreenUpload(IFormFile file)
         {
             try
@@ -605,7 +591,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private async Task<Boolean> ValidateStudentScreenTemplate(IFormFile file)
         {
             try
@@ -648,7 +633,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private Boolean CheckIfScreeningExists(StudentScreeningTemp model)
         {
             try
@@ -670,7 +654,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         private String GetStudentDisplayName(Guid studentId)
         {
             try
@@ -685,7 +668,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public List<StudentScreeningTempViewModel> GetCreateStudentScreeningList()
         {
@@ -727,7 +709,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public List<StudentScreeningTempViewModel> GetExistingStudentScreeningList()
         {
@@ -769,7 +750,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public List<StudentScreeningTempViewModel> GetErrorStudentScreeningList()
         {
@@ -811,7 +791,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult CompleteStudentScreeningUpload()
         {
@@ -864,7 +843,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public List<StudentScreeningViewModel> GetStudentScreeningList()
         {
@@ -900,7 +878,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public StudentScreeningViewModel GetStudentDetail(String StudentId)
         {
@@ -922,7 +899,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpDelete]
         public IActionResult DeleteStudentScreeningTempRecord(String screenTempId)
         {
@@ -944,7 +920,6 @@ namespace WebApp_ExcelFileProcessor.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult DeleteAllStudentScreening()
         {
@@ -956,7 +931,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                 return RedirectToAction("ManageStudentScreening");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return RedirectToAction("ManageStudentScreening");
             }
