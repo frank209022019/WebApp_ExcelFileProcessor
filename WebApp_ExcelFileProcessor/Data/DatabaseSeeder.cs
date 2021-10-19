@@ -19,7 +19,6 @@ namespace WebApp_ExcelFileProcessor.Data
             SeedClasses();
             SeedGroups();
             SeedModuleRoster();
-            _context.SaveChanges();
         }
 
         private static void SeedGenders()
@@ -47,6 +46,7 @@ namespace WebApp_ExcelFileProcessor.Data
              }
             };
             _context.Genders.AddRange(list);
+            _context.SaveChanges();
         }
 
         private static void SeedClasses()
@@ -373,6 +373,7 @@ namespace WebApp_ExcelFileProcessor.Data
                 }
             };
             _context.StudentClasses.AddRange(list);
+            _context.SaveChanges();
         }
 
         private static void SeedGroups()
@@ -429,6 +430,7 @@ namespace WebApp_ExcelFileProcessor.Data
                 }
             };
             _context.StudentGroups.AddRange(list);
+            _context.SaveChanges();
         }
 
         private static void SeedUserData()
@@ -445,6 +447,7 @@ namespace WebApp_ExcelFileProcessor.Data
                    Name = "Administrator",
                    NormalizedName = "Administrator".ToUpper()
                });
+            _context.SaveChanges();
 
             if (_context.Users.Count() > 0)
                 return;
@@ -460,9 +463,10 @@ namespace WebApp_ExcelFileProcessor.Data
                      EmailConfirmed = true,
                      PhoneNumber = "0413743172",
                      PhoneNumberConfirmed = true,
-                     PasswordHash = hasher.HashPassword(null, "123#@!Password")
+                     PasswordHash = hasher.HashPassword(null, "jUW7jkuP_,k$PG3")
                  }
                 );
+            _context.SaveChanges();
 
             if (_context.UserRoles.Count() > 0)
                 return;
@@ -474,6 +478,7 @@ namespace WebApp_ExcelFileProcessor.Data
                       UserId = "1b824f5d-01b1-411b-8e44-5b05003ef81e"
                   }
                 );
+            _context.SaveChanges();
         }
 
         private static void SeedModuleCodes()
@@ -548,6 +553,7 @@ namespace WebApp_ExcelFileProcessor.Data
          }
             };
             _context.ModuleCodes.AddRange(list);
+            _context.SaveChanges();
         }
 
         private static void SeedModuleRoster()
@@ -791,6 +797,7 @@ namespace WebApp_ExcelFileProcessor.Data
                                                     }
             };
             _context.GradeModuleRoster.AddRange(list);
+            _context.SaveChanges();
         }
     }
 }
