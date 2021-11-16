@@ -80,24 +80,26 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                 if (studentScreeningsList.Count() > 0)
                 {
+                    //  active student list
                     var studentList = _context.Students.Where(i => !i.IsDeleted &&
-                                                                                                        i.StudentClass.DisplayName.ToUpper() == gradeClass.ToUpper() &&
-                                                                                                        i.StudentGroup.DisplayName.ToUpper() == groupValue.ToUpper()).ToList();
+                                                                    i.StudentClass.DisplayName.ToUpper() == gradeClass.ToUpper() &&
+                                                                    i.StudentGroup.DisplayName.ToUpper() == groupValue.ToUpper()).ToList();
+                    //  active roster list
                     var moduleRosterList = _context.GradeModuleRoster.Where(i => !i.IsDeleted && i.GradeInt == Convert.ToInt32(gradeString)).ToList();
 
-                    //  Studens IN/NOT IN studentScreeningsList
+                    // Studens IN/NOT IN studentScreeningsList
                     var studentsInScreeningList = studentList.Where(p => studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
                     var studentsNotInScreeningList = studentList.Where(p => !studentScreeningsList.Any(p2 => p2.StudentId == p.StudentId && !p.IsDeleted)).ToList();
 
-                    //  Students - either absent or not required to be at school
+                    // Students - either absent or not required to be at school
                     if (studentsNotInScreeningList.Count() > 0)
                     {
                         foreach (var stud in studentsNotInScreeningList)
                         {
-                            //  Check each day of date range
+                            // Check each day of date range
                             foreach (DateTime day in EachCalendarDay(Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString)))
                             {
-                                //  Check if student has record for datetime
+                                // Check if student has record for datetime
                                 if (StudentHasRecordForDateTime(day, studentScreeningsList, stud.StudentId) == false)
                                 {
                                     switch (day.DayOfWeek)
@@ -137,7 +139,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         }
                     }
                 }
-                //  Generate report - can be downloaded
+
+                // Generate report - can be downloaded
                 String reportGeneratedString = GenerateExcelReport(returnList, Convert.ToDateTime(startDateString).ToString("dd-MM-yyyy"), Convert.ToDateTime(endDateString).ToString("dd-MM-yyyy"));
 
                 if (reportGeneratedString == null)
@@ -171,7 +174,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                     foreach (DateTime day in EachCalendarDay(Convert.ToDateTime(startDateString), Convert.ToDateTime(endDateString)))
                     {
-                        //  check if no screening record exists for the student on this day
+                        // check if no screening record exists for the student on this day
                         if (StudentHasRecordForDateTime(day, studentScreenings, currentStudent.StudentId) == false)
                         {
                             switch (day.DayOfWeek)
@@ -209,7 +212,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         }
                     }
                 }
-                //  Generate report - can be downloaded
+                // Generate report - can be downloaded
                 String reportGeneratedString = GenerateExcelReport(returnList, Convert.ToDateTime(startDateString).ToString("dd-MM-yyyy"), Convert.ToDateTime(endDateString).ToString("dd-MM-yyyy"));
 
                 if (reportGeneratedString == null)
@@ -228,12 +231,34 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted &&
-                                                                                                                    i.Student.StudentClass.DisplayName.ToUpper() == gradeClass.ToUpper() &&
-                                                                                                                    i.Student.StudentGroup.DisplayName.ToUpper() == groupName.ToUpper() &&
-                                                                                                                    (i.ScreeningTimeStamp.Year >= startDate.Year && i.ScreeningTimeStamp.Year <= endDate.Year) &&
-                                                                                                                    (i.ScreeningTimeStamp.Month >= startDate.Month && i.ScreeningTimeStamp.Month <= endDate.Month) &&
-                                                                                                                    (i.ScreeningTimeStamp.Day >= startDate.Day && i.ScreeningTimeStamp.Day <= endDate.Day)).ToList();
+                List<StudentScreening> returnList;
+
+                // FILTER grade/classes
+                Boolean isAllClasses = gradeClass.Contains("ALL");
+                if (isAllClasses)
+                {
+                    // get by grade
+                    var gradeInt = int.Parse(gradeClass.Substring(0, 1));
+                    returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && i.Student.StudentClass.GradeInt == gradeInt).ToList();
+                }
+                else
+                {
+                    // get by grade & class
+                    returnList = _context.StudentScreenings.Where(i => !i.IsDeleted && i.Student.StudentClass.DisplayName.ToUpper() == gradeClass.ToUpper()).ToList();
+                }
+
+                // FILTER by group
+                if (groupName.ToUpper() != "ALL")
+                {
+                    // filter by group if groupName = ALL, do nothing, keep all the records
+                    returnList = returnList.Where(i => i.Student.StudentGroup.DisplayName.ToUpper() == groupName.ToUpper()).ToList();
+                }
+
+                // FILTER by date range
+                returnList = returnList.Where(i => (i.ScreeningTimeStamp.Year >= startDate.Year && i.ScreeningTimeStamp.Year <= endDate.Year) &&
+                                                   (i.ScreeningTimeStamp.Month >= startDate.Month && i.ScreeningTimeStamp.Month <= endDate.Month) &&
+                                                   (i.ScreeningTimeStamp.Day >= startDate.Day && i.ScreeningTimeStamp.Day <= endDate.Day)).ToList();
+
                 if (returnList.Count() == 0)
                     return new List<StudentScreening>();
 
@@ -251,11 +276,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
             try
             {
                 var returnList = _context.StudentScreenings.Where(i => !i.IsDeleted &&
-                                                                                                                    i.Student.StudentClass.DisplayName.ToUpper() == student.StudentClass.DisplayName.ToUpper() &&
-                                                                                                                    i.Student.StudentGroup.DisplayName.ToUpper() == student.StudentGroup.DisplayName.ToUpper() &&
-                                                                                                                    (i.ScreeningTimeStamp.Year >= startDate.Year && i.ScreeningTimeStamp.Year <= endDate.Year) &&
-                                                                                                                    (i.ScreeningTimeStamp.Month >= startDate.Month && i.ScreeningTimeStamp.Month <= endDate.Month) &&
-                                                                                                                    (i.ScreeningTimeStamp.Day >= startDate.Day && i.ScreeningTimeStamp.Day <= endDate.Day)).ToList();
+                                                                        i.Student.StudentClass.DisplayName.ToUpper() == student.StudentClass.DisplayName.ToUpper() &&
+                                                                        i.Student.StudentGroup.DisplayName.ToUpper() == student.StudentGroup.DisplayName.ToUpper() &&
+                                                                        (i.ScreeningTimeStamp.Year >= startDate.Year && i.ScreeningTimeStamp.Year <= endDate.Year) &&
+                                                                        (i.ScreeningTimeStamp.Month >= startDate.Month && i.ScreeningTimeStamp.Month <= endDate.Month) &&
+                                                                        (i.ScreeningTimeStamp.Day >= startDate.Day && i.ScreeningTimeStamp.Day <= endDate.Day)).ToList();
                 if (returnList.Count() == 0)
                     return new List<StudentScreening>();
 
@@ -345,13 +370,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 List<Guid> distinctStudentIdList = absentList.Select(i => i.StudentId).Distinct().ToList();
                 ExcelDownload model;
 
-                //  New file name
+                // New file name
                 String fileName = String.Format("AbsenteeReport {0} - {1} - {2}.xlsx", startDate, endDate, Guid.NewGuid().ToString());
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (ExcelPackage package = new ExcelPackage())
                 {
-                    //  Overview Worksheet
+                    // Overview Worksheet
                     ExcelWorksheet wsSheet1 = package.Workbook.Worksheets.Add("Absent Records");
                     wsSheet1 = BuildAbsentHeaders(wsSheet1, startDate, endDate);
                     Int32 row = 3;
@@ -367,7 +392,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         row++;
                     }
 
-                    //  Summary Worksheet
+                    // Summary Worksheet
                     ExcelWorksheet wsSheet2 = package.Workbook.Worksheets.Add("Absent Summary");
                     wsSheet2 = BuildAbsentSummaryHeaders(wsSheet2, startDate, endDate);
                     row = 3;
@@ -383,13 +408,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         row++;
                     }
 
-                    //  Worksheet settings
+                    // Worksheet settings
                     wsSheet1.Protection.IsProtected = false;
                     wsSheet1.Protection.AllowSelectLockedCells = false;
                     wsSheet2.Protection.IsProtected = false;
                     wsSheet2.Protection.AllowSelectLockedCells = false;
 
-                    //  Save to database
+                    // Save to database
                     model = new ExcelDownload()
                     {
                         DateCreated = DateTime.Now,
@@ -416,13 +441,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         private ExcelWorksheet BuildAbsentHeaders(ExcelWorksheet ws, String startDate, String endDate)
         {
-            //  Header
+            // Header
             ws.Cells["A1:F1"].Merge = true;
             ws.Cells["A1:F1"].Style.Font.Bold = true;
             ws.Cells["A1:F1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells["A1"].Value = String.Format("Absent Records {0} - {1}", startDate, endDate);
 
-            //  Column names
+            // Column names
             ws.Cells[1, 1, 1, 6].Style.Font.Bold = true;
             ws.Cells[2, 1, 2, 6].Style.Font.Bold = true;
             ws.Cells["A2"].Value = "Absent Date";
@@ -436,13 +461,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         private ExcelWorksheet BuildAbsentSummaryHeaders(ExcelWorksheet ws, String startDate, String endDate)
         {
-            //  Header
+            // Header
             ws.Cells["A1:F1"].Merge = true;
             ws.Cells["A1:F1"].Style.Font.Bold = true;
             ws.Cells["A1:F1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells["A1"].Value = String.Format("Absent Summary {0} - {1}", startDate, endDate);
 
-            //  Column names
+            // Column names
             ws.Cells[1, 1, 1, 6].Style.Font.Bold = true;
             ws.Cells[2, 1, 2, 6].Style.Font.Bold = true;
             ws.Cells["A2"].Value = "QR Code";

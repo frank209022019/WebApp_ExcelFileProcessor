@@ -42,7 +42,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                //  get file details
+                // get file details
                 FileDetailsViewModel model = new FileDetailsViewModel()
                 {
                     DateUploaded = DateTime.Now
@@ -64,7 +64,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  save file details to database temp
+                // save file details to database temp
                 var processResult = await ProcessBaseClassUploadFile(files.FirstOrDefault());
                 if (!processResult.ResponseValid)
                     throw new Exception(processResult.ResponseMessage);
@@ -86,7 +86,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 var tempResults = _context.StudentTemps.ToList();
                 if (tempResults.Count() > 0)
                 {
-                    //  add to different model lists
+                    // add to different model lists
                     var createTemp = tempResults.Where(i => i.RowType == 'C').ToList();
                     if (createTemp != null && createTemp.Count() > 0)
                         model.CreateList = createTemp;
@@ -249,9 +249,20 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
+                // soft delete student & screenings
                 var currModel = _context.Students.SingleOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
                 currModel.IsDeleted = true;
                 _context.Students.Update(currModel);
+
+                var screenings = _context.StudentScreenings.Where(i => i.StudentId == model.StudentId && !i.IsDeleted).ToList();
+                if (screenings.Count() > 0)
+                {
+                    screenings.ForEach(scr =>
+                    {
+                        scr.IsDeleted = true;
+                    });
+                }
+
                 _context.SaveChanges();
 
                 return RedirectToAction("ManageBaseClass");
@@ -293,12 +304,12 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                //  Validate Template
+                // Validate Template
                 var validTemplate = await ValidateFileTemplate(file);
                 if (!validTemplate)
                     throw new Exception("Invalid template used.");
 
-                //  Clear all temp records
+                // Clear all temp records
                 var currentTempList = _context.StudentTemps.ToList();
                 if (currentTempList.Count() > 0)
                 {
@@ -306,13 +317,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     _context.SaveChanges();
                 }
 
-                //  Database Lists
+                // Database Lists
                 var studentGroupList = _context.StudentGroups.ToList();
                 var studentClassList = _context.StudentClasses.ToList();
                 var genderList = _context.Genders.ToList();
                 var moduleCodeList = _context.ModuleCodes.ToList();
 
-                //  Lists for result view
+                // Lists for result view
                 UploadBaseClassProcessViewModel returnValue = new UploadBaseClassProcessViewModel()
                 {
                     ResponseId = null,
@@ -323,24 +334,24 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     ErrorList = new List<StudentTemp>()
                 };
 
-                //  Process document
+                // Process document
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (var stream = new MemoryStream())
                 {
                     await file.CopyToAsync(stream);
                     using (ExcelPackage package = new ExcelPackage(stream))
                     {
-                        //  Get the first worksheet in the workbook
+                        // Get the first worksheet in the workbook
                         ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                         int colCount = worksheet.Dimension.End.Column;
                         int rowCount = worksheet.Dimension.End.Row;
 
-                        //  Loop through rows
+                        // Loop through rows
                         if (rowCount > 0)
                         {
                             for (int row = 4; row <= rowCount; row++)
                             {
-                                //  StudentTemp
+                                // StudentTemp
                                 Boolean rowHasError = false;
                                 StudentTemp tempModel = new StudentTemp()
                                 {
@@ -378,15 +389,15 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                      *  SUBJExtra3
                                      */
 
-                                    //  Check if current rows columns have null values
-                                    //  Student Information Compulsory
+                                    // Check if current rows columns have null values Student
+                                    // Information Compulsory
                                     for (int col = 1; col <= 8; col++)
                                     {
                                         if (worksheet.Cells[row, col].Value == null)
                                             rowHasError = true;
                                     }
 
-                                    //  Monday-Friday Module Code
+                                    // Monday-Friday Module Code
                                     if (worksheet.Cells[row, 9].Value == null)
                                         rowHasError = true;
                                     if (worksheet.Cells[row, 11].Value == null)
@@ -398,7 +409,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     if (worksheet.Cells[row, 17].Value == null)
                                         rowHasError = true;
 
-                                    //  Grade String
+                                    // Grade String
                                     if (worksheet.Cells[row, 1].Value != null)
                                     {
                                         var gradeString = worksheet.Cells[row, 1].Value;
@@ -408,7 +419,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "GradeString"));
                                     }
 
-                                    //  Student Nr
+                                    // Student Nr
                                     if (worksheet.Cells[row, 2].Value != null)
                                     {
                                         var valueStudentNr = worksheet.Cells[row, 2].Value;
@@ -418,7 +429,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentNr"));
                                     }
 
-                                    //  QR Code
+                                    // QR Code
                                     if (worksheet.Cells[row, 3].Value != null)
                                     {
                                         var valueQRCode = worksheet.Cells[row, 3].Value;
@@ -428,7 +439,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "QRCode"));
                                     }
 
-                                    //  Last Name
+                                    // Last Name
                                     if (worksheet.Cells[row, 4].Value != null)
                                     {
                                         var valueLastName = worksheet.Cells[row, 4].Value;
@@ -438,7 +449,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "LastName"));
                                     }
 
-                                    //  First Name
+                                    // First Name
                                     if (worksheet.Cells[row, 5].Value != null)
                                     {
                                         var valueFirstName = worksheet.Cells[row, 5].Value;
@@ -448,7 +459,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "FirstName"));
                                     }
 
-                                    //  Gender
+                                    // Gender
                                     if (worksheet.Cells[row, 6].Value != null)
                                     {
                                         var valueGender = worksheet.Cells[row, 6].Value;
@@ -458,7 +469,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "Gender"));
                                     }
 
-                                    //  Student Class
+                                    // Student Class
                                     if (worksheet.Cells[row, 7].Value != null)
                                     {
                                         var valueStudentClass = worksheet.Cells[row, 7].Value;
@@ -468,7 +479,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentClass"));
                                     }
 
-                                    //  Student Group
+                                    // Student Group
                                     if (worksheet.Cells[row, 8].Value != null)
                                     {
                                         var valueStudentGroup = worksheet.Cells[row, 8].Value;
@@ -478,7 +489,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentGroup"));
                                     }
 
-                                    //  Monday Module Code
+                                    // Monday Module Code
                                     if (worksheet.Cells[row, 9].Value != null)
                                     {
                                         var moduleCode = worksheet.Cells[row, 9].Value;
@@ -488,7 +499,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "MondayModuleCodeId"));
                                     }
 
-                                    //  Monday Subject String
+                                    // Monday Subject String
                                     if (worksheet.Cells[row, 10].Value != null)
                                     {
                                         var subjectString = worksheet.Cells[row, 10].Value;
@@ -498,7 +509,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.MondaySubjString = String.Empty;
                                     }
 
-                                    //  Tuesday Module Code
+                                    // Tuesday Module Code
                                     if (worksheet.Cells[row, 11].Value != null)
                                     {
                                         var moduleCode = worksheet.Cells[row, 11].Value;
@@ -508,7 +519,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "TuesdayModuleCodeId"));
                                     }
 
-                                    //  Tuesday Subject String
+                                    // Tuesday Subject String
                                     if (worksheet.Cells[row, 12].Value != null)
                                     {
                                         var subjectString = worksheet.Cells[row, 12].Value;
@@ -518,7 +529,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.TuesdaySubjString = String.Empty;
                                     }
 
-                                    //  Wednesday Module Code
+                                    // Wednesday Module Code
                                     if (worksheet.Cells[row, 13].Value != null)
                                     {
                                         var moduleCode = worksheet.Cells[row, 13].Value;
@@ -528,7 +539,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "WednesdayModuleCodeId"));
                                     }
 
-                                    //  Wednesday Subject String
+                                    // Wednesday Subject String
                                     if (worksheet.Cells[row, 14].Value != null)
                                     {
                                         var subjectString = worksheet.Cells[row, 14].Value;
@@ -538,7 +549,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.WednesdaySubjString = String.Empty;
                                     }
 
-                                    //  Thursday Module Code
+                                    // Thursday Module Code
                                     if (worksheet.Cells[row, 15].Value != null)
                                     {
                                         var moduleCode = worksheet.Cells[row, 15].Value;
@@ -548,7 +559,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "ThursdayModuleCodeId"));
                                     }
 
-                                    //  Thursday Subject String
+                                    // Thursday Subject String
                                     if (worksheet.Cells[row, 16].Value != null)
                                     {
                                         var subjectString = worksheet.Cells[row, 16].Value;
@@ -558,7 +569,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.ThursdaySubjString = String.Empty;
                                     }
 
-                                    //  Friday Module Code
+                                    // Friday Module Code
                                     if (worksheet.Cells[row, 17].Value != null)
                                     {
                                         var moduleCode = worksheet.Cells[row, 17].Value;
@@ -568,7 +579,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "FridayModuleCodeId"));
                                     }
 
-                                    //  Friday Subject String
+                                    // Friday Subject String
                                     if (worksheet.Cells[row, 18].Value != null)
                                     {
                                         var subjectString = worksheet.Cells[row, 18].Value;
@@ -578,7 +589,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.FridaySubjString = String.Empty;
                                     }
 
-                                    //  Extra01 Module Code
+                                    // Extra01 Module Code
                                     if (worksheet.Cells[row, 19].Value != null)
                                     {
                                         var moduleCode = worksheet.Cells[row, 19].Value;
@@ -588,7 +599,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.Extra1ModuleCodeId = null;
                                     }
 
-                                    //  Extra01 Subject String
+                                    // Extra01 Subject String
                                     if (worksheet.Cells[row, 20].Value != null)
                                     {
                                         var subjectString = worksheet.Cells[row, 20].Value;
@@ -598,7 +609,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.Extra1SubjString = String.Empty;
                                     }
 
-                                    //  Extra02 Module Code
+                                    // Extra02 Module Code
                                     if (worksheet.Cells[row, 21].Value != null)
                                     {
                                         var moduleCode = worksheet.Cells[row, 21].Value;
@@ -608,7 +619,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.Extra2ModuleCodeId = null;
                                     }
 
-                                    //  Extra02 Subject String
+                                    // Extra02 Subject String
                                     if (worksheet.Cells[row, 22].Value != null)
                                     {
                                         var subjectString = worksheet.Cells[row, 22].Value;
@@ -618,7 +629,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.Extra2SubjString = String.Empty;
                                     }
 
-                                    //  Extra03 Module Code
+                                    // Extra03 Module Code
                                     if (worksheet.Cells[row, 23].Value != null)
                                     {
                                         var moduleCode = worksheet.Cells[row, 23].Value;
@@ -628,7 +639,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.Extra3ModuleCodeId = null;
                                     }
 
-                                    //  Extra03 Subject String
+                                    // Extra03 Subject String
                                     if (worksheet.Cells[row, 24].Value != null)
                                     {
                                         var subjectString = worksheet.Cells[row, 24].Value;
@@ -638,15 +649,16 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.Extra3SubjString = String.Empty;
                                     }
 
-                                    //  Determine if row is create, update or error
+                                    // Determine if row is create, update or error
                                     if (!rowHasError)
                                     {
-                                        //  check if similar records already exists in the database && needs create or update
+                                        // check if similar records already exists in the database
+                                        // && needs create or update
                                         var alreadyExists = CheckIfStudentExisits(tempModel);
                                         if (alreadyExists)
                                         {
-                                            //  further process to check if row needs to be updated
-                                            //  incomplete validation - not able to create with upload
+                                            // further process to check if row needs to be updated
+                                            // incomplete validation - not able to create with upload
                                             var needsUpdate = CheckIfStudentNeedsUpdate(tempModel);
                                             if (needsUpdate)
                                                 tempModel.RowType = 'U';
@@ -661,14 +673,14 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                     }
                                     else
                                     {
-                                        //  add row to a error list
+                                        // add row to a error list
                                         tempModel.RowType = 'E';
                                         returnValue.ErrorList.Add(tempModel);
                                     }
                                 }
                                 catch
                                 {
-                                    //  add row to a error list (try-catch per row)
+                                    // add row to a error list (try-catch per row)
                                     tempModel.RowType = 'E';
                                     returnValue.ErrorList.Add(tempModel);
                                 }
@@ -681,7 +693,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  Add lists to database
+                // Add lists to database
                 if (returnValue.ErrorList.Count() > 0)
                 {
                     _context.StudentTemps.AddRange(returnValue.ErrorList);
@@ -706,9 +718,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                //  A3 = GR
-                //  B3 = NR
-                //  C3  =  QR CODE
+                // A3 = GR B3 = NR C3 = QR CODE
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (var stream = new MemoryStream())
@@ -716,7 +726,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     await file.CopyToAsync(stream);
                     using (ExcelPackage package = new ExcelPackage(stream))
                     {
-                        //  Get the first worksheet in the workbook
+                        // Get the first worksheet in the workbook
                         ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                         int colCount = worksheet.Dimension.End.Column;
                         int rowCount = worksheet.Dimension.End.Row;
@@ -765,77 +775,77 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 var currModel = _context.Students.SingleOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCode.ToUpper() && !i.IsDeleted);
                 if (currModel != null)
                 {
-                    //  StudentNr
+                    // StudentNr
                     if (currModel.StudentNr.ToString().ToUpper() != tempModel.StudentNr.ToString().ToUpper())
                         totalUpdates++;
 
-                    //  QRCode
+                    // QRCode
                     if (currModel.QRCode.ToUpper() != tempModel.QRCode.ToUpper())
                         totalUpdates++;
 
-                    //  LastName
+                    // LastName
                     if (currModel.LastName.ToUpper() != tempModel.LastName.ToUpper())
                         totalUpdates++;
 
-                    //  FirstName
+                    // FirstName
                     if (currModel.FirstName.ToUpper() != tempModel.FirstName.ToUpper())
                         totalUpdates++;
 
-                    //  GenderId
+                    // GenderId
                     if (currModel.GenderId.ToString().ToUpper() != tempModel.GenderId.ToString().ToUpper())
                         totalUpdates++;
 
-                    //  StudentClassId
+                    // StudentClassId
                     if (currModel.StudentClassId.ToString().ToUpper() != tempModel.StudentClassId.ToString().ToUpper())
                         totalUpdates++;
 
-                    //  StudentGroupId
+                    // StudentGroupId
                     if (currModel.StudentGroupId.ToString().ToUpper() != tempModel.StudentGroupId.ToString().ToUpper())
                         totalUpdates++;
 
-                    //  Monday
+                    // Monday
                     if (!CompareGuid(currModel.MondayModuleCodeId, tempModel.MondayModuleCodeId))
                         totalUpdates++;
                     if (!CompareString(currModel.MondaySubjString, tempModel.MondaySubjString))
                         totalUpdates++;
 
-                    //  Tuesday
+                    // Tuesday
                     if (!CompareGuid(currModel.TuesdayModuleCodeId, tempModel.TuesdayModuleCodeId))
                         totalUpdates++;
                     if (!CompareString(currModel.TuesdaySubjString, tempModel.TuesdaySubjString))
                         totalUpdates++;
 
-                    //  Wednesday
+                    // Wednesday
                     if (!CompareGuid(currModel.WednesdayModuleCodeId, tempModel.WednesdayModuleCodeId))
                         totalUpdates++;
                     if (!CompareString(currModel.WednesdaySubjString, tempModel.WednesdaySubjString))
                         totalUpdates++;
 
-                    //  Thursday
+                    // Thursday
                     if (!CompareGuid(currModel.ThursdayModuleCodeId, tempModel.ThursdayModuleCodeId))
                         totalUpdates++;
                     if (!CompareString(currModel.ThursdaySubjString, tempModel.ThursdaySubjString))
                         totalUpdates++;
 
-                    //  Friday
+                    // Friday
                     if (!CompareGuid(currModel.FridayModuleCodeId, tempModel.FridayModuleCodeId))
                         totalUpdates++;
                     if (!CompareString(currModel.FridaySubjString, tempModel.FridaySubjString))
                         totalUpdates++;
 
-                    //  Extra01
+                    // Extra01
                     if (!CompareGuid(currModel.Extra1ModuleCodeId, tempModel.Extra1ModuleCodeId))
                         totalUpdates++;
                     if (!CompareString(currModel.Extra1SubjString, tempModel.Extra1SubjString))
                         totalUpdates++;
 
-                    //  Extra02
+                    // Extra02
                     if (!CompareGuid(currModel.Extra2ModuleCodeId, tempModel.Extra2ModuleCodeId))
                         totalUpdates++;
                     if (!CompareString(currModel.Extra2SubjString, tempModel.Extra2SubjString))
                         totalUpdates++;
 
-                    //  Extra03
+                    // Extra03
                     if (!CompareGuid(currModel.Extra3ModuleCodeId, tempModel.Extra3ModuleCodeId))
                         totalUpdates++;
                     if (!CompareString(currModel.Extra3SubjString, tempModel.Extra3SubjString))
@@ -984,7 +994,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 var tempList = _context.StudentTemps.ToList();
                 if (tempList.Count() > 0)
                 {
-                    //  create new records
+                    // create new records
                     var createList = tempList.Where(i => i.RowType == 'C').ToList();
                     if (createList.Count() > 0)
                     {
@@ -1024,13 +1034,13 @@ namespace WebApp_ExcelFileProcessor.Controllers
                         _context.SaveChanges();
                     }
 
-                    //  update current records
+                    // update current records
                     var updateList = tempList.Where(i => i.RowType == 'U').ToList();
                     if (updateList.Count() > 0)
                     {
                         foreach (var item in updateList)
                         {
-                            //  get student records (with QRCode)
+                            // get student records (with QRCode)
                             var currStudent = _context.Students.SingleOrDefault(i => i.QRCode.ToUpper() == item.QRCode.ToUpper() && !i.IsDeleted);
                             if (currStudent != null)
                             {
@@ -1063,7 +1073,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  clear temp list
+                // clear temp list
                 _context.StudentTemps.RemoveRange(tempList);
                 _context.SaveChanges();
 
@@ -1168,7 +1178,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         private Boolean CompareGuid(Guid? guidOne, Guid? guidTwo)
         {
-            //  check if equal (true) : not equal (false)
+            // check if equal (true) : not equal (false)
             try
             {
                 if (guidOne == null && guidTwo != null)
@@ -1191,7 +1201,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
         private Boolean CompareString(String stringOne, String stringTwo)
         {
-            //  check if equal (true) : not equal (false)
+            // check if equal (true) : not equal (false)
             try
             {
                 if (stringOne == null && stringTwo != null)

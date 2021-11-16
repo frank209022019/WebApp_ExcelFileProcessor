@@ -54,6 +54,13 @@
                 <label class="control-label">Have you travelled to a high-risk area in the last 14 days?</label>
                 <input asp-for="HighRiskTravel14Days" class="form-control" required />
                 <span asp-validation-for="HighRiskTravel14Days" class="text-danger"></span>
+            </div>  
+            <div class="form-group">
+                <label class="control-label">Screening Status</label>
+                <select asp-for="ScreeningStatusId" class="form-control" asp-items="Model.ScreeningStatusList" required>
+                    <option value="" disabled selected hidden>Select Status</option>
+                </select>
+                <span asp-validation-for="ScreeningStatusId" class="text-danger"></span>
             </div>
         </div>
 
@@ -92,7 +99,7 @@
                 <label class="control-label">Time Stamp</label>
                 <input asp-for="ScreeningTimeStamp" class="form-control" type="datetime-local" asp-format="{0:dd/MM/yyyy HH:mm}" required onkeydown="return false" />
                 <span asp-validation-for="ScreeningTimeStamp" class="text-danger"></span>
-            </div>
+            </div>            
         </div>
     </div>
 </form>

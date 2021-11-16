@@ -29,12 +29,12 @@ namespace WebApp_ExcelFileProcessor.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-        
         }
 
         #region Audit
 
-        // This is overridden to prevent someone from calling SaveChanges without specifying the user making the change
+        // This is overridden to prevent someone from calling SaveChanges without specifying the
+        // user making the change
         public override int SaveChanges()
         {
             try
@@ -115,7 +115,9 @@ namespace WebApp_ExcelFileProcessor.Data
         public DbSet<ModuleCode> ModuleCodes { get; set; }
         public DbSet<GradeModuleRoster> GradeModuleRoster { get; set; }
         public DbSet<ExcelDownload> ExcelDownloads { get; set; }
+        public DbSet<ScreeningStatus> ScreeningStatuses { get; set; }
 
-        #endregion DbSets     
+        #endregion DbSets
+
     }
 }

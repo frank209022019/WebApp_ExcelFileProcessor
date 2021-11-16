@@ -56,10 +56,19 @@ namespace WebApp_ExcelFileProcessor.Models
         [ForeignKey("StudentId")]
         public virtual Student Student { get; set; }
 
+        [Required(ErrorMessage = "This is a required field.")]
+        public Guid ScreeningStatusId { get; set; }
+
+        [ForeignKey("ScreeningStatusId")]
+        public virtual ScreeningStatus ScreeningStatus { get; set; }
+
         [NotMapped]
         public String StudentDisplayName { get; set; }
 
         [NotMapped]
         public List<SelectListItem> StudentList { get; set; }
+
+        [NotMapped]
+        public IEnumerable<SelectListItem> ScreeningStatusList { get; set; }
     }
 }

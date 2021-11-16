@@ -55,6 +55,13 @@
                 <input asp-for="HighRiskTravel14Days" class="form-control" readonly />
                 <span asp-validation-for="HighRiskTravel14Days" class="text-danger"></span>
             </div>
+             <div class="form-group">
+                <label class="control-label">Screening Status</label>
+                <select asp-for="ScreeningStatusId" class="form-control" asp-items="Model.ScreeningStatusList" readonly>
+                    <option value="" disabled selected hidden>Select Status</option>
+                </select>
+                <span asp-validation-for="ScreeningStatusId" class="text-danger"></span>
+            </div>
         </div>
 
         <div class="col-xl-6 col-md-12 custom-col-responsiveness mb-2">

@@ -8,11 +8,12 @@
         <h1 class="custom-dark-blue">Manage Student Screening</h1>
         <hr class="custom-blue-hr" />
     </div>
-
-    <div class="col-xl-2 offset-xl-8 col-md-12 custom-col-responsiveness mb-3">
+    <div class="col-xl-2 offset-xl-6 col-md-12 custom-col-responsiveness mb-3">
         <a class="btn btn-outline-danger full-width" onclick="deleteAllScreenings()">Delete All Screenings</a>
     </div>
-
+    <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-3">
+        <a asp-action="UploadStudentScreening" asp-controller="StudentScreening" class="btn btn-outline-warning full-width">Upload Screening</a>
+    </div>
     <div class="col-xl-2 col-md-12 custom-col-responsiveness mb-3">
         <a asp-action="AddScreening" asp-controller="StudentScreening" class="btn btn-outline-primary full-width">Add Screening</a>
     </div>

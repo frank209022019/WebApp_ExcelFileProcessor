@@ -61,7 +61,7 @@ namespace WebApp_ExcelFileProcessor
             {
                 // Cookie settings
                 //options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 options.LoginPath = $"/Home/Index";
                 //options.LoginPath = "/Identity/Account/Login";
                 options.LogoutPath = "/Identity/Account/Logout";

@@ -31,5 +31,10 @@ namespace WebApp_ExcelFileProcessor.Models
 
         [ForeignKey("StudentId")]
         public virtual Student Student { get; set; }
+
+        public Guid ScreeningStatusId { get; set; }
+
+        [ForeignKey("ScreeningStatusId")]
+        public virtual ScreeningStatus ScreeningStatus { get; set; }
     }
 }

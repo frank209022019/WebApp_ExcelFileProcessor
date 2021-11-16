@@ -19,6 +19,7 @@ namespace WebApp_ExcelFileProcessor.Data
             SeedClasses();
             SeedGroups();
             SeedModuleRoster();
+            SeedScreeningStatuses();
         }
 
         private static void SeedGenders()
@@ -565,7 +566,7 @@ namespace WebApp_ExcelFileProcessor.Data
 
             List<GradeModuleRoster> list = new List<GradeModuleRoster>()
             {
-                //  grade 8
+                // grade 8
                     new GradeModuleRoster
                     {
                         GradeModuleRosterId = Guid.NewGuid(),
@@ -749,7 +750,7 @@ namespace WebApp_ExcelFileProcessor.Data
                                                 GradeInt = 11,
                                                 ModuleCodeId = moduleCodes.FirstOrDefault(i => !i.IsDeleted && i.ModuleCodeName.ToUpper() == "AFR/XHO").ModuleCodeId
                                             },
-                                                 //  grade 12
+                                                 // grade 12
                                                  new GradeModuleRoster
                                                  {
                                                      GradeModuleRosterId = Guid.NewGuid(),
@@ -797,6 +798,38 @@ namespace WebApp_ExcelFileProcessor.Data
                                                     }
             };
             _context.GradeModuleRoster.AddRange(list);
+            _context.SaveChanges();
+        }
+
+        private static void SeedScreeningStatuses()
+        {
+            if (_context.ScreeningStatuses.Count() > 0)
+                return;
+
+            List<ScreeningStatus> list = new List<ScreeningStatus>()
+            {
+                new ScreeningStatus
+                {
+                    ScreeningStatusId = Guid.NewGuid(),
+                    ScreeningStatusName = "Scanned"
+                },
+                new ScreeningStatus
+                {
+                    ScreeningStatusId = Guid.NewGuid(),
+                    ScreeningStatusName = "Late (Screening Sheet)"
+                },
+                new ScreeningStatus
+                {
+                    ScreeningStatusId = Guid.NewGuid(),
+                    ScreeningStatusName = "Late (No Screening Sheet)"
+                },
+                new ScreeningStatus
+                {
+                    ScreeningStatusId = Guid.NewGuid(),
+                    ScreeningStatusName = "Absent Legit Reason"
+                }
+            };
+            _context.ScreeningStatuses.AddRange(list);
             _context.SaveChanges();
         }
     }

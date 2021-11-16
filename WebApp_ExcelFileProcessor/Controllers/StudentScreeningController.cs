@@ -42,7 +42,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                //  get file details
+                // get file details
                 FileDetailsViewModel model = new FileDetailsViewModel()
                 {
                     DateUploaded = DateTime.Now
@@ -64,7 +64,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  save file details to database temp
+                // save file details to database temp
                 var processResult = await ProcessStudentScreenUpload(files.FirstOrDefault());
                 if (!processResult.ResponseValid)
                     throw new Exception(processResult.ResponseMessage);
@@ -149,6 +149,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 Value = i.StudentId.ToString(),
                 Text = i.FirstName + " " + i.LastName
             }).ToList();
+            model.ScreeningStatusList = _context.ScreeningStatuses.ToList().Select(i => new SelectListItem()
+            {
+                Value = i.ScreeningStatusId.ToString(),
+                Text = i.ScreeningStatusName
+            }).ToList();
             return View(model);
         }
 
@@ -175,7 +180,8 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     StudentDisplayName = exisitingStudent.FirstName + " " + exisitingStudent.LastName,
                     StudentId = exisitingStudent.StudentId,
                     IsDeleted = false,
-                    DateCreated = DateTime.Now
+                    DateCreated = DateTime.Now,
+                    ScreeningStatusId = model.ScreeningStatusId
                 };
                 _context.StudentScreenings.Add(newModel);
                 _context.SaveChanges();
@@ -194,6 +200,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
             try
             {
                 var model = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId.ToString().ToUpper() == ScreeningId.ToUpper());
+                model.ScreeningStatusList = _context.ScreeningStatuses.ToList().Select(i => new SelectListItem()
+                {
+                    Value = i.ScreeningStatusId.ToString(),
+                    Text = i.ScreeningStatusName
+                }).ToList();
                 if (model != null)
                 {
                     var student = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
@@ -230,6 +241,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 currModel.SufferFromChronicDisease = model.SufferFromChronicDisease;
                 currModel.AnyOfTheFollowingSymptoms = model.AnyOfTheFollowingSymptoms;
                 currModel.ScreeningTimeStamp = model.ScreeningTimeStamp;
+                currModel.ScreeningStatusId = model.ScreeningStatusId;
                 _context.StudentScreenings.Update(currModel);
                 _context.SaveChanges();
 
@@ -247,6 +259,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
             try
             {
                 var model = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId.ToString().ToUpper() == ScreeningId.ToUpper());
+                model.ScreeningStatusList = _context.ScreeningStatuses.ToList().Select(i => new SelectListItem()
+                {
+                    Value = i.ScreeningStatusId.ToString(),
+                    Text = i.ScreeningStatusName
+                }).ToList();
                 if (model != null)
                 {
                     var student = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
@@ -289,7 +306,11 @@ namespace WebApp_ExcelFileProcessor.Controllers
             try
             {
                 var model = _context.StudentScreenings.SingleOrDefault(i => i.StudentScreeningId.ToString().ToUpper() == ScreeningId.ToUpper());
-
+                model.ScreeningStatusList = _context.ScreeningStatuses.ToList().Select(i => new SelectListItem()
+                {
+                    Value = i.ScreeningStatusId.ToString(),
+                    Text = i.ScreeningStatusName
+                }).ToList();
                 if (model != null)
                 {
                     var student = _context.Students.FirstOrDefault(i => i.StudentId == model.StudentId && !i.IsDeleted);
@@ -316,12 +337,12 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                //  Validate Template
+                // Validate Template
                 var validTemplate = await ValidateStudentScreenTemplate(file);
                 if (!validTemplate)
                     throw new Exception("Invalid template used.");
 
-                //  Clear all temp records
+                // Clear all temp records
                 var currentTempList = _context.StudentScreeningTemps.ToList();
                 if (currentTempList.Count() > 0)
                 {
@@ -329,7 +350,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     _context.SaveChanges();
                 }
 
-                //  Lists for result view
+                // Lists for result view
                 UploadStudentScreenProcessViewModel returnValue = new UploadStudentScreenProcessViewModel()
                 {
                     ResponseId = null,
@@ -341,51 +362,52 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     ExisitingScreeningList = new List<Models.StudentScreeningTemp>()
                 };
 
-                //  Process document
+                // Process document
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (var stream = new MemoryStream())
                 {
                     await file.CopyToAsync(stream);
                     using (ExcelPackage package = new ExcelPackage(stream))
                     {
-                        //  Get the first worksheet in the workbook
+                        // Get the first worksheet in the workbook
                         ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                         int colCount = worksheet.Dimension.End.Column;
                         int rowCount = worksheet.Dimension.End.Row;
+                        List<Student> studentList = _context.Students.Where(i => !i.IsDeleted).ToList();
+                        List<ScreeningStatus> screeningStatusList = _context.ScreeningStatuses.Where(i => !i.IsDeleted).ToList();
 
-                        //  Loop through rows
+                        // Loop through rows
                         if (rowCount > 0)
                         {
                             for (int row = 2; row < rowCount; row++)
                             {
-                                //  StudentScreenTemp
+                                // StudentScreenTemp
                                 Boolean rowHasError = false;
                                 StudentScreeningTemp tempModel = new StudentScreeningTemp()
                                 {
                                     RowNumber = row,
                                     IsDeleted = false,
-                                    DateCreated = DateTime.Now
+                                    DateCreated = DateTime.Now,
+                                    ScreeningStatusId = screeningStatusList.FirstOrDefault(i => !i.IsDeleted && i.ScreeningStatusName.ToUpper() == "SCANNED").ScreeningStatusId
                                 };
 
                                 try
                                 {
-                                    //  Col1        ID    **
-                                    //  Col2        Temp        **
-                                    //  Col3       General sense of wellbeing?
-                                    //  Col4        Wearing a mask?
-                                    //  Col5        Have you travelled to a high-risk area in the last 14 days?
-                                    //  Col6        Have you recently been in close contact with someone infected with the virus?
-                                    //  Col7        Have you recently been in contact with someone probable to be infected with the virus?
-                                    //  Col8        Have you attended a health facility where patients that have the virus are treated in the last 14 days?
-                                    //  Col9        Have you been admitted with severe pneumonia
-                                    //  Col10        Do you suffer from any chronic disease?
-                                    //  Col11       Do you have any of the following symptoms?      **
-                                    //  Col12       Timestamp       **
+                                    // Col1 ID ** Col2 Temp ** Col3 General sense of wellbeing? Col4
+                                    // Wearing a mask? Col5 Have you travelled to a high-risk area
+                                    // in the last 14 days? Col6 Have you recently been in close
+                                    // contact with someone infected with the virus? Col7 Have you
+                                    // recently been in contact with someone probable to be infected
+                                    // with the virus? Col8 Have you attended a health facility
+                                    // where patients that have the virus are treated in the last 14
+                                    // days? Col9 Have you been admitted with severe pneumonia Col10
+                                    // Do you suffer from any chronic disease? Col11 Do you have any
+                                    // of the following symptoms? ** Col12 Timestamp **
 
-                                    //  Check if current rows columns have null values
+                                    // Check if current rows columns have null values
                                     for (int col = 1; col <= 12; col++)
                                     {
-                                        //  skip over general sense of wellbeing
+                                        // skip over general sense of wellbeing
                                         if (col != 3)
                                         {
                                             if (worksheet.Cells[row, col].Value == null)
@@ -393,7 +415,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                         }
                                     }
 
-                                    //  QRCodeId
+                                    // QRCodeId
                                     if (worksheet.Cells[row, 1].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 1].Value;
@@ -402,8 +424,9 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                         else
                                             throw new Exception(String.Format("ROW: {0} COL: {1}", row, "StudentColor"));
 
-                                        //  Get StudentId for record
-                                        var getStudentId = _context.Students.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCodeId.ToUpper() && !i.IsDeleted);
+                                        // Get StudentId for record
+                                        //var getStudentId = _context.Students.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCodeId.ToUpper() && !i.IsDeleted);
+                                        var getStudentId = studentList.FirstOrDefault(i => i.QRCode.ToUpper() == tempModel.QRCodeId.ToUpper() && !i.IsDeleted);
 
                                         if (getStudentId == null)
                                             throw new Exception("Student does not exist in database");
@@ -414,7 +437,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             tempModel.StudentId = getStudentId.StudentId;
                                     }
 
-                                    //  Temp
+                                    // Temp
                                     if (worksheet.Cells[row, 2].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 2].Value;
@@ -424,7 +447,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {2}", row, "StudentColor"));
                                     }
 
-                                    //  GeneralSenseWellbeing
+                                    // GeneralSenseWellbeing
                                     if (worksheet.Cells[row, 3].Value != null)
                                     {
                                         tempModel.GeneralSenseWellbeing = "N/A";
@@ -439,7 +462,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                         tempModel.GeneralSenseWellbeing = "N/A";
                                     }
 
-                                    //  WearingAMask
+                                    // WearingAMask
                                     if (worksheet.Cells[row, 4].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 4].Value;
@@ -449,7 +472,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {4}", row, "StudentColor"));
                                     }
 
-                                    //  HighRiskTravel14Days
+                                    // HighRiskTravel14Days
                                     if (worksheet.Cells[row, 5].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 5].Value;
@@ -459,7 +482,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {5}", row, "StudentColor"));
                                     }
 
-                                    //  CloseContactInfectedPerson
+                                    // CloseContactInfectedPerson
                                     if (worksheet.Cells[row, 6].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 6].Value;
@@ -469,7 +492,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {6}", row, "StudentColor"));
                                     }
 
-                                    //  CloseContactProbableInfectedPerson
+                                    // CloseContactProbableInfectedPerson
                                     if (worksheet.Cells[row, 7].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 7].Value;
@@ -479,7 +502,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {7}", row, "StudentColor"));
                                     }
 
-                                    //  AttendHealthFacility14Days
+                                    // AttendHealthFacility14Days
                                     if (worksheet.Cells[row, 8].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 8].Value;
@@ -489,7 +512,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {8}", row, "StudentColor"));
                                     }
 
-                                    //  AdmittedSeverPneumonia
+                                    // AdmittedSeverPneumonia
                                     if (worksheet.Cells[row, 9].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 9].Value;
@@ -499,7 +522,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {9}", row, "StudentColor"));
                                     }
 
-                                    //  SufferFromChronicDisease
+                                    // SufferFromChronicDisease
                                     if (worksheet.Cells[row, 10].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 10].Value;
@@ -509,7 +532,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {10}", row, "StudentColor"));
                                     }
 
-                                    //  AnyOfTheFollowingSymptoms
+                                    // AnyOfTheFollowingSymptoms
                                     if (worksheet.Cells[row, 11].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 11].Value;
@@ -519,7 +542,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                                             throw new Exception(String.Format("ROW: {0} COL: {11}", row, "StudentColor"));
                                     }
 
-                                    //  ScreeningTimeStamp
+                                    // ScreeningTimeStamp
                                     if (worksheet.Cells[row, 12].Value != null)
                                     {
                                         var cellValue = worksheet.Cells[row, 12].Value;
@@ -531,7 +554,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
 
                                     if (!rowHasError)
                                     {
-                                        //  Check if screening already exisits
+                                        // Check if screening already exisits
                                         var alreadyExists = CheckIfScreeningExists(tempModel);
                                         if (alreadyExists)
                                         {
@@ -565,7 +588,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  Add lists to database
+                // Add lists to database
                 if (returnValue.NewScreeningList.Count() > 0)
                 {
                     _context.StudentScreeningTemps.AddRange(returnValue.NewScreeningList);
@@ -595,9 +618,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
-                //  A1 = id
-                //  B1 = temp
-                //  C1 = General sense of wellbeing?
+                // A1 = id B1 = temp C1 = General sense of wellbeing?
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (var stream = new MemoryStream())
@@ -605,7 +626,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     await file.CopyToAsync(stream);
                     using (ExcelPackage package = new ExcelPackage(stream))
                     {
-                        //  Get the first worksheet in the workbook
+                        // Get the first worksheet in the workbook
                         ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                         int colCount = worksheet.Dimension.End.Column;
                         int rowCount = worksheet.Dimension.End.Row;
@@ -658,6 +679,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
         {
             try
             {
+                // first check active records
                 var student = _context.Students.FirstOrDefault(x => x.StudentId == (Guid)studentId && !x.IsDeleted);
                 return String.Format("{0} {1}", student.FirstName, student.LastName);
             }
@@ -799,7 +821,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                 var tempList = _context.StudentScreeningTemps.ToList();
                 if (tempList.Count() > 0)
                 {
-                    //  create new records
+                    // create new records
                     var createList = tempList.Where(i => i.RowType == 'C').ToList();
                     if (createList.Count() > 0)
                     {
@@ -830,7 +852,7 @@ namespace WebApp_ExcelFileProcessor.Controllers
                     }
                 }
 
-                //  clear temp list
+                // clear temp list
                 _context.StudentScreeningTemps.RemoveRange(tempList);
                 _context.SaveChanges();
 
